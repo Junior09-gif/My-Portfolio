@@ -1,4 +1,4 @@
-import { Shield, FileText, ArrowUp } from "lucide-react";
+import { Code2, ArrowUp, FileText, Github, Mail } from "lucide-react";
 
 interface FooterProps {
   fullName: string;
@@ -6,52 +6,86 @@ interface FooterProps {
 }
 
 export default function Footer({ fullName, onOpenResume }: FooterProps) {
-  const handleScrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  const links = [
+    { label: "Home", href: "#home" },
+    { label: "About", href: "#about" },
+    { label: "Skills", href: "#skills" },
+    { label: "Projects", href: "#projects" },
+    { label: "Cyber Lab", href: "#cyber-lab" },
+    { label: "Contact", href: "#contact" },
+  ];
+
+  const scroll = (href: string) => document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <footer className="bg-navy-950 border-t border-navy-900 py-12 relative overflow-hidden" id="app_footer">
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:3rem_3rem]"></div>
-      </div>
+    <footer className="bg-surface-900 border-t border-white/5 relative">
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-        
-        {/* Logo & Brand text */}
-        <div className="flex items-center gap-2.5">
-          <div className="p-1.5 bg-brand-600/10 border border-brand-500/20 rounded-lg text-brand-400">
-            <Shield className="w-4 h-4" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+          {/* Brand */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/30 flex items-center justify-center">
+                <Code2 className="w-4 h-4 text-brand-400" />
+              </div>
+              <span className="font-display font-bold text-white text-sm">
+                Edwin<span className="text-brand-400">.</span>dev
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 leading-relaxed max-w-xs">
+              IT student at KNUST building real-world software solutions and exploring cybersecurity.
+            </p>
+            <div className="flex gap-2">
+              <a href="mailto:kingslayer5543@gmail.com"
+                className="p-2 rounded-lg bg-surface-700 border border-white/6 text-slate-400 hover:text-white hover:border-white/15 transition-all">
+                <Mail className="w-4 h-4" />
+              </a>
+              <a href="https://github.com/kingslayer5543" target="_blank" rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-surface-700 border border-white/6 text-slate-400 hover:text-white hover:border-white/15 transition-all">
+                <Github className="w-4 h-4" />
+              </a>
+            </div>
           </div>
-          <span className="font-display font-medium text-sm text-navy-200">
-            <span className="font-bold text-white text-brand-400">{fullName}</span> | IT Portfolio
-          </span>
+
+          {/* Nav links */}
+          <div>
+            <p className="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-4">Navigation</p>
+            <div className="grid grid-cols-2 gap-2">
+              {links.map(({ label, href }) => (
+                <button key={label} onClick={() => scroll(href)}
+                  className="text-left text-sm text-slate-400 hover:text-white transition-colors cursor-pointer">
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div>
+            <p className="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-4">Quick Actions</p>
+            <div className="space-y-2">
+              <button onClick={onOpenResume}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl w-full bg-brand-600/10 border border-brand-500/20 text-brand-400 hover:bg-brand-600/20 transition-colors cursor-pointer text-sm font-medium">
+                <FileText className="w-4 h-4" />View Resume
+              </button>
+              <button onClick={scrollTop}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl w-full bg-surface-700 border border-white/6 text-slate-400 hover:text-white hover:border-white/15 transition-colors cursor-pointer text-sm font-medium">
+                <ArrowUp className="w-4 h-4" />Back to Top
+              </button>
+            </div>
+          </div>
+
         </div>
 
-        {/* Navigation / Actions section */}
-        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-navy-400 font-mono">
-          <button
-            onClick={onOpenResume}
-            className="flex items-center gap-1.5 px-3 py-1 bg-brand-500/10 text-brand-400 border border-brand-500/20 rounded-md hover:bg-brand-500/20 transition-all cursor-pointer"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Interactive Resume (Printable)</span>
-          </button>
-          
-          <button
-            onClick={handleScrollToTop}
-            className="flex items-center gap-1 px-2.5 py-1 hover:text-white transition-colors cursor-pointer"
-          >
-            <ArrowUp className="w-3.5 h-3.5" />
-            <span>Scroll to Top</span>
-          </button>
+        {/* Bottom bar */}
+        <div className="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 font-mono">
+          <p>© {new Date().getFullYear()} {fullName}. All rights reserved.</p>
+          <p>BSc. Information Technology · KNUST, Ghana</p>
         </div>
-
-        {/* Copyright notice */}
-        <div className="text-center md:text-right text-xs text-navy-500 font-mono">
-          <p>© {new Date().getFullYear()} {fullName.split(" ").slice(0, 2).join(" ")}. All Rights Reserved.</p>
-        </div>
-
       </div>
     </footer>
   );
