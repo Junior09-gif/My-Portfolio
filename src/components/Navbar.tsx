@@ -1,144 +1,171 @@
-import { useState } from "react";
-import { Menu, X, Share2, Check } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, Share2, Check, Code2 } from "lucide-react";
 
 interface NavbarProps {
   fullName: string;
 }
 
+const navItems = [
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
+  { label: "Projects", href: "#projects" },
+  { label: "Cyber Lab", href: "#cyber-lab" },
+  { label: "Contact", href: "#contact" },
+];
+
 export default function Navbar({ fullName }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("#home");
 
-  const handleCopyLink = () => {
-    let baseUrl = "https://ais-pre-p6s7ubg7bk6753uhksmpxk-527426969725.europe-west1.run.app";
-    if (window.location.host && !window.location.host.includes("localhost") && !window.location.host.includes("3000")) {
-      baseUrl = window.location.protocol + "//" + window.location.host;
-    }
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Highlight active nav item based on scroll position
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(`#${e.target.id}`);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    navItems.forEach(({ href }) => {
+      const el = document.querySelector(href);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const handleNavClick = (href: string) => {
+    setIsOpen(false);
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleShare = () => {
     const cleanName = fullName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-    const shareUrl = `${baseUrl}?ref=${cleanName}`;
-    navigator.clipboard.writeText(shareUrl).then(() => {
+    const url = `${window.location.origin}?ref=${cleanName}`;
+    navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
   };
 
-  const navItems = [
-    { label: "Home", href: "#home" },
-    { label: "About", href: "#about" },
-    { label: "Skills", href: "#skills" },
-    { label: "Projects", href: "#projects" },
-    { label: "Cyber Lab", href: "#cyber-lab" },
-    { label: "Contact", href: "#contact" },
-  ];
-
-  const handleNavClick = (href: string) => {
-    setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <nav className="sticky top-0 z-50 bg-navy-950/80 backdrop-blur-md border-b border-navy-900 shadow-lg" id="app_navbar">
+    <nav
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled
+          ? "bg-[#060810]/90 backdrop-blur-md border-b border-white/5 shadow-xl shadow-black/30"
+          : "bg-transparent"
+        }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo Brand */}
-          <div className="flex-shrink-0 flex items-center gap-2.5">
-            <div className="relative group flex items-center justify-center">
-              <svg className="w-9 h-9 text-brand-400 group-hover:scale-105 transition-transform duration-300" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="45" fill="url(#logo-bg)" stroke="url(#logo-border)" strokeWidth="3" />
-                <circle cx="50" cy="50" r="39" stroke="rgba(59, 130, 246, 0.15)" strokeWidth="1" strokeDasharray="4 4" />
-                <path d="M32 28V72" stroke="url(#logo-accent)" strokeWidth="5.5" strokeLinecap="round" />
-                <path d="M32 28H46C51 28 51 38 46 38H32M32 38H48C53 38 53 48 48 48H32" stroke="url(#logo-accent)" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M52 28L66 48M52 48L66 28" stroke="#3b82f6" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M32 60L41 72L50 60L59 72L68 60" stroke="#f472b6" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx="50" cy="50" r="3.5" fill="#10b981" />
-                <defs>
-                  <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#030712" />
-                    <stop offset="100%" stopColor="#0b1530" />
-                  </linearGradient>
-                  <linearGradient id="logo-border" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#3b82f6" />
-                    <stop offset="50%" stopColor="#f472b6" />
-                    <stop offset="100%" stopColor="#10b981" />
-                  </linearGradient>
-                  <linearGradient id="logo-accent" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#60a5fa" />
-                    <stop offset="100%" stopColor="#f472b6" />
-                  </linearGradient>
-                </defs>
-              </svg>
+
+          {/* Logo */}
+          <a
+            href="#home"
+            onClick={(e) => { e.preventDefault(); handleNavClick("#home"); }}
+            className="flex items-center gap-2.5 group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-brand-500/10 border border-brand-500/30 flex items-center justify-center group-hover:bg-brand-500/20 transition-colors">
+              <Code2 className="w-4 h-4 text-brand-400" />
             </div>
-            <a href="#home" className="font-display font-medium text-base tracking-tight text-white hover:text-brand-400 transition-colors flex flex-col justify-center">
-              <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-pink-400 to-emerald-400 text-sm tracking-wider font-mono">Mr. Edwin</span>
-            </a>
-          </div>
+            <span className="font-display font-bold text-sm text-white tracking-tight">
+              Edwin<span className="text-brand-400">.</span>dev
+            </span>
+          </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <div className="flex space-x-6">
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => handleNavClick(item.href)}
-                  className="font-sans text-sm font-medium text-navy-200 hover:text-brand-400 transition-colors cursor-pointer"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Share Link Button */}
-            <button
-              onClick={handleCopyLink}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide border transition-all cursor-pointer ${copied
-                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                  : "bg-navy-900 text-navy-300 border-navy-800 hover:text-white hover:border-navy-700 hover:bg-navy-850"
-                }`}
-              title="Copy portfolio website link to clipboard"
-            >
-              {copied ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
-              <span>{copied ? "Copied!" : "Share Link"}</span>
-            </button>
-          </div>
-
-          {/* Mobile menu & share button */}
-          <div className="flex items-center md:hidden gap-1.5">
-            <button
-              onClick={handleCopyLink}
-              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${copied
-                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                  : "bg-navy-900 text-navy-300 border-navy-800"
-                }`}
-            >
-              {copied ? <Check className="w-3 h-3" /> : <Share2 className="w-3 h-3" />}
-              <span>{copied ? "Copied" : "Share"}</span>
-            </button>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md text-navy-400 hover:text-white hover:bg-navy-900 transition-colors cursor-pointer"
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Navigation Drawer */}
-      {isOpen && (
-        <div className="md:hidden bg-navy-900 border-b border-navy-800 transition-all animate-in fade-in slide-in-from-top-4 duration-200">
-          <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3">
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <button
                 key={item.label}
                 onClick={() => handleNavClick(item.href)}
-                className="block w-full text-left px-4 py-2.5 rounded-md text-base font-medium text-navy-200 hover:text-brand-400 hover:bg-navy-800 transition-colors cursor-pointer"
+                className={`relative px-3.5 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${active === item.href
+                    ? "text-white"
+                    : "text-slate-400 hover:text-white"
+                  }`}
+              >
+                {active === item.href && (
+                  <span className="absolute inset-0 rounded-lg bg-white/5" />
+                )}
+                {item.label}
+                {active === item.href && (
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand-400" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="hidden md:flex items-center gap-3">
+            <button
+              onClick={handleShare}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${copied
+                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+                  : "bg-surface-800 text-slate-300 border-white/10 hover:border-brand-500/40 hover:text-white"
+                }`}
+            >
+              {copied ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
+              {copied ? "Copied!" : "Share"}
+            </button>
+
+            <a
+              href="#contact"
+              onClick={(e) => { e.preventDefault(); handleNavClick("#contact"); }}
+              className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition-colors shadow-lg shadow-brand-900/40"
+            >
+              Hire Me
+            </a>
+          </div>
+
+          {/* Mobile toggle */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile drawer */}
+      {isOpen && (
+        <div className="md:hidden bg-[#0d1117]/95 backdrop-blur-md border-t border-white/5">
+          <div className="px-4 py-4 space-y-1">
+            {navItems.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => handleNavClick(item.href)}
+                className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${active === item.href
+                    ? "bg-brand-500/10 text-brand-300"
+                    : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
               >
                 {item.label}
               </button>
             ))}
+            <div className="pt-3 flex gap-2">
+              <button
+                onClick={handleShare}
+                className="flex-1 py-2 rounded-lg text-xs font-semibold border border-white/10 text-slate-300 hover:text-white transition-colors cursor-pointer"
+              >
+                {copied ? "Copied!" : "Share Link"}
+              </button>
+              <a
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); handleNavClick("#contact"); }}
+                className="flex-1 py-2 rounded-lg text-xs font-semibold bg-brand-600 text-white text-center"
+              >
+                Hire Me
+              </a>
+            </div>
           </div>
         </div>
       )}
