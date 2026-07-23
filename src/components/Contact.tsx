@@ -1,19 +1,18 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { UserProfile, ContactMessage } from "../types";
-import { 
-  Mail, Github, Linkedin, Send, MessageSquareCode, ShieldCheck, Check, 
+import {
+  Mail, Github, Linkedin, Send, MessageSquareCode, ShieldCheck, Check,
   Copy, Clock, Terminal, Globe, MapPin, Phone, Ghost, Instagram, Music
 } from "lucide-react";
 
 interface ContactProps {
   profile: UserProfile;
-  editMode: boolean;
   messages: ContactMessage[];
   onAddMessage: (msg: ContactMessage) => void;
 }
 
-export default function Contact({ profile, editMode, messages, onAddMessage }: ContactProps) {
+export default function Contact({ profile, messages, onAddMessage }: ContactProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -50,7 +49,7 @@ export default function Contact({ profile, editMode, messages, onAddMessage }: C
         message: formData.message,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
-      
+
       onAddMessage(newMsg);
       setIsSubmitting(false);
       setSuccess(true);
@@ -66,7 +65,7 @@ export default function Contact({ profile, editMode, messages, onAddMessage }: C
       <div className="absolute top-1/2 right-1/4 w-80 h-80 bg-brand-500/5 rounded-full filter blur-[120px] pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-xs font-mono uppercase tracking-widest text-brand-400 mb-2 font-semibold">Get In Touch</h2>
@@ -75,7 +74,7 @@ export default function Contact({ profile, editMode, messages, onAddMessage }: C
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* Contact Details & Social Links (5 Cols) */}
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-6">
@@ -100,7 +99,7 @@ export default function Contact({ profile, editMode, messages, onAddMessage }: C
                     </a>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={handleCopyEmail}
                   className="p-1.5 rounded-md hover:bg-navy-800 text-navy-400 hover:text-white transition-colors cursor-pointer"
                   title="Copy email to clipboard"
@@ -162,9 +161,9 @@ export default function Contact({ profile, editMode, messages, onAddMessage }: C
                   <div className="p-0.5 rounded-lg overflow-hidden flex-shrink-0 bg-emerald-500/10">
                     <svg className="w-8 h-8 flex-shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect width="24" height="24" rx="5.5" fill="url(#whatsapp_card_grad)" />
-                      <path 
-                        d="M12.012 4.5c-4.14 0-7.5 3.36-7.5 7.5 0 1.433.407 2.767 1.1 3.916L4.5 19.5l3.708-1.075c1.116.634 2.4.975 3.804.975 4.14 0 7.5-3.36 7.5-7.5s-3.36-7.5-7.5-7.5zm3.834 10.742c-.158.4-.808.75-1.108.775-.3-.008-.6-.083-1.95-.641-1.725-.709-2.834-2.459-2.917-2.575-.083-.109-.675-.9-1.325-2.009s-.425-1.958-.233-2.15c.191-.192.416-.242.558-.242s.275.008.391.017c.125.008.292-.042.459.358.166.4.575 1.392.625 1.5.05.1.083.225.016.358s-.1.225-.2.342c-.1.116-.208.258-.3.35-.1.1-.208.208-.092.408.117.200.517.85 1.109 1.375.766.684 1.408.892 1.608.992s.316.083.433-.05c.117-.134.508-.592.642-.792.133-.2.267-.167.45-.1s1.175.55 1.375.65c.2.1.333.15.383.234.05.083.05.491-.108.891z" 
-                        fill="white" 
+                      <path
+                        d="M12.012 4.5c-4.14 0-7.5 3.36-7.5 7.5 0 1.433.407 2.767 1.1 3.916L4.5 19.5l3.708-1.075c1.116.634 2.4.975 3.804.975 4.14 0 7.5-3.36 7.5-7.5s-3.36-7.5-7.5-7.5zm3.834 10.742c-.158.4-.808.75-1.108.775-.3-.008-.6-.083-1.95-.641-1.725-.709-2.834-2.459-2.917-2.575-.083-.109-.675-.9-1.325-2.009s-.425-1.958-.233-2.15c.191-.192.416-.242.558-.242s.275.008.391.017c.125.008.292-.042.459.358.166.4.575 1.392.625 1.5.05.1.083.225.016.358s-.1.225-.2.342c-.1.116-.208.258-.3.35-.1.1-.208.208-.092.408.117.200.517.85 1.109 1.375.766.684 1.408.892 1.608.992s.316.083.433-.05c.117-.134.508-.592.642-.792.133-.2.267-.167.45-.1s1.175.55 1.375.65c.2.1.333.15.383.234.05.083.05.491-.108.891z"
+                        fill="white"
                       />
                       <defs>
                         <linearGradient id="whatsapp_card_grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
@@ -176,10 +175,10 @@ export default function Contact({ profile, editMode, messages, onAddMessage }: C
                   </div>
                   <div>
                     <span className="text-[10px] text-navy-500 block uppercase tracking-wider font-mono">WhatsApp Call/Chat</span>
-                    <a 
-                      href={`https://wa.me/233${profile.whatsapp.replace(/^0/, '')}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
+                    <a
+                      href={`https://wa.me/233${profile.whatsapp.replace(/^0/, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-sm font-medium text-emerald-400 hover:text-white transition-colors"
                     >
                       {profile.whatsapp} (Direct Link)
@@ -236,12 +235,12 @@ export default function Contact({ profile, editMode, messages, onAddMessage }: C
                   >
                     <svg className="w-5 h-5 flex-shrink-0 rounded-[4px] shadow-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <rect width="24" height="24" rx="5" fill="#FFFC00" />
-                      <path 
-                        d="M12 5.5c-2.1 0-3.3 1.3-3.3 3 0 .5.1.8.3 1.1-.8.1-1.3.6-1.3 1.2 0 .4.2.7.5.8-.1.2-.1.4-.1.6 0 1.1 1.2 1.5 2.2 1.7.1.3.3.5.6.6-.7.4-1.3 1.1-1.3 1.9 0 .2.2.3.3.3h.3c.4 0 .9-.2 1.3-.4.4-.3.9-.6 1.6-.6s1.2.3 1.6.6c.4.2.9.4 1.3.4h.3c.2 0 .3-.1.3-.3 0-.8-.6-1.5-1.3-1.9.3-.1.5-.3.6-.6.9-.2 2.2-.6 2.2-1.7 0-.2 0-.4-.1-.6.3-.1.5-.4.5-.8 0-.6-.5-1.1-1.3-1.2.2-.3.3-.6.3-1.1 0-1.7-1.2-3-3.3-3z" 
-                        fill="white" 
-                        stroke="black" 
-                        strokeWidth="1.2" 
-                        strokeLinejoin="round" 
+                      <path
+                        d="M12 5.5c-2.1 0-3.3 1.3-3.3 3 0 .5.1.8.3 1.1-.8.1-1.3.6-1.3 1.2 0 .4.2.7.5.8-.1.2-.1.4-.1.6 0 1.1 1.2 1.5 2.2 1.7.1.3.3.5.6.6-.7.4-1.3 1.1-1.3 1.9 0 .2.2.3.3.3h.3c.4 0 .9-.2 1.3-.4.4-.3.9-.6 1.6-.6s1.2.3 1.6.6c.4.2.9.4 1.3.4h.3c.2 0 .3-.1.3-.3 0-.8-.6-1.5-1.3-1.9.3-.1.5-.3.6-.6.9-.2 2.2-.6 2.2-1.7 0-.2 0-.4-.1-.6.3-.1.5-.4.5-.8 0-.6-.5-1.1-1.3-1.2.2-.3.3-.6.3-1.1 0-1.7-1.2-3-3.3-3z"
+                        fill="white"
+                        stroke="black"
+                        strokeWidth="1.2"
+                        strokeLinejoin="round"
                       />
                     </svg>
                     <span className="truncate">Snapchat</span>

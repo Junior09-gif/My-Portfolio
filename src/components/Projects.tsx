@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Project } from "../types";
-import { 
-  FolderGit2, Code2, Play, BookOpen, AlertCircle, Wifi, Database, Info, 
+import {
+  FolderGit2, Code2, Play, BookOpen, AlertCircle, Wifi, Database, Info,
   Settings, Terminal, Calculator, HelpCircle, Network, Layers, RefreshCw, ChevronRight, Check
 } from "lucide-react";
 
 interface ProjectsProps {
   projects: Project[];
-  editMode: boolean;
   accentColor: string;
   setAccentColor: (color: string) => void;
 }
 
-export default function Projects({ projects, editMode, accentColor, setAccentColor }: ProjectsProps) {
+export default function Projects({ projects, accentColor, setAccentColor }: ProjectsProps) {
   const [activeProject, setActiveProject] = useState<string>("calculator"); // Preset to Python Calculator to highlight interactive features
 
   // --- Python Calculator States ---
@@ -49,7 +48,7 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
       // Avoid repetitive sequential operators
       return;
     }
-    
+
     const newInput = calcInput + char;
     setCalcInput(newInput);
     setCalcScreen(newInput);
@@ -67,16 +66,16 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
       if (/[^-()\d/*+.]/.test(calcInput)) {
         throw new Error("Invalid Syntax");
       }
-      
+
       // Calculate equation safely
       // Convert expression to valid mathematical evaluate
       // standard operator evaluate:
       const resultValue = Function(`"use strict"; return (${calcInput})`)();
-      
+
       if (isNaN(resultValue) || !isFinite(resultValue)) {
         throw new Error("Math Error");
       }
-      
+
       const resStr = String(resultValue);
       setCalcScreen(resStr);
       setCalcHistory(prev => [`>>> ${calcInput} = ${resStr}`, ...prev.slice(0, 4)]);
@@ -97,7 +96,7 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
     setSubnetError("");
 
     const cidrVal = Math.max(0, Math.min(32, subnetCidr));
-    
+
     // Subnet calculation formula
     const maskBin = "".padStart(cidrVal, "1").padEnd(32, "0");
     const maskParts = [
@@ -150,7 +149,7 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-900/40 to-transparent pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-xs font-mono uppercase tracking-widest text-brand-400 mb-2 font-semibold">Practical Solutions</h2>
@@ -160,7 +159,7 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
 
         {/* 2 Column Layout: Project Navigator Cards on Left, Active Interactive Demo on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
-          
+
           {/* Projects Navigator (5 Cols) */}
           <div className="lg:col-span-12 xl:col-span-5 space-y-4">
             <p className="text-sm text-navy-400 leading-relaxed font-sans mb-4">
@@ -174,18 +173,16 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
                   <div
                     key={proj.id}
                     onClick={() => setActiveProject(proj.id)}
-                    className={`p-5 rounded-2xl border text-left cursor-pointer transition-all hover:scale-[1.01] ${
-                      isActive
+                    className={`p-5 rounded-2xl border text-left cursor-pointer transition-all hover:scale-[1.01] ${isActive
                         ? "bg-navy-900/60 border-brand-500 shadow-xl shadow-brand-500/5"
                         : "bg-navy-900/20 border-navy-850 hover:border-navy-805"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className={`p-2 rounded-xl border ${
-                        isActive
+                      <div className={`p-2 rounded-xl border ${isActive
                           ? "bg-brand-500/20 border-brand-500/30 text-brand-300"
                           : "bg-navy-950 border-navy-800 text-navy-400"
-                      }`}>
+                        }`}>
                         {proj.id === "calculator" ? (
                           <Calculator className="w-5 h-5" />
                         ) : proj.id === "network" ? (
@@ -225,7 +222,7 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
           {/* Core Interactive Sandbox Drawer (7 Cols) */}
           <div className="lg:col-span-12 xl:col-span-7">
             <div className="rounded-2xl bg-navy-900 p-6 border border-brand-500/10 shadow-2xl h-full flex flex-col justify-between">
-              
+
               {/* Box Header containing current target name */}
               <div className="flex items-center justify-between border-b border-navy-850 pb-4 mb-6">
                 <div className="flex items-center gap-3">
@@ -263,7 +260,7 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
                       <button onClick={calcClear} className="col-span-2 p-3.5 rounded-xl bg-rose-500/15 text-rose-400 border border-rose-500/20 hover:bg-rose-500/25 transition-all text-center cursor-pointer">AC</button>
                       <button onClick={() => calcAppend("/")} className="p-3.5 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20 transition-all text-center cursor-pointer">/</button>
                       <button onClick={() => calcAppend("*")} className="p-3.5 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20 transition-all text-center cursor-pointer">*</button>
-                      
+
                       {/* Row 2 */}
                       <button onClick={() => calcAppend("7")} className="p-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-850 transition-all text-center cursor-pointer">7</button>
                       <button onClick={() => calcAppend("8")} className="p-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-850 transition-all text-center cursor-pointer">8</button>
@@ -280,7 +277,7 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
                       <button onClick={() => calcAppend("1")} className="p-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-850 transition-all text-center cursor-pointer">1</button>
                       <button onClick={() => calcAppend("2")} className="p-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-850 transition-all text-center cursor-pointer">2</button>
                       <button onClick={() => calcAppend("3")} className="p-3.5 rounded-xl bg-navy-900 text-white hover:bg-navy-850 transition-all text-center cursor-pointer">3</button>
-                      
+
                       {/* Equals Button (Spans 2 rows) */}
                       <button onClick={calcEvaluate} className="row-span-2 p-3.5 rounded-xl bg-brand-600 text-white hover:bg-brand-500 shadow-md shadow-brand-500/25 transition-all flex items-center justify-center cursor-pointer">=</button>
 
@@ -390,7 +387,7 @@ export default function Projects({ projects, editMode, accentColor, setAccentCol
                           >
                             <span
                               className="w-10 h-10 rounded-full border-2 transition-transform duration-200 group-hover:scale-105"
-                              style={{ 
+                              style={{
                                 backgroundColor: preset.hex,
                                 borderColor: accentColor === preset.hex ? '#ffffff' : 'transparent'
                               }}
