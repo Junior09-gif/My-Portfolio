@@ -7,40 +7,50 @@ interface HeroProps {
   profile: UserProfile;
 }
 
-// ─── Particle types ───────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
 
-type Shape = "circle" | "square" | "triangle";
-
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  baseVx: number;
-  baseVy: number;
-  size: number;
-  opacity: number;
+interface Dot {
+  x: number; y: number;
+  vx: number; vy: number;
+  baseVx: number; baseVy: number;
+  r: number;          // radius
+  alpha: number;      // base opacity
+  depth: number;      // 0 (far) → 1 (near) for parallax & blur
   color: string;
-  shape: Shape;
-  rotation: number;
-  rotSpeed: number;
 }
 
-// ─── Palette — warm neutrals only, zero neon ─────────────────────────────────
-const COLORS = [
-  "#E2E8F0", // off-white
-  "#CBD5E1", // cool slate
-  "#94A3B8", // medium slate
-  "#A7F3D0", // soft sage
-  "#BAE6FD", // powder blue
-  "#FDE68A", // warm straw
-];
-const SHAPES: Shape[] = ["circle", "circle", "circle", "square", "triangle"];
-const COUNT = 88;
+interface GeoLine {
+  x1: number; y1: number;
+  x2: number; y2: number;
+  alpha: number;
+  pulse: number;      // phase offset for breathing opacity
+  speed: number;
+}
 
-function makeParticles(w: number, h: number): Particle[] {
-  return Array.from({ length: COUNT }, () => {
-    const speed = 0.05 + Math.random() * 0.15;
+// ─── Palette ──────────────────────────────────────────────────────────────────
+
+const DOT_COLORS = [
+  "rgba(148,163,184,",   // slate-400
+  "rgba(100,116,139,",   // slate-500
+  "rgba(71,85,105,",     // slate-600
+  "rgba(103,232,249,",   // cyan-300
+  "rgba(56,189,248,",    // sky-400
+  "rgba(226,232,240,",   // off-white
+];
+
+// ─── Canvas scene ─────────────────────────────────────────────────────────────
+
+const MOBILE_BREAKPOINT = 768;
+const DOT_COUNT_DESKTOP = 110;
+const DOT_COUNT_MOBILE = 55;
+const CONNECT_DIST = 140;  // px — max distance to draw network line
+const MAX_CONNECTIONS = 3;    // per dot — keeps density restrained
+
+function buildDots(w: number, h: number, isMobile: boolean): Dot[] {
+  const count = isMobile ? DOT_COUNT_MOBILE : DOT_COUNT_DESKTOP;
+  return Array.from({ length: count }, () => {
+    const depth = 0.2 + Math.random() * 0.8;
+    const speed = (0.04 + Math.random() * 0.12) * depth;
     const angle = Math.random() * Math.PI * 2;
     return {
       x: Math.random() * w,
@@ -49,56 +59,54 @@ function makeParticles(w: number, h: number): Particle[] {
       vy: Math.sin(angle) * speed,
       baseVx: Math.cos(angle) * speed,
       baseVy: Math.sin(angle) * speed,
-      size: 0.6 + Math.random() * 1.8,
-      opacity: 0.06 + Math.random() * 0.13,
-      color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
-      rotation: Math.random() * Math.PI * 2,
-      rotSpeed: (Math.random() - 0.5) * 0.008,
+      r: (0.5 + Math.random() * 1.6) * depth,
+      alpha: (0.04 + Math.random() * 0.18) * depth,
+      depth,
+      color: DOT_COLORS[Math.floor(Math.random() * DOT_COLORS.length)],
     };
   });
 }
 
-function drawShape(
-  ctx: CanvasRenderingContext2D,
-  p: Particle
-) {
-  ctx.save();
-  ctx.translate(p.x, p.y);
-  ctx.rotate(p.rotation);
-  ctx.globalAlpha = p.opacity;
-  ctx.fillStyle = p.color;
+function buildGeoLines(w: number, h: number): GeoLine[] {
+  // A handful of static faint geometric structures — thin rectangles / diagonals
+  const lines: GeoLine[] = [];
+  const add = (x1: number, y1: number, x2: number, y2: number) =>
+    lines.push({
+      x1: x1 * w, y1: y1 * h, x2: x2 * w, y2: y2 * h,
+      alpha: 0.018 + Math.random() * 0.022,
+      pulse: Math.random() * Math.PI * 2,
+      speed: 0.003 + Math.random() * 0.004
+    });
 
-  const s = p.size;
+  // sparse triangle structures anchored to corners/edges
+  add(0.05, 0.1, 0.22, 0.35);
+  add(0.22, 0.35, 0.08, 0.55);
+  add(0.08, 0.55, 0.05, 0.1);
 
-  if (p.shape === "circle") {
-    ctx.beginPath();
-    ctx.arc(0, 0, s, 0, Math.PI * 2);
-    ctx.fill();
-  } else if (p.shape === "square") {
-    ctx.fillRect(-s, -s, s * 2, s * 2);
-  } else {
-    // equilateral triangle
-    ctx.beginPath();
-    ctx.moveTo(0, -s * 1.2);
-    ctx.lineTo(s * 1.05, s * 0.7);
-    ctx.lineTo(-s * 1.05, s * 0.7);
-    ctx.closePath();
-    ctx.fill();
-  }
+  add(0.78, 0.08, 0.95, 0.28);
+  add(0.95, 0.28, 0.82, 0.48);
+  add(0.82, 0.48, 0.78, 0.08);
 
-  ctx.restore();
+  add(0.12, 0.72, 0.28, 0.92);
+  add(0.28, 0.92, 0.38, 0.75);
+  add(0.38, 0.75, 0.12, 0.72);
+
+  add(0.65, 0.68, 0.88, 0.82);
+  add(0.88, 0.82, 0.75, 0.95);
+  add(0.75, 0.95, 0.65, 0.68);
+
+  return lines;
 }
 
-// ─── Canvas component ─────────────────────────────────────────────────────────
-
-function ParticleCanvas() {
+function CinematicCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stateRef = useRef<{
-    particles: Particle[];
+    dots: Dot[];
+    geoLines: GeoLine[];
     mouse: { x: number; y: number };
     raf: number;
-  }>({ particles: [], mouse: { x: -9999, y: -9999 }, raf: 0 });
+    t: number;
+  }>({ dots: [], geoLines: [], mouse: { x: 0, y: 0 }, raf: 0, t: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -106,76 +114,131 @@ function ParticleCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT;
+
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
-      stateRef.current.particles = makeParticles(canvas.width, canvas.height);
+      stateRef.current.dots = buildDots(canvas.width, canvas.height, isMobile());
+      stateRef.current.geoLines = buildGeoLines(canvas.width, canvas.height);
     };
     resize();
 
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    // Mouse tracking on the section element (parent), not the canvas,
-    // so we capture movement over text/buttons too
-    const section = canvas.parentElement?.parentElement;
+    const section = canvas.closest("section");
     const onMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      stateRef.current.mouse = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
+      stateRef.current.mouse = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
-    const onLeave = () => {
-      stateRef.current.mouse = { x: -9999, y: -9999 };
+    const onTouch = (e: TouchEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const t = e.touches[0];
+      stateRef.current.mouse = { x: t.clientX - rect.left, y: t.clientY - rect.top };
     };
     section?.addEventListener("mousemove", onMove);
-    section?.addEventListener("mouseleave", onLeave);
+    section?.addEventListener("touchmove", onTouch, { passive: true });
 
-    const REPEL_R = 130;
-    const REPEL_F = 0.009;
-    const DAMP = 0.988;
+    const REPEL_R = 120;
+    const REPEL_F = 0.007;
+    const DAMP = 0.990;
 
     const tick = () => {
-      const { particles, mouse } = stateRef.current;
+      const { dots, geoLines, mouse } = stateRef.current;
+      stateRef.current.t += 0.008;
+      const t = stateRef.current.t;
       const w = canvas.width;
       const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+
       ctx.clearRect(0, 0, w, h);
 
-      for (const p of particles) {
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const dist = Math.hypot(dx, dy);
+      // ── 1. Geo lines (static structures, breathing alpha) ──
+      for (const gl of geoLines) {
+        const a = gl.alpha * (0.6 + 0.4 * Math.sin(t * gl.speed * 200 + gl.pulse));
+        ctx.beginPath();
+        ctx.moveTo(gl.x1, gl.y1);
+        ctx.lineTo(gl.x2, gl.y2);
+        ctx.strokeStyle = `rgba(100,116,139,${a})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
 
+      // ── 2. Network lines between close dots ──
+      for (let i = 0; i < dots.length; i++) {
+        let connections = 0;
+        for (let j = i + 1; j < dots.length && connections < MAX_CONNECTIONS; j++) {
+          const dx = dots[i].x - dots[j].x;
+          const dy = dots[i].y - dots[j].y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < CONNECT_DIST) {
+            const depthFactor = (dots[i].depth + dots[j].depth) * 0.5;
+            const a = (1 - dist / CONNECT_DIST) * 0.08 * depthFactor;
+            ctx.beginPath();
+            ctx.moveTo(dots[i].x, dots[i].y);
+            ctx.lineTo(dots[j].x, dots[j].y);
+            ctx.strokeStyle = `rgba(56,189,248,${a})`;
+            ctx.lineWidth = 0.4 * depthFactor;
+            ctx.stroke();
+            connections++;
+          }
+        }
+      }
+
+      // ── 3. Dots (with cursor repulsion & depth parallax) ──
+      const mx = mouse.x || cx;
+      const my = mouse.y || cy;
+      // parallax offset relative to center
+      const px = (mx - cx) / cx;
+      const py = (my - cy) / cy;
+
+      for (const d of dots) {
+        // cursor repulsion
+        const dx = d.x - mx;
+        const dy = d.y - my;
+        const dist = Math.hypot(dx, dy);
         if (dist < REPEL_R && dist > 0) {
           const f = (1 - dist / REPEL_R) * REPEL_F;
-          p.vx += (dx / dist) * f;
-          p.vy += (dy / dist) * f;
+          d.vx += (dx / dist) * f;
+          d.vy += (dy / dist) * f;
         }
 
-        // Drift back to base velocity
-        p.vx = p.vx * DAMP + p.baseVx * (1 - DAMP);
-        p.vy = p.vy * DAMP + p.baseVy * (1 - DAMP);
+        // drift back
+        d.vx = d.vx * DAMP + d.baseVx * (1 - DAMP);
+        d.vy = d.vy * DAMP + d.baseVy * (1 - DAMP);
 
-        // Speed cap
-        const spd = Math.hypot(p.vx, p.vy);
-        if (spd > 0.6) {
-          p.vx = (p.vx / spd) * 0.6;
-          p.vy = (p.vy / spd) * 0.6;
-        }
+        // speed cap
+        const spd = Math.hypot(d.vx, d.vy);
+        if (spd > 0.5) { d.vx = d.vx / spd * 0.5; d.vy = d.vy / spd * 0.5; }
 
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rotation += p.rotSpeed;
+        d.x += d.vx;
+        d.y += d.vy;
 
-        // Wrap
-        if (p.x < -6) p.x = w + 6;
-        else if (p.x > w + 6) p.x = -6;
-        if (p.y < -6) p.y = h + 6;
-        else if (p.y > h + 6) p.y = -6;
+        // wrap
+        if (d.x < -4) d.x = w + 4; else if (d.x > w + 4) d.x = -4;
+        if (d.y < -4) d.y = h + 4; else if (d.y > h + 4) d.y = -4;
 
-        drawShape(ctx, p);
+        // parallax draw offset — deeper dots move less
+        const ox = px * d.depth * 14;
+        const oy = py * d.depth * 14;
+
+        // soft depth-of-field: far dots get a larger, fuzzier circle
+        const blurR = d.r * (1 + (1 - d.depth) * 2.5);
+
+        // breathing alpha
+        const breathe = 0.85 + 0.15 * Math.sin(t * 0.8 + d.depth * 12);
+        const alpha = d.alpha * breathe;
+
+        ctx.beginPath();
+        ctx.arc(d.x + ox, d.y + oy, blurR, 0, Math.PI * 2);
+        ctx.fillStyle = `${d.color}${alpha})`;
+        ctx.fill();
       }
+
+      // ── 4. Atmospheric soft vignette over particles ──
+      // (done in CSS — see section style)
 
       ctx.globalAlpha = 1;
       stateRef.current.raf = requestAnimationFrame(tick);
@@ -187,7 +250,7 @@ function ParticleCanvas() {
       cancelAnimationFrame(stateRef.current.raf);
       ro.disconnect();
       section?.removeEventListener("mousemove", onMove);
-      section?.removeEventListener("mouseleave", onLeave);
+      section?.removeEventListener("touchmove", onTouch);
     };
   }, []);
 
@@ -201,28 +264,24 @@ function ParticleCanvas() {
   );
 }
 
-// ─── Animation helpers ────────────────────────────────────────────────────────
+// ─── Animation presets ────────────────────────────────────────────────────────
 
 const rise = (delay = 0) => ({
-  initial: { opacity: 0, y: 28 },
+  initial: { opacity: 0, y: 32 },
   animate: { opacity: 1, y: 0 },
-  transition: {
-    duration: 0.8,
-    ease: [0.16, 1, 0.3, 1],
-    delay,
-  },
+  transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1], delay },
 });
 
-const appear = (delay = 0) => ({
+const fade = (delay = 0) => ({
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { duration: 0.9, ease: "easeOut", delay },
+  transition: { duration: 1, ease: "easeOut", delay },
 });
 
-const slideIn = (delay = 0) => ({
-  initial: { opacity: 0, x: -16 },
+const slideLeft = (delay = 0) => ({
+  initial: { opacity: 0, x: -20 },
   animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay },
+  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay },
 });
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
@@ -237,91 +296,100 @@ export default function Hero({ profile }: HeroProps) {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden select-none"
-      style={{ backgroundColor: "#0B1120" }}
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{ backgroundColor: "#080C14" }}
     >
-      {/* Canvas */}
+      {/* ── Cinematic canvas ── */}
       <div className="absolute inset-0 pointer-events-none">
-        <ParticleCanvas />
+        <CinematicCanvas />
       </div>
 
-      {/* Subtle top edge fade */}
+      {/* ── Atmospheric lighting — very faint radial at top-right ── */}
       <div
-        className="absolute top-0 inset-x-0 h-40 pointer-events-none"
+        className="absolute pointer-events-none"
         style={{
+          top: "-10%", right: "-5%",
+          width: "55vw", height: "55vw",
+          borderRadius: "50%",
           background:
-            "linear-gradient(to bottom, rgba(11,17,32,0.9) 0%, transparent 100%)",
+            "radial-gradient(circle, rgba(56,189,248,0.032) 0%, transparent 70%)",
+        }}
+      />
+      {/* faint bottom-left warmth */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          bottom: "-8%", left: "-4%",
+          width: "40vw", height: "40vw",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(100,116,139,0.028) 0%, transparent 70%)",
         }}
       />
 
-      {/* Subtle bottom edge fade */}
+      {/* ── Edge fades ── */}
       <div
-        className="absolute bottom-0 inset-x-0 h-32 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(11,17,32,0.85) 0%, transparent 100%)",
-        }}
+        className="absolute top-0 inset-x-0 h-48 pointer-events-none"
+        style={{ background: "linear-gradient(to bottom, #080C14 0%, transparent 100%)" }}
+      />
+      <div
+        className="absolute bottom-0 inset-x-0 h-40 pointer-events-none"
+        style={{ background: "linear-gradient(to top, #080C14 0%, transparent 100%)" }}
       />
 
-      {/* ── Main content ── */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-12 pt-32 pb-28">
+      {/* ── Content ── */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 sm:px-12 pt-32 pb-28">
 
-        {/* Left accent line + eyebrow */}
-        <motion.div
-          {...slideIn(0.15)}
-          className="flex items-center gap-3 mb-10"
-        >
+        {/* Eyebrow */}
+        <motion.div {...slideLeft(0.2)} className="flex items-center gap-3 mb-10">
+          <span className="h-px w-8 block" style={{ backgroundColor: "#38BDF8" }} />
           <span
-            className="block h-px w-10 rounded-full"
-            style={{ backgroundColor: "#A7F3D0" }}
-          />
-          <span
-            className="text-[10.5px] font-mono tracking-[0.22em] uppercase"
-            style={{ color: "#A7F3D0" }}
+            className="text-[10px] font-mono tracking-[0.25em] uppercase"
+            style={{ color: "#38BDF8" }}
           >
-            BSc. Information Technology &nbsp;·&nbsp; KNUST
+            BSc. Information Technology &nbsp;·&nbsp; KNUST, Ghana
           </span>
         </motion.div>
 
-        {/* Headline — two lines, large editorial */}
-        <div className="mb-8 overflow-hidden">
-          <motion.h1
-            {...rise(0.25)}
-            className="font-bold leading-[1.05] tracking-tight"
+        {/* Headline */}
+        <motion.h1
+          {...rise(0.3)}
+          className="font-bold tracking-tight leading-[1.04] mb-3"
+          style={{
+            fontSize: "clamp(3.2rem, 8vw, 5.6rem)",
+            fontFamily: "'Inter', sans-serif",
+            color: "#F1F5F9",
+          }}
+        >
+          Hi, I'm{" "}
+          <span
             style={{
-              fontSize: "clamp(3rem, 7.5vw, 5.2rem)",
-              color: "#F1F5F9",
-              fontFamily: "'Inter', sans-serif",
+              background:
+                "linear-gradient(135deg, #E2E8F0 0%, #7DD3FC 55%, #38BDF8 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
             }}
           >
-            Hi, I'm{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, #E2E8F0 0%, #A7F3D0 60%, #BAE6FD 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              {firstName}
-            </span>
-          </motion.h1>
-          <motion.h1
-            {...rise(0.35)}
-            className="font-bold leading-[1.05] tracking-tight"
-            style={{
-              fontSize: "clamp(3rem, 7.5vw, 5.2rem)",
-              color: "#475569",
-              fontFamily: "'Inter', sans-serif",
-            }}
-          >
-            {lastName}.
-          </motion.h1>
-        </div>
+            {firstName}
+          </span>
+        </motion.h1>
+
+        <motion.h1
+          {...rise(0.38)}
+          className="font-bold tracking-tight leading-[1.04] mb-8"
+          style={{
+            fontSize: "clamp(3.2rem, 8vw, 5.6rem)",
+            fontFamily: "'Inter', sans-serif",
+            color: "#1E3A5F",
+          }}
+        >
+          {lastName}.
+        </motion.h1>
 
         {/* Bio */}
         <motion.p
-          {...rise(0.45)}
+          {...rise(0.48)}
           className="text-lg sm:text-xl leading-relaxed mb-3 max-w-2xl"
           style={{ color: "#94A3B8" }}
         >
@@ -329,26 +397,26 @@ export default function Hero({ profile }: HeroProps) {
           the edges of cybersecurity.
         </motion.p>
         <motion.p
-          {...rise(0.52)}
-          className="text-sm sm:text-base leading-relaxed max-w-xl mb-12"
-          style={{ color: "#64748B" }}
+          {...rise(0.55)}
+          className="text-sm sm:text-base leading-relaxed max-w-xl mb-14"
+          style={{ color: "#475569" }}
         >
           {profile.tagline}
         </motion.p>
 
-        {/* CTA row */}
+        {/* CTA buttons */}
         <motion.div
-          {...rise(0.6)}
-          className="flex flex-wrap items-center gap-3 mb-20"
+          {...rise(0.63)}
+          className="flex flex-wrap items-center gap-3 mb-24"
         >
-          <HoverButton
+          <CinematicButton
             onClick={() => scroll("#projects")}
-            variant="filled"
+            variant="primary"
           >
             View Projects
-          </HoverButton>
+          </CinematicButton>
 
-          <HoverButton
+          <CinematicButton
             as="a"
             href={profile.githubUrl}
             target="_blank"
@@ -357,9 +425,9 @@ export default function Hero({ profile }: HeroProps) {
             icon={<Github className="w-4 h-4" />}
           >
             GitHub
-          </HoverButton>
+          </CinematicButton>
 
-          <HoverButton
+          <CinematicButton
             as="a"
             href="#contact"
             onClick={(e: React.MouseEvent) => { e.preventDefault(); scroll("#contact"); }}
@@ -367,46 +435,37 @@ export default function Hero({ profile }: HeroProps) {
             icon={<Mail className="w-4 h-4" />}
           >
             Contact
-          </HoverButton>
+          </CinematicButton>
 
-          <HoverButton
+          <CinematicButton
             as="a"
-            href="#resume"
+            href="#about"
             onClick={(e: React.MouseEvent) => { e.preventDefault(); scroll("#about"); }}
             variant="ghost"
             icon={<FileText className="w-4 h-4" />}
           >
             Résumé
-          </HoverButton>
+          </CinematicButton>
         </motion.div>
 
-        {/* Stats row */}
-        <motion.div
-          {...appear(0.75)}
-          className="flex items-center gap-8 sm:gap-12"
-        >
+        {/* Stats */}
+        <motion.div {...fade(0.78)} className="flex items-center gap-10 sm:gap-16">
           {[
             { value: "3+", label: "Projects" },
             { value: "6", label: "Skills" },
             { value: "KNUST", label: "University" },
           ].map(({ value, label }, i) => (
-            <div key={label} className="flex items-center gap-8 sm:gap-12">
+            <div key={label} className="flex items-center gap-10 sm:gap-16">
               {i > 0 && (
-                <span
-                  className="block h-8 w-px"
-                  style={{ backgroundColor: "#1E293B" }}
-                />
+                <span className="h-8 w-px block" style={{ backgroundColor: "#0F2744" }} />
               )}
               <div>
-                <div
-                  className="text-xl font-bold font-mono"
-                  style={{ color: "#E2E8F0" }}
-                >
+                <div className="text-xl font-bold font-mono" style={{ color: "#CBD5E1" }}>
                   {value}
                 </div>
                 <div
                   className="text-[10px] font-mono tracking-widest uppercase mt-0.5"
-                  style={{ color: "#475569" }}
+                  style={{ color: "#334155" }}
                 >
                   {label}
                 </div>
@@ -416,36 +475,38 @@ export default function Hero({ profile }: HeroProps) {
         </motion.div>
       </div>
 
-      {/* Scroll cue — bottom center */}
+      {/* Scroll cue */}
       <motion.button
-        {...appear(1.3)}
+        {...fade(1.4)}
         onClick={() => scroll("#about")}
         aria-label="Scroll down"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 cursor-pointer group"
-        style={{ color: "#334155" }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 group cursor-pointer"
+        style={{ color: "#1E3A5F" }}
       >
-        <span className="text-[9px] font-mono tracking-[0.2em] uppercase group-hover:text-slate-400 transition-colors duration-300">
+        <span
+          className="text-[9px] font-mono tracking-[0.22em] uppercase transition-colors duration-300 group-hover:text-slate-500"
+        >
           scroll
         </span>
         <motion.div
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ArrowDown className="w-3.5 h-3.5 group-hover:text-slate-400 transition-colors duration-300" />
+          <ArrowDown className="w-3.5 h-3.5 transition-colors duration-300 group-hover:text-slate-500" />
         </motion.div>
       </motion.button>
     </section>
   );
 }
 
-// ─── Reusable hover button ────────────────────────────────────────────────────
+// ─── Button component ─────────────────────────────────────────────────────────
 
-type ButtonVariant = "filled" | "outline" | "ghost";
+type BtnVariant = "primary" | "outline" | "ghost";
 
-interface HoverButtonProps {
+interface CinematicButtonProps {
   children: React.ReactNode;
   onClick?: (e: React.MouseEvent) => void;
-  variant?: ButtonVariant;
+  variant?: BtnVariant;
   icon?: React.ReactNode;
   as?: "button" | "a";
   href?: string;
@@ -453,73 +514,40 @@ interface HoverButtonProps {
   rel?: string;
 }
 
-const STYLES: Record<ButtonVariant, {
-  base: React.CSSProperties;
-  hover: React.CSSProperties;
-}> = {
-  filled: {
-    base: {
-      backgroundColor: "#1E293B",
-      color: "#E2E8F0",
-      border: "1px solid #2D3F55",
-    },
-    hover: {
-      backgroundColor: "#263447",
-      color: "#F8FAFC",
-      border: "1px solid #94A3B8",
-    },
+const BTN: Record<BtnVariant, { base: React.CSSProperties; hover: React.CSSProperties }> = {
+  primary: {
+    base: { backgroundColor: "#0F2744", color: "#7DD3FC", border: "1px solid #1E3A5F" },
+    hover: { backgroundColor: "#162F56", color: "#BAE6FD", border: "1px solid #38BDF8" },
   },
   outline: {
-    base: {
-      backgroundColor: "transparent",
-      color: "#94A3B8",
-      border: "1px solid #1E293B",
-    },
-    hover: {
-      backgroundColor: "transparent",
-      color: "#E2E8F0",
-      border: "1px solid #94A3B8",
-    },
+    base: { backgroundColor: "transparent", color: "#64748B", border: "1px solid #0F2744" },
+    hover: { backgroundColor: "transparent", color: "#94A3B8", border: "1px solid #1E3A5F" },
   },
   ghost: {
-    base: {
-      backgroundColor: "transparent",
-      color: "#475569",
-      border: "1px solid transparent",
-    },
-    hover: {
-      backgroundColor: "transparent",
-      color: "#94A3B8",
-      border: "1px solid transparent",
-    },
+    base: { backgroundColor: "transparent", color: "#334155", border: "1px solid transparent" },
+    hover: { backgroundColor: "transparent", color: "#64748B", border: "1px solid transparent" },
   },
 };
 
-function HoverButton({
-  children,
-  onClick,
-  variant = "outline",
-  icon,
-  as: Tag = "button",
-  ...rest
-}: HoverButtonProps & Record<string, unknown>) {
-  const { base, hover } = STYLES[variant];
-
+function CinematicButton({
+  children, onClick, variant = "outline", icon,
+  as: Tag = "button", ...rest
+}: CinematicButtonProps & Record<string, unknown>) {
+  const { base, hover } = BTN[variant];
   return (
     <Tag
       {...rest}
       onClick={onClick}
       className="flex items-center gap-2 px-5 py-2.5 rounded-md text-sm font-medium transition-all duration-200 cursor-pointer"
       style={base}
-      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
-        Object.assign((e.currentTarget as HTMLElement).style, hover);
-      }}
-      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
-        Object.assign((e.currentTarget as HTMLElement).style, base);
-      }}
+      onMouseEnter={(e: React.MouseEvent<HTMLElement>) =>
+        Object.assign((e.currentTarget as HTMLElement).style, hover)
+      }
+      onMouseLeave={(e: React.MouseEvent<HTMLElement>) =>
+        Object.assign((e.currentTarget as HTMLElement).style, base)
+      }
     >
-      {icon}
-      {children}
+      {icon}{children}
     </Tag>
   );
 }
