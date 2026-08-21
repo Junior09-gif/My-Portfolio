@@ -1,7 +1,8 @@
 /**
- * Hero
+ * Hero v2
  * Frosted-glass card layout that sits above AnimatedBackground.
  * Receives `dark` from App so glass tints match the active theme.
+ * Updated: 2026-08-20
  */
 import { motion } from "motion/react";
 import { ArrowDown, Github, Mail, FileText, Shield, Code2 } from "lucide-react";
