@@ -72,17 +72,8 @@ export default function App() {
         profile={profile}
       />
 
-      {/* Controls bar — top-right corner, above everything */}
-      <div
-        style={{
-          position: "fixed",
-          top: "4.5rem",
-          right: "1rem",
-          zIndex: 100,
-        }}
-      >
-        <ControlsBar config={bgConfig} onChange={updateBg} />
-      </div>
+      {/* Controls bar — bottom-right, self-positioned */}
+      <ControlsBar config={bgConfig} onChange={updateBg} />
     </div>
   );
 }
