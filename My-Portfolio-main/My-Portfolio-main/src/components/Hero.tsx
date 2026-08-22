@@ -5,15 +5,15 @@ import { UserProfile } from "../types";
 interface HeroProps { profile: UserProfile; }
 
 const rise = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 28 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay },
+  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay },
 });
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { duration: 0.8, ease: "easeOut", delay },
+  transition: { duration: 0.9, ease: "easeOut", delay },
 });
 
 export default function Hero({ profile }: HeroProps) {
@@ -25,54 +25,33 @@ export default function Hero({ profile }: HeroProps) {
       id="home"
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(180deg, #F0F7FF 0%, #FFFFFF 60%)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative",
-        overflow: "hidden",
-        paddingTop: "4rem",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        position: "relative", overflow: "hidden",
+        background: "transparent",
+        zIndex: 1,
       }}
     >
-      {/* Subtle grid pattern */}
       <div style={{
-        position: "absolute", inset: 0, pointerEvents: "none",
-        backgroundImage: "linear-gradient(#E0E7FF 1px, transparent 1px), linear-gradient(90deg, #E0E7FF 1px, transparent 1px)",
-        backgroundSize: "40px 40px",
-        opacity: 0.3,
-      }} />
-
-      {/* Top gradient fade */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, height: "200px",
-        background: "linear-gradient(to bottom, #F0F7FF, transparent)",
-        pointerEvents: "none",
-      }} />
-
-      <div style={{
-        position: "relative", zIndex: 1,
-        maxWidth: "56rem", margin: "0 auto",
-        padding: "5rem 1.5rem 8rem",
+        position: "relative", zIndex: 2,
+        maxWidth: "52rem", margin: "0 auto",
+        padding: "7rem 1.5rem 8rem",
         textAlign: "center",
         display: "flex", flexDirection: "column", alignItems: "center",
       }}>
 
-        {/* Status badge */}
-        <motion.div {...fade(0.05)} style={{ marginBottom: "1.5rem" }}>
+        {/* Status pill */}
+        <motion.div {...fade(0.05)} style={{ marginBottom: "1.75rem" }}>
           <span style={{
-            display: "inline-flex", alignItems: "center", gap: "0.4rem",
-            padding: "0.35rem 0.9rem",
-            background: "#fff",
-            border: "1px solid #E5E7EB",
+            display: "inline-flex", alignItems: "center", gap: "0.5rem",
+            padding: "0.4rem 1rem",
+            background: "rgba(13,21,40,0.7)",
+            border: "1px solid rgba(59,130,246,0.25)",
             borderRadius: "999px",
-            fontSize: "0.78rem", color: "#6B7280",
-            boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+            fontSize: "0.78rem", color: "#8FA3C8",
+            backdropFilter: "blur(12px)",
           }}>
-            <span style={{
-              width: "0.45rem", height: "0.45rem", borderRadius: "50%",
-              background: "#16A34A", flexShrink: 0,
-            }} />
+            <span style={{ width: "0.45rem", height: "0.45rem", borderRadius: "50%", background: "#22C55E", flexShrink: 0, boxShadow: "0 0 6px #22C55E" }} />
             Available for internships &amp; collaborations
           </span>
         </motion.div>
@@ -81,12 +60,9 @@ export default function Hero({ profile }: HeroProps) {
         <motion.h1
           {...rise(0.12)}
           style={{
-            fontSize: "clamp(2.8rem, 6vw, 4.5rem)",
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            color: "#111827",
-            marginBottom: "0.5rem",
+            fontSize: "clamp(2.8rem, 6.5vw, 5rem)",
+            fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.08,
+            color: "#F0F4FF", marginBottom: "0.4rem",
           }}
         >
           Building software.
@@ -94,12 +70,11 @@ export default function Hero({ profile }: HeroProps) {
         <motion.h1
           {...rise(0.2)}
           style={{
-            fontSize: "clamp(2.8rem, 6vw, 4.5rem)",
-            fontWeight: 800,
-            letterSpacing: "-0.03em",
-            lineHeight: 1.1,
-            color: "#2563EB",
-            marginBottom: "1.75rem",
+            fontSize: "clamp(2.8rem, 6.5vw, 5rem)",
+            fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.08,
+            background: "linear-gradient(135deg, #60A5FA 0%, #3B82F6 40%, #06B6D4 100%)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            marginBottom: "2rem",
           }}
         >
           Securing systems.
@@ -109,17 +84,13 @@ export default function Hero({ profile }: HeroProps) {
         <motion.p
           {...rise(0.28)}
           style={{
-            fontSize: "clamp(1rem, 1.8vw, 1.15rem)",
-            lineHeight: 1.75,
-            color: "#6B7280",
-            maxWidth: "34rem",
-            marginBottom: "2.25rem",
+            fontSize: "clamp(1rem, 1.8vw, 1.12rem)",
+            lineHeight: 1.78, color: "#8FA3C8",
+            maxWidth: "32rem", marginBottom: "0.75rem",
           }}
         >
           I'm{" "}
-          <strong style={{ color: "#111827", fontWeight: 600 }}>
-            Boadu Kofi Junior Edwin
-          </strong>
+          <strong style={{ color: "#F0F4FF", fontWeight: 600 }}>Boadu Kofi Junior Edwin</strong>
           {" "}— IT student at KNUST building practical software and
           exploring the edges of cybersecurity.
         </motion.p>
@@ -127,56 +98,37 @@ export default function Hero({ profile }: HeroProps) {
         {/* Location */}
         <motion.div
           {...fade(0.3)}
-          style={{
-            display: "flex", alignItems: "center", gap: "0.4rem",
-            fontSize: "0.8rem", color: "#9CA3AF", marginBottom: "2.5rem",
-          }}
+          style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", color: "#4A5F80", marginBottom: "2.5rem" }}
         >
-          <MapPin style={{ width: "0.85rem", height: "0.85rem", color: "#2563EB" }} />
+          <MapPin style={{ width: "0.85rem", height: "0.85rem", color: "#3B82F6" }} />
           Kumasi, Ghana · KNUST
         </motion.div>
 
-        {/* CTA buttons */}
+        {/* CTA */}
         <motion.div
           {...rise(0.36)}
-          style={{ display: "flex", flexWrap: "wrap", gap: "0.65rem", justifyContent: "center", marginBottom: "4rem" }}
+          style={{ display: "flex", flexWrap: "wrap", gap: "0.65rem", justifyContent: "center", marginBottom: "3.75rem" }}
         >
-          <button
-            className="btn-primary"
-            onClick={() => scroll("#projects")}
-          >
+          <button className="btn-primary" onClick={() => scroll("#projects")}>
             View Projects
           </button>
-
-          <a
-            href={profile.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-secondary"
-          >
+          <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary">
             <Github style={{ width: "1rem", height: "1rem" }} />
             GitHub
           </a>
-
-          <a
-            href="#contact"
-            onClick={e => { e.preventDefault(); scroll("#contact"); }}
-            className="btn-secondary"
-          >
+          <a href="#contact" onClick={e => { e.preventDefault(); scroll("#contact"); }} className="btn-secondary">
             <Mail style={{ width: "1rem", height: "1rem" }} />
             Contact Me
           </a>
         </motion.div>
 
-        {/* Stats row */}
+        {/* Stats */}
         <motion.div
           {...fade(0.48)}
           style={{
             display: "flex", flexWrap: "wrap", justifyContent: "center",
-            gap: "0",
-            padding: "1.5rem 0",
-            borderTop: "1px solid #E5E7EB",
-            width: "100%", maxWidth: "36rem",
+            padding: "1.5rem 0", borderTop: "1px solid rgba(255,255,255,0.07)",
+            width: "100%", maxWidth: "36rem", gap: 0,
           }}
         >
           {[
@@ -185,45 +137,36 @@ export default function Hero({ profile }: HeroProps) {
             { value: "KNUST", label: "University" },
             { value: "2029", label: "Grad. Year" },
           ].map(({ value, label }, i) => (
-            <div
-              key={label}
-              style={{
-                flex: "1 1 25%", textAlign: "center", padding: "0 1rem",
-                borderRight: i < 3 ? "1px solid #E5E7EB" : "none",
-              }}
-            >
-              <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#111827", letterSpacing: "-0.02em" }}>
-                {value}
-              </div>
-              <div style={{ fontSize: "0.7rem", color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: "0.2rem" }}>
-                {label}
-              </div>
+            <div key={label} style={{
+              flex: "1 1 25%", textAlign: "center", padding: "0 1rem",
+              borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+            }}>
+              <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#F0F4FF", letterSpacing: "-0.02em" }}>{value}</div>
+              <div style={{ fontSize: "0.65rem", color: "#4A5F80", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "0.2rem", fontFamily: "var(--font-mono)" }}>{label}</div>
             </div>
           ))}
         </motion.div>
 
-        {/* Focus areas */}
+        {/* Focus tags */}
         <motion.div
-          {...fade(0.55)}
-          style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", justifyContent: "center", marginTop: "2rem" }}
+          {...fade(0.56)}
+          style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", justifyContent: "center", marginTop: "1.75rem" }}
         >
           {[
             { icon: Code2, label: "Software Dev" },
             { icon: Shield, label: "Cybersecurity" },
             { icon: Network, label: "Networking" },
           ].map(({ icon: Icon, label }) => (
-            <span
-              key={label}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.35rem",
-                padding: "0.35rem 0.8rem",
-                background: "#F9FAFB",
-                border: "1px solid #E5E7EB",
-                borderRadius: "999px",
-                fontSize: "0.78rem", color: "#374151",
-              }}
-            >
-              <Icon style={{ width: "0.85rem", height: "0.85rem", color: "#2563EB" }} />
+            <span key={label} style={{
+              display: "inline-flex", alignItems: "center", gap: "0.35rem",
+              padding: "0.35rem 0.85rem",
+              background: "rgba(13,21,40,0.7)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: "999px",
+              fontSize: "0.78rem", color: "#8FA3C8",
+              backdropFilter: "blur(8px)",
+            }}>
+              <Icon style={{ width: "0.85rem", height: "0.85rem", color: "#3B82F6" }} />
               {label}
             </span>
           ))}
@@ -232,18 +175,16 @@ export default function Hero({ profile }: HeroProps) {
 
       {/* Scroll cue */}
       <motion.button
-        {...fade(1.1)}
+        {...fade(1.2)}
         onClick={() => scroll("#about")}
         aria-label="Scroll down"
         style={{
-          position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)",
+          position: "absolute", bottom: "2.5rem", left: "50%", transform: "translateX(-50%)",
           display: "flex", flexDirection: "column", alignItems: "center", gap: "0.4rem",
-          background: "none", border: "none", cursor: "pointer", color: "#D1D5DB",
+          background: "none", border: "none", cursor: "pointer", color: "#2A3F60",
         }}
       >
-        <span style={{ fontSize: "0.6rem", letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: "var(--font-mono)" }}>
-          scroll
-        </span>
+        <span style={{ fontSize: "0.58rem", fontFamily: "var(--font-mono)", letterSpacing: "0.2em", textTransform: "uppercase" }}>scroll</span>
         <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
           <ArrowDown style={{ width: "0.9rem", height: "0.9rem" }} />
         </motion.div>
