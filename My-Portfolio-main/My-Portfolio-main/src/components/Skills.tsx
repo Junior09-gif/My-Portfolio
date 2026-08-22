@@ -8,22 +8,22 @@ interface SkillsProps { skills: Skill[]; }
 const DETAILS: Record<string, { desc: string; points: string[] }> = {
   "Python": { desc: "Automation scripts, mathematical solvers, file handlers, and defensive terminal tools.", points: ["Data structures & algorithms", "Script automation pipelines", "Defensive security scripting"] },
   "HTML": { desc: "Semantic, accessible web documents with responsive layouts.", points: ["Semantic HTML5 elements", "Accessibility (ARIA) standards", "SEO-friendly structure"] },
-  "CSS": { desc: "Modern layouts using grid, flexbox, custom properties, and animations.", points: ["Responsive grid & flexbox", "CSS custom properties & theming", "Keyframe & transition animations"] },
+  "CSS": { desc: "Modern layouts using grid, flexbox, custom properties, and animations.", points: ["Responsive grid & flexbox", "CSS custom properties", "Animations & transitions"] },
   "JavaScript": { desc: "Client-side logic, DOM manipulation, async workflows, and API integrations.", points: ["ES6+ syntax & async/await", "DOM events & state management", "REST API integrations"] },
-  "Networking": { desc: "TCP/IP models, IPv4 subnetting, routing protocols, and socket-level communication.", points: ["IPv4 addressing & CIDR subnetting", "DNS, DHCP, routing gateways", "OSI model layer analysis"] },
-  "Cybersecurity Basics": { desc: "Security threat modeling, encryption fundamentals, and cybercrime prevention frameworks.", points: ["Threat identification & mitigation", "Encryption & hash functions", "Secure coding principles"] },
+  "Networking": { desc: "TCP/IP models, IPv4 subnetting, routing protocols, and socket-level communication.", points: ["IPv4 addressing & CIDR", "DNS, DHCP, routing gateways", "OSI model layer analysis"] },
+  "Cybersecurity Basics": { desc: "Security threat modeling, encryption fundamentals, and cybercrime prevention.", points: ["Threat identification", "Encryption & hash functions", "Secure coding principles"] },
 };
 
 const getIcon = (name?: string) => {
-  const cls = "w-4 h-4";
+  const s = { width: "1rem", height: "1rem" };
   switch (name) {
-    case "Python": return <Terminal className={cls} />;
-    case "Html5": return <Code2 className={cls} />;
-    case "Css3": return <Paintbrush className={cls} />;
-    case "Javascript": return <Cpu className={cls} />;
-    case "Network": return <Network className={cls} />;
-    case "ShieldSec": return <ShieldCheck className={cls} />;
-    default: return <Code2 className={cls} />;
+    case "Python": return <Terminal style={s} />;
+    case "Html5": return <Code2 style={s} />;
+    case "Css3": return <Paintbrush style={s} />;
+    case "Javascript": return <Cpu style={s} />;
+    case "Network": return <Network style={s} />;
+    case "ShieldSec": return <ShieldCheck style={s} />;
+    default: return <Code2 style={s} />;
   }
 };
 
@@ -35,172 +35,142 @@ const inView = (delay = 0) => ({
 });
 
 export default function Skills({ skills }: SkillsProps) {
-  const [selected, setSelected] = useState<Skill>(skills[5]);
+  const [selected, setSelected] = useState<Skill>(skills[0]);
 
   return (
-    <section id="skills" className="section relative" style={{ background: "#0F0F17" }}>
-      <div
-        className="absolute top-0 inset-x-0 h-px"
-        style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent)" }}
-      />
-      <div
-        className="absolute bottom-0 inset-x-0 h-px"
-        style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent)" }}
-      />
-
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+    <section id="skills" className="section section-alt">
+      <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
 
         {/* Header */}
-        <motion.div {...inView()} className="mb-16">
-          <p className="label mb-3">Skills</p>
-          <h2
-            className="font-bold tracking-tight"
-            style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", color: "#F5F5F7", letterSpacing: "-0.02em" }}
-          >
+        <motion.div {...inView()} style={{ marginBottom: "3.5rem" }}>
+          <p className="label" style={{ marginBottom: "0.5rem" }}>Skills</p>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.02em" }}>
             Tech stack &amp; competencies
           </h2>
+          <p style={{ fontSize: "0.95rem", color: "#6B7280", marginTop: "0.5rem" }}>
+            Click any skill to explore proficiency and depth.
+          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2.5rem" }}>
 
-          {/* Skill grid */}
-          <div className="lg:col-span-7 space-y-3">
-            <p className="mono-tag mb-5">Click any skill to explore depth</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {skills.map((skill, i) => {
-                const isActive = selected?.name === skill.name;
-                return (
-                  <motion.button
-                    key={skill.name}
-                    {...inView(i * 0.05)}
-                    onClick={() => setSelected(skill)}
-                    whileHover={{ y: -1 }}
-                    className="text-left p-4 rounded-xl transition-all duration-200 cursor-pointer w-full"
-                    style={{
-                      background: isActive ? "rgba(10,132,255,0.08)" : "rgba(255,255,255,0.03)",
-                      border: `1px solid ${isActive ? "rgba(10,132,255,0.3)" : "rgba(255,255,255,0.07)"}`,
-                    }}
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2.5">
-                        <div
-                          className="p-1.5 rounded-lg"
-                          style={{
-                            background: isActive ? "rgba(10,132,255,0.12)" : "rgba(255,255,255,0.05)",
-                            color: isActive ? "#0A84FF" : "#515154",
-                          }}
-                        >
-                          {getIcon(skill.iconName)}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium" style={{ color: "#F5F5F7" }}>{skill.name}</p>
-                          <span
-                            className="text-xs"
-                            style={{ color: "#515154", fontFamily: "var(--font-mono)", fontSize: "0.65rem" }}
-                          >
-                            {skill.category}
-                          </span>
-                        </div>
+          {/* Grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", alignContent: "start" }}>
+            {skills.map((skill, i) => {
+              const isActive = selected?.name === skill.name;
+              return (
+                <motion.button
+                  key={skill.name}
+                  {...inView(i * 0.05)}
+                  onClick={() => setSelected(skill)}
+                  whileHover={{ y: -2 }}
+                  style={{
+                    textAlign: "left", padding: "1rem",
+                    borderRadius: "0.75rem", cursor: "pointer",
+                    background: isActive ? "#EFF6FF" : "#fff",
+                    border: `1px solid ${isActive ? "#BFDBFE" : "#E5E7EB"}`,
+                    boxShadow: isActive ? "0 2px 12px rgba(37,99,235,0.08)" : "none",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.65rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <div style={{
+                        padding: "0.35rem", borderRadius: "0.4rem",
+                        background: isActive ? "#DBEAFE" : "#F3F4F6",
+                        color: isActive ? "#2563EB" : "#6B7280",
+                      }}>
+                        {getIcon(skill.iconName)}
                       </div>
-                      <span
-                        className="text-xs font-bold"
-                        style={{ color: isActive ? "#0A84FF" : "#515154", fontFamily: "var(--font-mono)" }}
-                      >
-                        {skill.level}%
-                      </span>
+                      <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#111827" }}>{skill.name}</span>
                     </div>
-
-                    {/* Progress */}
-                    <div
-                      className="h-0.5 rounded-full overflow-hidden"
-                      style={{ background: "rgba(255,255,255,0.06)" }}
-                    >
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${skill.level}%` }}
-                        transition={{ duration: 0.9, ease: "easeOut" }}
-                        className="h-full rounded-full"
-                        style={{ background: isActive ? "#0A84FF" : "rgba(255,255,255,0.15)" }}
-                      />
-                    </div>
-                  </motion.button>
-                );
-              })}
-            </div>
+                    <span style={{ fontSize: "0.75rem", fontWeight: 700, color: isActive ? "#2563EB" : "#9CA3AF", fontFamily: "var(--font-mono)" }}>
+                      {skill.level}%
+                    </span>
+                  </div>
+                  <div style={{ height: "3px", background: "#E5E7EB", borderRadius: "999px", overflow: "hidden" }}>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${skill.level}%` }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                      style={{ height: "100%", background: isActive ? "#2563EB" : "#9CA3AF", borderRadius: "999px" }}
+                    />
+                  </div>
+                  <p style={{ fontSize: "0.7rem", color: "#9CA3AF", marginTop: "0.35rem", fontFamily: "var(--font-mono)" }}>
+                    {skill.category}
+                  </p>
+                </motion.button>
+              );
+            })}
           </div>
 
           {/* Detail panel */}
-          <div className="lg:col-span-5">
-            <motion.div
-              key={selected?.name}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="rounded-2xl p-6 sticky top-24 space-y-6"
-              style={{ background: "#141420", border: "1px solid rgba(255,255,255,0.07)" }}
-            >
-              {/* Icon + name */}
-              <div
-                className="flex items-center gap-3 pb-5"
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-              >
-                <div
-                  className="p-2.5 rounded-xl"
-                  style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF" }}
-                >
-                  {getIcon(selected?.iconName)}
-                </div>
-                <div>
-                  <p className="mono-tag">{selected?.category}</p>
-                  <h3 className="text-base font-semibold mt-0.5" style={{ color: "#F5F5F7" }}>{selected?.name}</h3>
-                </div>
+          <motion.div
+            key={selected?.name}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              padding: "1.5rem",
+              background: "#fff",
+              border: "1px solid #E5E7EB",
+              borderRadius: "1rem",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.05)",
+              position: "sticky", top: "5.5rem",
+              alignSelf: "start",
+            }}
+          >
+            {/* Icon + name */}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem", paddingBottom: "1.25rem", borderBottom: "1px solid #E5E7EB" }}>
+              <div style={{ padding: "0.65rem", borderRadius: "0.6rem", background: "#EFF6FF", color: "#2563EB" }}>
+                {getIcon(selected?.iconName)}
               </div>
-
-              {/* Ring */}
-              <div className="flex items-center gap-4">
-                <div className="relative w-14 h-14 flex-shrink-0">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 52 52">
-                    <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="4" />
-                    <circle
-                      cx="26" cy="26" r="20" fill="none"
-                      stroke="#0A84FF" strokeWidth="4"
-                      strokeLinecap="round"
-                      strokeDasharray={`${(2 * Math.PI * 20 * (selected?.level ?? 0)) / 100} 999`}
-                    />
-                  </svg>
-                  <span
-                    className="absolute inset-0 flex items-center justify-center text-xs font-bold"
-                    style={{ color: "#0A84FF", fontFamily: "var(--font-mono)" }}
-                  >
-                    {selected?.level}%
-                  </span>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold" style={{ color: "#F5F5F7" }}>Proficiency</p>
-                  <p className="text-xs mt-0.5" style={{ color: "#86868B" }}>
-                    {(selected?.level ?? 0) >= 85 ? "Advanced" : (selected?.level ?? 0) >= 70 ? "Intermediate" : "Foundational"}
-                  </p>
-                </div>
+              <div>
+                <p className="mono-tag">{selected?.category}</p>
+                <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#111827", marginTop: "0.15rem" }}>{selected?.name}</h3>
               </div>
+            </div>
 
-              {/* Description */}
-              <p style={{ fontSize: "0.88rem", lineHeight: 1.7, color: "#86868B" }}>
-                {DETAILS[selected?.name ?? ""]?.desc}
-              </p>
-
-              {/* Points */}
-              <div className="space-y-2.5">
-                <p className="mono-tag">Key competencies</p>
-                {(DETAILS[selected?.name ?? ""]?.points ?? []).map(pt => (
-                  <div key={pt} className="flex items-start gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: "#30D158" }} />
-                    <span style={{ fontSize: "0.82rem", color: "#86868B" }}>{pt}</span>
-                  </div>
-                ))}
+            {/* Proficiency ring */}
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.25rem" }}>
+              <div style={{ position: "relative", width: "3.5rem", height: "3.5rem", flexShrink: 0 }}>
+                <svg style={{ width: "100%", height: "100%", transform: "rotate(-90deg)" }} viewBox="0 0 52 52">
+                  <circle cx="26" cy="26" r="20" fill="none" stroke="#F3F4F6" strokeWidth="4" />
+                  <circle
+                    cx="26" cy="26" r="20" fill="none"
+                    stroke="#2563EB" strokeWidth="4" strokeLinecap="round"
+                    strokeDasharray={`${(2 * Math.PI * 20 * (selected?.level ?? 0)) / 100} 999`}
+                  />
+                </svg>
+                <span style={{
+                  position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "0.65rem", fontWeight: 700, color: "#2563EB", fontFamily: "var(--font-mono)",
+                }}>
+                  {selected?.level}%
+                </span>
               </div>
-            </motion.div>
-          </div>
+              <div>
+                <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#111827" }}>Proficiency</p>
+                <p style={{ fontSize: "0.8rem", color: "#6B7280", marginTop: "0.1rem" }}>
+                  {(selected?.level ?? 0) >= 85 ? "Advanced" : (selected?.level ?? 0) >= 70 ? "Intermediate" : "Foundational"}
+                </p>
+              </div>
+            </div>
 
+            <p style={{ fontSize: "0.875rem", lineHeight: 1.7, color: "#6B7280", marginBottom: "1.25rem" }}>
+              {DETAILS[selected?.name ?? ""]?.desc}
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <p className="mono-tag" style={{ marginBottom: "0.25rem" }}>Key competencies</p>
+              {(DETAILS[selected?.name ?? ""]?.points ?? []).map(pt => (
+                <div key={pt} style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                  <CheckCircle2 style={{ width: "0.9rem", height: "0.9rem", color: "#16A34A", flexShrink: 0, marginTop: "0.1rem" }} />
+                  <span style={{ fontSize: "0.825rem", color: "#6B7280" }}>{pt}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

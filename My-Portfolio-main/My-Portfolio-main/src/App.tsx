@@ -8,17 +8,8 @@ import CyberLab from "./components/CyberLab";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import ResumeModal from "./components/ResumeModal";
-import AnimatedBackground, { BgConfig } from "./components/AnimatedBackground";
-import ControlsBar from "./components/ControlsBar";
 import { Project, ContactMessage } from "./types";
 import { defaultProfile, defaultSkills, defaultProjects } from "./data";
-
-const DEFAULT_BG: BgConfig = {
-  mode: "dust",
-  speed: 1,
-  brightness: 100,
-  dark: true,
-};
 
 export default function App() {
   const profile = defaultProfile;
@@ -26,54 +17,36 @@ export default function App() {
   const [projects] = useState<Project[]>(defaultProjects);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [resumeOpen, setResumeOpen] = useState(false);
-  const [accentColor, setAccentColor] = useState("#0A84FF");
-  const [bgConfig, setBgConfig] = useState<BgConfig>(DEFAULT_BG);
-
-  const updateBg = (next: Partial<BgConfig>) =>
-    setBgConfig(prev => ({ ...prev, ...next }));
+  const [accentColor, setAccentColor] = useState("#2563EB");
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0A0A0F", color: "#F5F5F7", position: "relative" }}>
-
-      {/* Fixed animated canvas — behind everything */}
-      <AnimatedBackground config={bgConfig} />
-
-      {/* Page content */}
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <Navbar fullName={profile.fullName} />
-
-        <main>
-          <Hero profile={profile} dark={bgConfig.dark} />
-          <About profile={profile} />
-          <Skills skills={skills} />
-          <Projects
-            projects={projects}
-            accentColor={accentColor}
-            setAccentColor={setAccentColor}
-          />
-          <CyberLab />
-          <Contact
-            profile={profile}
-            messages={messages}
-            onAddMessage={m => setMessages(p => [m, ...p])}
-          />
-        </main>
-
-        <Footer
-          fullName={profile.fullName}
-          onOpenResume={() => setResumeOpen(true)}
+    <div style={{ minHeight: "100vh", background: "#fff", color: "#111827" }}>
+      <Navbar fullName={profile.fullName} />
+      <main>
+        <Hero profile={profile} />
+        <About profile={profile} />
+        <Skills skills={skills} />
+        <Projects
+          projects={projects}
+          accentColor={accentColor}
+          setAccentColor={setAccentColor}
         />
-      </div>
-
-      {/* Resume modal */}
+        <CyberLab />
+        <Contact
+          profile={profile}
+          messages={messages}
+          onAddMessage={m => setMessages(p => [m, ...p])}
+        />
+      </main>
+      <Footer
+        fullName={profile.fullName}
+        onOpenResume={() => setResumeOpen(true)}
+      />
       <ResumeModal
         isOpen={resumeOpen}
         onClose={() => setResumeOpen(false)}
         profile={profile}
       />
-
-      {/* Controls bar — bottom-right, self-positioned */}
-      <ControlsBar config={bgConfig} onChange={updateBg} />
     </div>
   );
 }

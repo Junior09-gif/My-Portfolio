@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { UserProfile, ContactMessage } from "../types";
-import { Mail, Github, Linkedin, Send, Check, Copy, MapPin, Phone, Instagram, ShieldCheck } from "lucide-react";
+import { Mail, MapPin, Phone, Send, Check, Copy, Github, Linkedin, ShieldCheck } from "lucide-react";
 
 interface ContactProps {
   profile: UserProfile;
@@ -36,119 +36,101 @@ export default function Contact({ profile, messages, onAddMessage }: ContactProp
     if (!form.name || !form.email || !form.message) return;
     setSending(true);
     setTimeout(() => {
-      onAddMessage({ name: form.name, email: form.email, subject: form.subject || "No Subject", message: form.message, timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) });
+      onAddMessage({
+        name: form.name, email: form.email,
+        subject: form.subject || "No Subject",
+        message: form.message,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      });
       setSending(false); setSuccess(true);
       setForm({ name: "", email: "", subject: "", message: "" });
       setTimeout(() => setSuccess(false), 5000);
     }, 1400);
   };
 
-  const inputStyle: React.CSSProperties = {
-    width: "100%",
-    background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "0.75rem",
-    padding: "0.65rem 1rem",
-    fontSize: "0.875rem",
-    color: "#F5F5F7",
-    outline: "none",
-    transition: "border-color 0.2s",
-    fontFamily: "var(--font-sans)",
-  };
-
   return (
-    <section id="contact" className="section relative" style={{ background: "#0A0A0F" }}>
-      <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+    <section id="contact" className="section" style={{ background: "#fff" }}>
+      <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
 
         {/* Header */}
-        <motion.div {...inView()} className="mb-16">
-          <p className="label mb-3">Contact</p>
-          <h2
-            className="font-bold tracking-tight"
-            style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", color: "#F5F5F7", letterSpacing: "-0.02em" }}
-          >
+        <motion.div {...inView()} style={{ marginBottom: "3.5rem" }}>
+          <p className="label" style={{ marginBottom: "0.5rem" }}>Contact</p>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.02em" }}>
             Let's work together
           </h2>
-          <p className="mt-3" style={{ fontSize: "0.95rem", color: "#86868B", maxWidth: "28rem" }}>
-            Open to internships, IT roles, and collaborative projects. Reach out anytime.
+          <p style={{ fontSize: "0.95rem", color: "#6B7280", marginTop: "0.5rem", maxWidth: "28rem" }}>
+            Open to internships, IT roles, and collaborative projects.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "3rem" }}>
 
           {/* Left */}
-          <motion.div {...inView(0.1)} className="lg:col-span-4 space-y-6">
+          <motion.div {...inView(0.1)} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
 
-            {/* Contact cards */}
             {[
-              { icon: Mail, label: "Email", value: profile.email, action: copyEmail, actionIcon: copied ? <Check className="w-3.5 h-3.5" style={{ color: "#30D158" }} /> : <Copy className="w-3.5 h-3.5" /> },
-              { icon: MapPin, label: "Location", value: profile.location, action: null, actionIcon: null },
-              ...(profile.phone1 ? [{ icon: Phone, label: "Phone", value: profile.phone1, action: null, actionIcon: null }] : []),
-            ].map(({ icon: Icon, label, value, action, actionIcon }) => (
+              { icon: Mail, label: "Email", value: profile.email, action: copyEmail },
+              { icon: MapPin, label: "Location", value: profile.location, action: null },
+              ...(profile.phone1 ? [{ icon: Phone, label: "Phone", value: profile.phone1, action: null }] : []),
+            ].map(({ icon: Icon, label, value, action }) => (
               <div
                 key={label}
-                className="flex items-center justify-between p-4 rounded-xl"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "1rem",
+                  background: "#F9FAFB",
+                  border: "1px solid #E5E7EB",
+                  borderRadius: "0.75rem",
+                }}
               >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="p-2 rounded-lg"
-                    style={{ background: "rgba(10,132,255,0.08)", color: "#0A84FF" }}
-                  >
-                    <Icon className="w-4 h-4" />
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <div style={{ padding: "0.5rem", background: "#EFF6FF", borderRadius: "0.5rem", color: "#2563EB" }}>
+                    <Icon style={{ width: "1rem", height: "1rem" }} />
                   </div>
                   <div>
                     <p className="mono-tag">{label}</p>
-                    <p className="text-sm font-medium mt-0.5" style={{ color: "#F5F5F7" }}>{value}</p>
+                    <p style={{ fontSize: "0.875rem", fontWeight: 500, color: "#111827", marginTop: "0.1rem" }}>{value}</p>
                   </div>
                 </div>
                 {action && (
                   <button
                     onClick={action}
-                    className="p-1.5 rounded-lg cursor-pointer transition-colors"
-                    style={{ color: "#515154", background: "none", border: "none" }}
-                    onMouseEnter={e => (e.currentTarget.style.color = "#F5F5F7")}
-                    onMouseLeave={e => (e.currentTarget.style.color = "#515154")}
+                    style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", padding: "0.25rem" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "#374151")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "#9CA3AF")}
                   >
-                    {actionIcon}
+                    {copied ? <Check style={{ width: "0.9rem", height: "0.9rem", color: "#16A34A" }} /> : <Copy style={{ width: "0.9rem", height: "0.9rem" }} />}
                   </button>
                 )}
               </div>
             ))}
 
             {/* Socials */}
-            <div>
-              <p className="mono-tag mb-3">Find me online</p>
-              <div className="flex gap-2">
+            <div style={{ marginTop: "0.5rem" }}>
+              <p className="mono-tag" style={{ marginBottom: "0.65rem" }}>Find me online</p>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
                 {[
                   { icon: Github, label: "GitHub", href: profile.githubUrl },
                   { icon: Linkedin, label: "LinkedIn", href: profile.linkedinUrl },
-                  ...(profile.instagram ? [{ icon: Instagram, label: "Instagram", href: `https://instagram.com/${profile.instagram.replace(/^@/, "")}` }] : []),
                 ].map(({ icon: Icon, label, href }) => (
                   <a
                     key={label}
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-200"
                     style={{
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid rgba(255,255,255,0.07)",
-                      color: "#86868B",
-                      textDecoration: "none",
+                      display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                      padding: "0.45rem 0.9rem",
+                      background: "#fff", color: "#374151",
+                      border: "1px solid #E5E7EB",
+                      borderRadius: "0.5rem",
+                      fontSize: "0.8rem", fontWeight: 500,
+                      textDecoration: "none", transition: "all 0.2s",
                     }}
-                    onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.color = "#F5F5F7";
-                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.15)";
-                    }}
-                    onMouseLeave={e => {
-                      (e.currentTarget as HTMLElement).style.color = "#86868B";
-                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
-                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#D1D5DB"; (e.currentTarget as HTMLElement).style.background = "#F9FAFB"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLElement).style.background = "#fff"; }}
                   >
-                    <Icon className="w-3.5 h-3.5" />
+                    <Icon style={{ width: "0.85rem", height: "0.85rem" }} />
                     {label}
                   </a>
                 ))}
@@ -156,55 +138,35 @@ export default function Contact({ profile, messages, onAddMessage }: ContactProp
             </div>
           </motion.div>
 
-          {/* Right — form */}
-          <motion.div {...inView(0.15)} className="lg:col-span-8">
-            <div
-              className="rounded-2xl p-7"
-              style={{ background: "#141420", border: "1px solid rgba(255,255,255,0.07)" }}
-            >
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Form */}
+          <motion.div {...inView(0.15)}>
+            <div style={{ padding: "1.75rem", background: "#fff", border: "1px solid #E5E7EB", borderRadius: "1rem", boxShadow: "0 4px 24px rgba(0,0,0,0.05)" }}>
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
                   <div>
-                    <label className="mono-tag block mb-1.5">Your Name *</label>
-                    <input
-                      name="name" required value={form.name} onChange={handleChange}
-                      placeholder="e.g. Ama Serwaa"
-                      style={inputStyle}
-                      onFocus={e => (e.currentTarget.style.borderColor = "rgba(10,132,255,0.4)")}
-                      onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
-                    />
+                    <label className="mono-tag" style={{ display: "block", marginBottom: "0.4rem" }}>Name *</label>
+                    <input name="name" required value={form.name} onChange={handleChange} placeholder="Your name" className="input-field" />
                   </div>
                   <div>
-                    <label className="mono-tag block mb-1.5">Email Address *</label>
-                    <input
-                      name="email" type="email" required value={form.email} onChange={handleChange}
-                      placeholder="ama@gmail.com"
-                      style={inputStyle}
-                      onFocus={e => (e.currentTarget.style.borderColor = "rgba(10,132,255,0.4)")}
-                      onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
-                    />
+                    <label className="mono-tag" style={{ display: "block", marginBottom: "0.4rem" }}>Email *</label>
+                    <input name="email" type="email" required value={form.email} onChange={handleChange} placeholder="your@email.com" className="input-field" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="mono-tag block mb-1.5">Subject</label>
-                  <input
-                    name="subject" value={form.subject} onChange={handleChange}
-                    placeholder="e.g. Internship enquiry"
-                    style={inputStyle}
-                    onFocus={e => (e.currentTarget.style.borderColor = "rgba(10,132,255,0.4)")}
-                    onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
-                  />
+                  <label className="mono-tag" style={{ display: "block", marginBottom: "0.4rem" }}>Subject</label>
+                  <input name="subject" value={form.subject} onChange={handleChange} placeholder="e.g. Internship enquiry" className="input-field" />
                 </div>
 
                 <div>
-                  <label className="mono-tag block mb-1.5">Message *</label>
+                  <label className="mono-tag" style={{ display: "block", marginBottom: "0.4rem" }}>Message *</label>
                   <textarea
-                    name="message" required value={form.message} onChange={handleChange} rows={5}
+                    name="message" required value={form.message} onChange={handleChange}
                     placeholder="Tell me about your project or opportunity..."
-                    style={{ ...inputStyle, resize: "none" }}
-                    onFocus={e => (e.currentTarget.style.borderColor = "rgba(10,132,255,0.4)")}
-                    onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
+                    rows={5}
+                    className="input-field"
+                    style={{ resize: "none" }}
                   />
                 </div>
 
@@ -215,13 +177,16 @@ export default function Contact({ profile, messages, onAddMessage }: ContactProp
                       initial={{ opacity: 0, scale: 0.97 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0 }}
-                      className="flex items-center gap-3 p-4 rounded-xl"
-                      style={{ background: "rgba(48,209,88,0.08)", border: "1px solid rgba(48,209,88,0.2)" }}
+                      style={{
+                        display: "flex", alignItems: "center", gap: "0.75rem",
+                        padding: "1rem", borderRadius: "0.75rem",
+                        background: "#F0FDF4", border: "1px solid #BBF7D0",
+                      }}
                     >
-                      <ShieldCheck className="w-5 h-5 flex-shrink-0" style={{ color: "#30D158" }} />
+                      <ShieldCheck style={{ width: "1.1rem", height: "1.1rem", color: "#16A34A", flexShrink: 0 }} />
                       <div>
-                        <p className="text-sm font-semibold" style={{ color: "#30D158" }}>Message sent!</p>
-                        <p className="text-xs mt-0.5" style={{ color: "#86868B" }}>I'll get back to you as soon as possible.</p>
+                        <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#15803D" }}>Message sent!</p>
+                        <p style={{ fontSize: "0.8rem", color: "#6B7280", marginTop: "0.1rem" }}>I'll get back to you as soon as possible.</p>
                       </div>
                     </motion.div>
                   ) : (
@@ -229,39 +194,39 @@ export default function Contact({ profile, messages, onAddMessage }: ContactProp
                       key="btn"
                       type="submit"
                       disabled={sending}
-                      className="w-full py-3 rounded-xl text-sm font-semibold text-white flex items-center justify-center gap-2 cursor-pointer transition-all duration-200"
-                      style={{ background: sending ? "#005BBB" : "#0A84FF" }}
-                      whileHover={{ background: "#409CFF" } as never}
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+                        width: "100%", padding: "0.75rem",
+                        background: sending ? "#93C5FD" : "#2563EB",
+                        color: "#fff", borderRadius: "0.6rem",
+                        fontSize: "0.875rem", fontWeight: 600,
+                        border: "none", cursor: sending ? "not-allowed" : "pointer",
+                        transition: "background 0.2s",
+                      }}
+                      onMouseEnter={e => { if (!sending) e.currentTarget.style.background = "#1D4ED8"; }}
+                      onMouseLeave={e => { if (!sending) e.currentTarget.style.background = "#2563EB"; }}
                     >
                       {sending
-                        ? <><div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />Sending...</>
-                        : <><Send className="w-4 h-4" />Send Message</>
+                        ? <><div style={{ width: "1rem", height: "1rem", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.3)", borderTopColor: "#fff", animation: "spin 0.8s linear infinite" }} />Sending...</>
+                        : <><Send style={{ width: "1rem", height: "1rem" }} />Send Message</>
                       }
                     </motion.button>
                   )}
                 </AnimatePresence>
               </form>
 
-              {/* Message log */}
               {messages.length > 0 && (
-                <div
-                  className="mt-6 pt-5 space-y-3"
-                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-                >
-                  <p className="mono-tag">Inbox ({messages.length})</p>
-                  <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                <div style={{ marginTop: "1.25rem", paddingTop: "1.25rem", borderTop: "1px solid #E5E7EB" }}>
+                  <p className="mono-tag" style={{ marginBottom: "0.65rem" }}>Inbox ({messages.length})</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", maxHeight: "10rem", overflowY: "auto" }}>
                     {messages.map((m, i) => (
-                      <div
-                        key={i}
-                        className="p-3 rounded-xl space-y-1"
-                        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-semibold" style={{ color: "#F5F5F7" }}>{m.name}</span>
-                          <span className="text-xs" style={{ color: "#515154", fontFamily: "var(--font-mono)" }}>{m.timestamp}</span>
+                      <div key={i} style={{ padding: "0.75rem", background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: "0.6rem" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.25rem" }}>
+                          <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#111827" }}>{m.name}</span>
+                          <span style={{ fontSize: "0.7rem", color: "#9CA3AF", fontFamily: "var(--font-mono)" }}>{m.timestamp}</span>
                         </div>
-                        <p className="text-xs" style={{ color: "#0A84FF" }}>{m.subject}</p>
-                        <p className="text-xs line-clamp-2" style={{ color: "#86868B" }}>{m.message}</p>
+                        <p style={{ fontSize: "0.75rem", color: "#2563EB", marginBottom: "0.2rem" }}>{m.subject}</p>
+                        <p style={{ fontSize: "0.75rem", color: "#6B7280", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{m.message}</p>
                       </div>
                     ))}
                   </div>
@@ -269,7 +234,6 @@ export default function Contact({ profile, messages, onAddMessage }: ContactProp
               )}
             </div>
           </motion.div>
-
         </div>
       </div>
     </section>

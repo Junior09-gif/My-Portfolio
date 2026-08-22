@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { UserProfile } from "../types";
-import { MapPin, GraduationCap, Target, Calendar } from "lucide-react";
+import { MapPin, GraduationCap, Target, Calendar, CheckCircle2 } from "lucide-react";
 import { timelineEvents } from "../data";
 
 interface AboutProps { profile: UserProfile; }
@@ -14,87 +14,89 @@ const inView = (delay = 0) => ({
 
 export default function About({ profile }: AboutProps) {
   return (
-    <section id="about" className="section relative" style={{ background: "#0A0A0F" }}>
-      <div className="absolute inset-0 dot-grid opacity-30 pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+    <section id="about" className="section" style={{ background: "#fff" }}>
+      <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
 
         {/* Header */}
-        <motion.div {...inView()} className="mb-16">
-          <p className="label mb-3">About</p>
-          <h2
-            className="font-bold tracking-tight"
-            style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", color: "#F5F5F7", letterSpacing: "-0.02em" }}
-          >
+        <motion.div {...inView()} style={{ marginBottom: "3.5rem" }}>
+          <p className="label" style={{ marginBottom: "0.5rem" }}>About Me</p>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 800, color: "#111827", letterSpacing: "-0.02em" }}>
             The person behind the code
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "3.5rem" }}>
 
-          {/* Left */}
-          <div className="space-y-10">
+          {/* Left col */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
 
             {/* Bio */}
             <motion.div {...inView(0.1)}>
-              <p className="mono-tag mb-4">profile.bio</p>
-              <div className="space-y-4">
-                {profile.bio.split("\n\n").map((para, i) => (
-                  <p key={i} style={{ fontSize: "0.95rem", lineHeight: 1.75, color: "#86868B" }}>
-                    {para}
-                  </p>
-                ))}
-              </div>
+              <p className="mono-tag" style={{ marginBottom: "0.75rem" }}>profile.bio</p>
+              {profile.bio.split("\n\n").map((para, i) => (
+                <p key={i} style={{ fontSize: "0.95rem", lineHeight: 1.8, color: "#6B7280", marginBottom: "1rem" }}>
+                  {para}
+                </p>
+              ))}
             </motion.div>
 
             {/* Career goal */}
             <motion.div
               {...inView(0.15)}
-              className="rounded-xl p-5"
-              style={{ background: "rgba(10,132,255,0.06)", border: "1px solid rgba(10,132,255,0.15)" }}
+              style={{
+                padding: "1.25rem",
+                background: "#EFF6FF",
+                border: "1px solid #BFDBFE",
+                borderRadius: "0.75rem",
+                display: "flex", gap: "0.75rem",
+              }}
             >
-              <div className="flex items-start gap-3">
-                <Target className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: "#0A84FF" }} />
-                <div>
-                  <p className="text-xs font-semibold mb-1" style={{ color: "#F5F5F7" }}>Career Objective</p>
-                  <p style={{ fontSize: "0.85rem", lineHeight: 1.65, color: "#86868B" }}>{profile.careerGoal}</p>
-                </div>
+              <Target style={{ width: "1.1rem", height: "1.1rem", color: "#2563EB", flexShrink: 0, marginTop: "0.1rem" }} />
+              <div>
+                <p style={{ fontSize: "0.8rem", fontWeight: 600, color: "#1D4ED8", marginBottom: "0.3rem" }}>Career Objective</p>
+                <p style={{ fontSize: "0.875rem", lineHeight: 1.65, color: "#3B82F6" }}>{profile.careerGoal}</p>
               </div>
             </motion.div>
 
             {/* Quick facts */}
-            <motion.div {...inView(0.2)} className="grid grid-cols-2 gap-3">
+            <motion.div {...inView(0.2)} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
               {[
                 { icon: GraduationCap, label: "University", value: "KNUST, Ghana" },
                 { icon: MapPin, label: "Location", value: profile.location },
                 { icon: Calendar, label: "Program", value: "BSc. IT" },
-                { icon: Calendar, label: "Graduation", value: "Expected 2029" },
+                { icon: Calendar, label: "Graduation", value: "2029" },
               ].map(({ icon: Icon, label, value }) => (
                 <div
                   key={label}
-                  className="card card-hover p-4 rounded-xl"
+                  style={{
+                    padding: "0.9rem",
+                    background: "#F9FAFB",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: "0.75rem",
+                  }}
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    <Icon className="w-3.5 h-3.5" style={{ color: "#0A84FF" }} />
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.35rem" }}>
+                    <Icon style={{ width: "0.85rem", height: "0.85rem", color: "#2563EB" }} />
                     <span className="mono-tag">{label}</span>
                   </div>
-                  <p className="text-sm font-medium" style={{ color: "#F5F5F7" }}>{value}</p>
+                  <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#111827" }}>{value}</p>
                 </div>
               ))}
             </motion.div>
 
             {/* Interests */}
             <motion.div {...inView(0.25)}>
-              <p className="mono-tag mb-3">Areas of interest</p>
-              <div className="flex flex-wrap gap-2">
+              <p className="mono-tag" style={{ marginBottom: "0.65rem" }}>Areas of Interest</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
                 {profile.fieldsOfInterest.map(f => (
                   <span
                     key={f}
-                    className="px-3 py-1.5 rounded-full text-xs font-medium"
                     style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      color: "#86868B",
+                      padding: "0.3rem 0.75rem",
+                      background: "#F3F4F6",
+                      border: "1px solid #E5E7EB",
+                      borderRadius: "999px",
+                      fontSize: "0.8rem", color: "#374151",
                     }}
                   >
                     {f}
@@ -104,75 +106,71 @@ export default function About({ profile }: AboutProps) {
             </motion.div>
           </div>
 
-          {/* Right — ID card + timeline */}
-          <div className="space-y-10">
+          {/* Right col */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
 
-            {/* ID Card */}
+            {/* Profile card */}
             <motion.div
               {...inView(0.1)}
-              className="rounded-2xl overflow-hidden"
-              style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+              style={{
+                border: "1px solid #E5E7EB",
+                borderRadius: "1rem",
+                overflow: "hidden",
+                boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+              }}
             >
-              {/* Card header */}
-              <div
-                className="h-24 relative flex items-end px-6 pb-0"
-                style={{ background: "linear-gradient(135deg, #0A0A0F 0%, #0F1A2E 100%)" }}
-              >
-                <div
-                  className="absolute inset-0 dot-grid opacity-30"
-                />
-                <div
-                  className="absolute top-3 right-4 text-xs font-mono rounded-full px-2.5 py-0.5"
-                  style={{
-                    background: "rgba(10,132,255,0.1)",
-                    border: "1px solid rgba(10,132,255,0.2)",
-                    color: "#0A84FF",
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.1em",
-                  }}
-                >
+              {/* Card banner */}
+              <div style={{
+                height: "6rem",
+                background: "linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)",
+                position: "relative",
+              }}>
+                <div style={{
+                  position: "absolute", top: "0.75rem", right: "0.75rem",
+                  padding: "0.2rem 0.65rem",
+                  background: "#fff",
+                  border: "1px solid #BFDBFE",
+                  borderRadius: "999px",
+                  fontSize: "0.65rem", color: "#2563EB", fontFamily: "var(--font-mono)",
+                }}>
                   ACTIVE · 2026
                 </div>
               </div>
 
-              <div
-                className="p-6"
-                style={{ background: "#141420" }}
-              >
-                {/* Avatar + name */}
-                <div className="flex items-end gap-4 -mt-10 mb-5">
-                  <div
-                    className="w-16 h-16 rounded-xl flex-shrink-0 flex items-center justify-center text-xl font-bold text-white"
-                    style={{
-                      background: "linear-gradient(135deg, #0A84FF 0%, #005BBB 100%)",
-                      border: "3px solid #141420",
-                    }}
-                  >
+              <div style={{ padding: "0 1.5rem 1.5rem", background: "#fff" }}>
+                {/* Avatar */}
+                <div style={{ display: "flex", alignItems: "flex-end", gap: "1rem", marginTop: "-2rem", marginBottom: "1rem" }}>
+                  <div style={{
+                    width: "4rem", height: "4rem", borderRadius: "0.75rem",
+                    background: "linear-gradient(135deg, #2563EB, #1D4ED8)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "1.3rem", fontWeight: 700, color: "#fff",
+                    border: "3px solid #fff",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                    flexShrink: 0,
+                  }}>
                     {profile.fullName.charAt(0)}
                   </div>
-                  <div className="pb-1">
-                    <h3 className="font-semibold text-sm" style={{ color: "#F5F5F7" }}>{profile.fullName}</h3>
-                    <p
-                      style={{ fontSize: "0.72rem", color: "#0A84FF", fontFamily: "var(--font-mono)" }}
-                    >
-                      IT Student · KNUST
-                    </p>
+                  <div style={{ paddingBottom: "0.25rem" }}>
+                    <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "#111827" }}>{profile.fullName}</p>
+                    <p style={{ fontSize: "0.75rem", color: "#2563EB", fontFamily: "var(--font-mono)" }}>IT Student · KNUST</p>
                   </div>
                 </div>
 
-                <div
-                  className="grid grid-cols-2 gap-4 text-xs pt-4"
-                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-mono)" }}
-                >
+                <div style={{
+                  display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem",
+                  paddingTop: "1rem", borderTop: "1px solid #E5E7EB",
+                  fontSize: "0.8rem",
+                }}>
                   {[
                     { label: "INSTITUTION", value: "KNUST" },
                     { label: "FACULTY", value: "Computing" },
-                    { label: "LOCATION", value: profile.location },
+                    { label: "LOCATION", value: "Kumasi, GH" },
                     { label: "LEVEL", value: "Year 1" },
                   ].map(({ label, value }) => (
                     <div key={label}>
-                      <span className="block mb-0.5" style={{ color: "#515154" }}>{label}</span>
-                      <span className="font-semibold" style={{ color: "#F5F5F7" }}>{value}</span>
+                      <p className="mono-tag" style={{ marginBottom: "0.2rem" }}>{label}</p>
+                      <p style={{ fontWeight: 600, color: "#111827" }}>{value}</p>
                     </div>
                   ))}
                 </div>
@@ -181,42 +179,59 @@ export default function About({ profile }: AboutProps) {
 
             {/* Timeline */}
             <motion.div {...inView(0.2)}>
-              <div className="flex items-center gap-2 mb-6">
-                <GraduationCap className="w-4 h-4" style={{ color: "#0A84FF" }} />
-                <p className="text-sm font-semibold" style={{ color: "#F5F5F7" }}>Academic Timeline</p>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem" }}>
+                <GraduationCap style={{ width: "1rem", height: "1rem", color: "#2563EB" }} />
+                <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#111827" }}>Academic Timeline</p>
               </div>
 
-              <div
-                className="relative pl-5 space-y-7"
-                style={{ borderLeft: "1px solid rgba(255,255,255,0.08)" }}
-              >
+              <div style={{ position: "relative", paddingLeft: "1.25rem", borderLeft: "2px solid #E5E7EB" }}>
                 {timelineEvents.map((evt, i) => (
-                  <div key={i} className="relative">
-                    <div
-                      className="absolute -left-[21px] top-1.5 w-2.5 h-2.5 rounded-full"
-                      style={{ background: "#0A84FF", border: "2px solid #0A0A0F" }}
-                    />
-                    <span
-                      className="inline-block mb-2 px-2 py-0.5 rounded-md"
-                      style={{
-                        fontSize: "0.65rem",
-                        fontFamily: "var(--font-mono)",
-                        color: "#0A84FF",
-                        background: "rgba(10,132,255,0.08)",
-                        border: "1px solid rgba(10,132,255,0.15)",
-                      }}
-                    >
+                  <div key={i} style={{ position: "relative", marginBottom: i < timelineEvents.length - 1 ? "1.75rem" : 0 }}>
+                    <div style={{
+                      position: "absolute", left: "-1.5rem", top: "0.25rem",
+                      width: "0.65rem", height: "0.65rem", borderRadius: "50%",
+                      background: "#2563EB", border: "2px solid #fff",
+                      boxShadow: "0 0 0 2px #BFDBFE",
+                    }} />
+                    <span style={{
+                      display: "inline-block", marginBottom: "0.4rem",
+                      padding: "0.15rem 0.6rem",
+                      background: "#EFF6FF", color: "#2563EB",
+                      border: "1px solid #BFDBFE",
+                      borderRadius: "0.35rem",
+                      fontSize: "0.65rem", fontFamily: "var(--font-mono)",
+                    }}>
                       {evt.year}
                     </span>
-                    <h4 className="text-sm font-semibold mb-0.5" style={{ color: "#F5F5F7" }}>{evt.title}</h4>
-                    <p className="text-xs mb-1" style={{ color: "#515154" }}>{evt.institution}</p>
-                    <p style={{ fontSize: "0.82rem", lineHeight: 1.6, color: "#86868B" }}>{evt.details}</p>
+                    <h4 style={{ fontSize: "0.875rem", fontWeight: 600, color: "#111827", marginBottom: "0.15rem" }}>{evt.title}</h4>
+                    <p style={{ fontSize: "0.75rem", color: "#9CA3AF", marginBottom: "0.4rem" }}>{evt.institution}</p>
+                    <p style={{ fontSize: "0.825rem", lineHeight: 1.65, color: "#6B7280" }}>{evt.details}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* What I bring */}
+            <motion.div
+              {...inView(0.25)}
+              style={{ padding: "1.25rem", background: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: "0.75rem" }}
+            >
+              <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#111827", marginBottom: "0.75rem" }}>What I bring</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                {[
+                  "Practical software development skills",
+                  "Cybersecurity awareness & fundamentals",
+                  "Strong problem-solving mindset",
+                  "Collaborative team player",
+                ].map(item => (
+                  <div key={item} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <CheckCircle2 style={{ width: "0.9rem", height: "0.9rem", color: "#16A34A", flexShrink: 0 }} />
+                    <span style={{ fontSize: "0.825rem", color: "#6B7280" }}>{item}</span>
                   </div>
                 ))}
               </div>
             </motion.div>
           </div>
-
         </div>
       </div>
     </section>

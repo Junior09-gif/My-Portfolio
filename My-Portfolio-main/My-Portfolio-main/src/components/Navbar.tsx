@@ -4,21 +4,21 @@ import { Menu, X } from "lucide-react";
 interface NavbarProps { fullName: string; }
 
 const NAV = [
-  { label: "Home",      href: "#home"      },
-  { label: "About",     href: "#about"     },
-  { label: "Skills",    href: "#skills"    },
-  { label: "Projects",  href: "#projects"  },
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
+  { label: "Projects", href: "#projects" },
   { label: "Cyber Lab", href: "#cyber-lab" },
-  { label: "Contact",   href: "#contact"   },
+  { label: "Contact", href: "#contact" },
 ];
 
 export default function Navbar({ fullName }: NavbarProps) {
-  const [open,    setOpen]    = useState(false);
-  const [scrolled,setScrolled]= useState(false);
-  const [active,  setActive]  = useState("#home");
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("#home");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -37,72 +37,78 @@ export default function Navbar({ fullName }: NavbarProps) {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Initials from full name
   const initials = fullName.split(" ").map(w => w[0]).slice(0, 2).join("");
 
   return (
     <nav
-      className="fixed top-0 inset-x-0 z-50 transition-all duration-500"
       style={{
-        background: scrolled ? "rgba(10,10,15,0.85)" : "transparent",
-        backdropFilter: scrolled ? "blur(24px) saturate(180%)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(24px) saturate(180%)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid transparent",
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+        background: scrolled ? "rgba(255,255,255,0.95)" : "#fff",
+        backdropFilter: scrolled ? "blur(12px)" : "none",
+        borderBottom: scrolled ? "1px solid #E5E7EB" : "1px solid transparent",
+        transition: "all 0.3s ease",
       }}
     >
-      <div className="max-w-6xl mx-auto px-5 sm:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "4rem" }}>
 
           {/* Logo */}
           <button
             onClick={() => go("#home")}
-            className="flex items-center gap-2.5 cursor-pointer"
+            style={{ display: "flex", alignItems: "center", gap: "0.6rem", background: "none", border: "none", cursor: "pointer" }}
           >
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
-              style={{ background: "#0A84FF", fontFamily: "var(--font-sans)" }}
-            >
+            <div style={{
+              width: "2rem", height: "2rem", borderRadius: "0.5rem",
+              background: "#2563EB", color: "#fff",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "0.7rem", fontWeight: 700,
+            }}>
               {initials}
             </div>
-            <span className="text-sm font-semibold" style={{ color: "#F5F5F7" }}>
-              Edwin<span style={{ color: "#0A84FF" }}>.</span>dev
+            <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "#111827" }}>
+              Edwin<span style={{ color: "#2563EB" }}>.</span>dev
             </span>
           </button>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop links */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }} className="hidden md:flex">
             {NAV.map(({ label, href }) => {
               const isActive = active === href;
               return (
                 <button
                   key={label}
                   onClick={() => go(href)}
-                  className="relative px-3.5 py-2 rounded-lg text-sm transition-all duration-200 cursor-pointer"
                   style={{
-                    color: isActive ? "#F5F5F7" : "#86868B",
-                    fontWeight: isActive ? 500 : 400,
+                    padding: "0.4rem 0.85rem",
+                    borderRadius: "0.5rem",
+                    fontSize: "0.875rem",
+                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? "#2563EB" : "#6B7280",
+                    background: isActive ? "#EFF6FF" : "transparent",
+                    border: "none", cursor: "pointer",
+                    transition: "all 0.15s",
                   }}
+                  onMouseEnter={e => { if (!isActive) { e.currentTarget.style.color = "#111827"; e.currentTarget.style.background = "#F9FAFB"; } }}
+                  onMouseLeave={e => { if (!isActive) { e.currentTarget.style.color = "#6B7280"; e.currentTarget.style.background = "transparent"; } }}
                 >
-                  {isActive && (
-                    <span
-                      className="absolute inset-0 rounded-lg"
-                      style={{ background: "rgba(255,255,255,0.05)" }}
-                    />
-                  )}
-                  <span className="relative">{label}</span>
+                  {label}
                 </button>
               );
             })}
           </div>
 
           {/* CTA */}
-          <div className="hidden md:flex items-center gap-2">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }} className="hidden md:flex">
             <button
               onClick={() => go("#contact")}
-              className="px-4 py-1.5 rounded-lg text-sm font-semibold text-white cursor-pointer transition-all duration-200"
-              style={{ background: "#0A84FF" }}
-              onMouseEnter={e => (e.currentTarget.style.background = "#409CFF")}
-              onMouseLeave={e => (e.currentTarget.style.background = "#0A84FF")}
+              style={{
+                padding: "0.45rem 1.1rem",
+                background: "#2563EB", color: "#fff",
+                borderRadius: "0.5rem", fontSize: "0.875rem", fontWeight: 600,
+                border: "none", cursor: "pointer", transition: "background 0.2s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "#1D4ED8")}
+              onMouseLeave={e => (e.currentTarget.style.background = "#2563EB")}
             >
               Hire Me
             </button>
@@ -111,8 +117,8 @@ export default function Navbar({ fullName }: NavbarProps) {
           {/* Mobile toggle */}
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-lg transition-colors cursor-pointer"
-            style={{ color: "#86868B" }}
+            className="md:hidden"
+            style={{ background: "none", border: "none", cursor: "pointer", color: "#6B7280", padding: "0.25rem" }}
           >
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -121,37 +127,34 @@ export default function Navbar({ fullName }: NavbarProps) {
 
       {/* Mobile menu */}
       {open && (
-        <div
-          className="md:hidden border-t"
-          style={{
-            background: "rgba(10,10,15,0.96)",
-            backdropFilter: "blur(24px)",
-            borderColor: "rgba(255,255,255,0.06)",
-          }}
-        >
-          <div className="max-w-6xl mx-auto px-5 py-4 space-y-1">
+        <div style={{ background: "#fff", borderTop: "1px solid #E5E7EB" }}>
+          <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0.75rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
             {NAV.map(({ label, href }) => (
               <button
                 key={label}
                 onClick={() => go(href)}
-                className="w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors cursor-pointer"
                 style={{
-                  color: active === href ? "#F5F5F7" : "#86868B",
-                  background: active === href ? "rgba(255,255,255,0.05)" : "transparent",
+                  textAlign: "left", padding: "0.6rem 0.75rem", borderRadius: "0.5rem",
+                  fontSize: "0.875rem", fontWeight: active === href ? 600 : 400,
+                  color: active === href ? "#2563EB" : "#6B7280",
+                  background: active === href ? "#EFF6FF" : "transparent",
+                  border: "none", cursor: "pointer",
                 }}
               >
                 {label}
               </button>
             ))}
-            <div className="pt-2">
-              <button
-                onClick={() => go("#contact")}
-                className="w-full py-2.5 rounded-lg text-sm font-semibold text-white cursor-pointer"
-                style={{ background: "#0A84FF" }}
-              >
-                Hire Me
-              </button>
-            </div>
+            <button
+              onClick={() => go("#contact")}
+              style={{
+                marginTop: "0.5rem", padding: "0.65rem",
+                background: "#2563EB", color: "#fff",
+                borderRadius: "0.5rem", fontSize: "0.875rem", fontWeight: 600,
+                border: "none", cursor: "pointer",
+              }}
+            >
+              Hire Me
+            </button>
           </div>
         </div>
       )}
