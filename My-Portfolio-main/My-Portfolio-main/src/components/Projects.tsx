@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Project } from "../types";
 import {
-  Terminal, Calculator, Network, AlertCircle, BookOpen,
-  ChevronRight, Wifi, RotateCcw, CheckCircle2
+  Terminal, Calculator, Network, AlertCircle,
+  BookOpen, Wifi, RotateCcw, CheckCircle2
 } from "lucide-react";
 
 interface ProjectsProps {
@@ -11,6 +11,20 @@ interface ProjectsProps {
   accentColor: string;
   setAccentColor: (c: string) => void;
 }
+
+const inView = (delay = 0) => ({
+  initial: { opacity: 0, y: 16 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay },
+});
+
+const COLORS = [
+  { name: "Blue", hex: "#0A84FF" },
+  { name: "Indigo", hex: "#5E5CE6" },
+  { name: "Green", hex: "#30D158" },
+  { name: "Pink", hex: "#FF375F" },
+];
 
 export default function Projects({ projects, accentColor, setAccentColor }: ProjectsProps) {
   const [active, setActive] = useState("calculator");
@@ -20,15 +34,14 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
   const [screen, setScreen] = useState("0");
   const [history, setHistory] = useState<string[]>(["# shell ready"]);
 
-  const calcAppend = (ch: string) => {
+  const append = (ch: string) => {
     if (screen === "Error") { setScreen(ch); setInput(ch); return; }
     const ops = ["+", "-", "*", "/"];
     if (ops.includes(ch) && ops.includes(input.slice(-1))) return;
-    const next = input + ch;
-    setInput(next); setScreen(next);
+    const n = input + ch; setInput(n); setScreen(n);
   };
-  const calcClear = () => { setInput(""); setScreen("0"); };
-  const calcEval = () => {
+  const clear = () => { setInput(""); setScreen("0"); };
+  const evaluate = () => {
     try {
       if (!input) return;
       if (/[^-()\d/*+.]/.test(input)) throw new Error();
@@ -45,7 +58,10 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
   const [ip, setIp] = useState("192.168.1.45");
   const [cidr, setCidr] = useState(24);
   const [ipErr, setIpErr] = useState("");
-  const [subnet, setSubnet] = useState({ mask: "255.255.255.0", network: "192.168.1.0", broadcast: "192.168.1.255", hosts: "254" });
+  const [subnet, setSubnet] = useState({
+    mask: "255.255.255.0", network: "192.168.1.0",
+    broadcast: "192.168.1.255", hosts: "254",
+  });
 
   useEffect(() => {
     const parts = ip.split(".").map(Number);
@@ -60,22 +76,19 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
     const hb = "0".repeat(c).padEnd(32, "1");
     const hp = [0, 8, 16, 24].map(o => parseInt(hb.slice(o, o + 8), 2));
     const bp = np.map((p, i) => p | hp[i]);
-    const hosts = c >= 31 ? 0 : Math.pow(2, 32 - c) - 2;
-    setSubnet({ mask: mp.join("."), network: np.join("."), broadcast: bp.join("."), hosts: hosts.toLocaleString() });
+    setSubnet({
+      mask: mp.join("."),
+      network: np.join("."),
+      broadcast: bp.join("."),
+      hosts: c >= 31 ? "0" : (Math.pow(2, 32 - c) - 2).toLocaleString(),
+    });
   }, [ip, cidr]);
 
-  // ── Theme ──
-  const colorPresets = [
-    { name: "Blue", hex: "#0ea5e9" },
-    { name: "Violet", hex: "#8b5cf6" },
-    { name: "Emerald", hex: "#10b981" },
-    { name: "Rose", hex: "#f43f5e" },
-  ];
   const applyColor = (hex: string) => {
     setAccentColor(hex);
     document.documentElement.style.setProperty("--color-brand-500", hex);
-    document.documentElement.style.setProperty("--color-brand-600", hex);
     document.documentElement.style.setProperty("--color-brand-400", hex);
+    document.documentElement.style.setProperty("--color-brand-600", hex);
   };
 
   const tabIcon = (id: string) => {
@@ -84,52 +97,83 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
     return <Terminal className="w-4 h-4" />;
   };
 
-  return (
-    <section id="projects" className="py-28 bg-[#060810] relative">
-      <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none" />
-      <div className="absolute right-0 bottom-1/4 w-[400px] h-[400px] bg-brand-600/5 rounded-full blur-[120px] pointer-events-none" />
+  const fieldStyle: React.CSSProperties = {
+    background: "rgba(255,255,255,0.04)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: "0.65rem",
+    padding: "0.5rem 0.8rem",
+    fontSize: "0.82rem",
+    color: "#F5F5F7",
+    outline: "none",
+    fontFamily: "var(--font-mono)",
+    width: "100%",
+  };
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  return (
+    <section id="projects" className="section relative" style={{ background: "#0F0F17" }}>
+      <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none" />
+
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
 
         {/* Header */}
-        <div className="mb-16">
-          <p className="section-label mb-3">Academic Projects</p>
-          <h2 className="text-3xl sm:text-4xl font-display font-bold text-white tracking-tight">
+        <motion.div {...inView()} className="mb-16">
+          <p className="label mb-3">Projects</p>
+          <h2
+            className="font-bold tracking-tight"
+            style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", color: "#F5F5F7", letterSpacing: "-0.02em" }}
+          >
             Practical solutions I've built
           </h2>
-          <div className="w-10 h-0.5 bg-brand-500 mt-4" />
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
 
           {/* Project list */}
           <div className="xl:col-span-5 space-y-3">
-            {projects.map((proj) => {
+            {projects.map((proj, i) => {
               const isActive = active === proj.id;
               return (
                 <motion.div
                   key={proj.id}
-                  whileHover={{ x: 2 }}
+                  {...inView(i * 0.07)}
                   onClick={() => setActive(proj.id)}
-                  className={`p-5 rounded-xl border cursor-pointer transition-all ${isActive
-                      ? "bg-brand-500/8 border-brand-500/40 shadow-lg shadow-brand-900/10"
-                      : "bg-surface-800 border-white/6 hover:border-white/15"
-                    }`}
+                  className="p-5 rounded-xl cursor-pointer transition-all duration-200"
+                  style={{
+                    background: isActive ? "rgba(10,132,255,0.07)" : "rgba(255,255,255,0.03)",
+                    border: `1px solid ${isActive ? "rgba(10,132,255,0.25)" : "rgba(255,255,255,0.07)"}`,
+                  }}
+                  whileHover={{ y: -1 }}
                 >
                   <div className="flex items-start gap-3">
-                    <div className={`p-2 rounded-lg border mt-0.5 flex-shrink-0 ${isActive ? "bg-brand-500/15 border-brand-500/30 text-brand-400" : "bg-surface-700 border-white/8 text-slate-400"
-                      }`}>
+                    <div
+                      className="p-2 rounded-lg mt-0.5 flex-shrink-0"
+                      style={{
+                        background: isActive ? "rgba(10,132,255,0.1)" : "rgba(255,255,255,0.04)",
+                        color: isActive ? "#0A84FF" : "#515154",
+                      }}
+                    >
                       {tabIcon(proj.id)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-display font-semibold text-white text-sm">{proj.title}</h3>
-                        <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform ${isActive ? "rotate-90 text-brand-400" : "text-slate-600"}`} />
-                      </div>
-                      <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-3">{proj.description}</p>
+                      <h3 className="text-sm font-semibold mb-1" style={{ color: "#F5F5F7" }}>{proj.title}</h3>
+                      <p className="text-xs leading-relaxed mb-3 line-clamp-2" style={{ color: "#86868B" }}>
+                        {proj.description}
+                      </p>
                       <div className="flex flex-wrap gap-1.5">
-                        {proj.techStack.map(t => (
-                          <span key={t} className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface-700 border border-white/6 text-slate-400">{t}</span>
+                        {proj.techStack.slice(0, 3).map(t => (
+                          <span
+                            key={t}
+                            className="px-2 py-0.5 rounded-md"
+                            style={{
+                              background: "rgba(255,255,255,0.04)",
+                              border: "1px solid rgba(255,255,255,0.07)",
+                              color: "#515154",
+                              fontFamily: "var(--font-mono)",
+                              fontSize: "0.65rem",
+                            }}
+                          >
+                            {t}
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -139,28 +183,36 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
             })}
           </div>
 
-          {/* Interactive demo panel */}
+          {/* Demo panel */}
           <div className="xl:col-span-7">
-            <div className="card h-full flex flex-col">
-
+            <div
+              className="rounded-2xl flex flex-col"
+              style={{ background: "#141420", border: "1px solid rgba(255,255,255,0.07)", minHeight: "480px" }}
+            >
               {/* Panel header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-white/6">
+              <div
+                className="flex items-center justify-between px-6 py-4 flex-shrink-0"
+                style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+              >
                 <div className="flex items-center gap-2.5">
-                  <div className="p-1.5 bg-brand-500/10 border border-brand-500/20 rounded-lg text-brand-400 animate-pulse">
+                  <div
+                    className="p-1.5 rounded-lg"
+                    style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF" }}
+                  >
                     <Terminal className="w-3.5 h-3.5" />
                   </div>
                   <div>
-                    <p className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">Interactive Demo</p>
-                    <h3 className="text-sm font-display font-bold text-white leading-tight">
+                    <p className="mono-tag">Interactive Demo</p>
+                    <h3 className="text-sm font-semibold mt-0.5" style={{ color: "#F5F5F7" }}>
                       {active === "calculator" && "Python Calculator"}
                       {active === "network" && "IPv4 Subnet Tool"}
                       {active === "portfolio" && "Theme Configurator"}
                     </h3>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-500">
-                  <Wifi className="w-3 h-3 text-emerald-400" />
-                  <span>LIVE</span>
+                <div className="flex items-center gap-1.5">
+                  <Wifi className="w-3 h-3" style={{ color: "#30D158" }} />
+                  <span className="mono-tag" style={{ color: "#30D158" }}>LIVE</span>
                 </div>
               </div>
 
@@ -168,99 +220,276 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
               <div className="flex-1 p-6 flex items-center justify-center">
                 <AnimatePresence mode="wait">
 
-                  {/* Calculator */}
+                  {/* ── Calculator ── */}
                   {active === "calculator" && (
-                    <motion.div key="calc" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="w-full max-w-xs mx-auto">
-                      <div className="bg-surface-900 rounded-2xl border border-white/6 p-4 shadow-xl">
+                    <motion.div
+                      key="calc"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      className="w-full max-w-xs mx-auto"
+                    >
+                      <div
+                        className="rounded-2xl p-4"
+                        style={{ background: "#0A0A0F", border: "1px solid rgba(255,255,255,0.07)" }}
+                      >
                         {/* Screen */}
-                        <div className="bg-[#060810] rounded-xl px-4 py-3 mb-4 text-right border border-white/5">
-                          <p className="text-[10px] font-mono text-slate-600 min-h-4">{input || "0"}</p>
-                          <p className="text-2xl font-mono font-bold text-white truncate">{screen}</p>
+                        <div
+                          className="rounded-xl px-4 py-3 mb-4 text-right"
+                          style={{ background: "#141420", border: "1px solid rgba(255,255,255,0.06)" }}
+                        >
+                          <p
+                            className="min-h-4 truncate"
+                            style={{ fontSize: "0.65rem", color: "#515154", fontFamily: "var(--font-mono)" }}
+                          >
+                            {input || "0"}
+                          </p>
+                          <p
+                            className="text-2xl font-bold truncate"
+                            style={{ color: "#F5F5F7", fontFamily: "var(--font-mono)" }}
+                          >
+                            {screen}
+                          </p>
                         </div>
+
                         {/* Buttons */}
-                        <div className="grid grid-cols-4 gap-2 text-sm font-mono font-semibold">
-                          <button onClick={calcClear} className="col-span-2 py-3 rounded-xl bg-rose-500/15 text-rose-400 border border-rose-500/20 hover:bg-rose-500/25 cursor-pointer transition-colors">AC</button>
-                          {["/", "*"].map(op => <button key={op} onClick={() => calcAppend(op)} className="py-3 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20 cursor-pointer transition-colors">{op}</button>)}
-                          {["7", "8", "9"].map(n => <button key={n} onClick={() => calcAppend(n)} className="py-3 rounded-xl bg-surface-700 text-white hover:bg-surface-600 cursor-pointer transition-colors">{n}</button>)}
-                          <button onClick={() => calcAppend("-")} className="py-3 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20 cursor-pointer transition-colors">-</button>
-                          {["4", "5", "6"].map(n => <button key={n} onClick={() => calcAppend(n)} className="py-3 rounded-xl bg-surface-700 text-white hover:bg-surface-600 cursor-pointer transition-colors">{n}</button>)}
-                          <button onClick={() => calcAppend("+")} className="py-3 rounded-xl bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20 cursor-pointer transition-colors">+</button>
-                          {["1", "2", "3"].map(n => <button key={n} onClick={() => calcAppend(n)} className="py-3 rounded-xl bg-surface-700 text-white hover:bg-surface-600 cursor-pointer transition-colors">{n}</button>)}
-                          <button onClick={calcEval} className="row-span-2 rounded-xl bg-brand-600 text-white hover:bg-brand-500 shadow-lg shadow-brand-900/40 cursor-pointer transition-colors flex items-center justify-center text-lg">=</button>
-                          <button onClick={() => calcAppend("0")} className="col-span-2 py-3 rounded-xl bg-surface-700 text-white hover:bg-surface-600 cursor-pointer transition-colors">0</button>
-                          <button onClick={() => calcAppend(".")} className="py-3 rounded-xl bg-surface-700 text-white hover:bg-surface-600 cursor-pointer transition-colors">.</button>
+                        <div className="grid grid-cols-4 gap-2 text-sm font-semibold" style={{ fontFamily: "var(--font-mono)" }}>
+                          <button
+                            onClick={clear}
+                            className="col-span-2 py-3 rounded-xl cursor-pointer transition-all duration-150"
+                            style={{ background: "rgba(255,55,95,0.12)", color: "#FF375F", border: "1px solid rgba(255,55,95,0.2)" }}
+                          >
+                            AC
+                          </button>
+                          {["/", "*"].map(op => (
+                            <button
+                              key={op}
+                              onClick={() => append(op)}
+                              className="py-3 rounded-xl cursor-pointer transition-all duration-150"
+                              style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF", border: "1px solid rgba(10,132,255,0.2)" }}
+                            >
+                              {op}
+                            </button>
+                          ))}
+                          {["7", "8", "9"].map(n => (
+                            <button
+                              key={n}
+                              onClick={() => append(n)}
+                              className="py-3 rounded-xl cursor-pointer transition-colors"
+                              style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
+                              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
+                              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+                            >
+                              {n}
+                            </button>
+                          ))}
+                          <button
+                            onClick={() => append("-")}
+                            className="py-3 rounded-xl cursor-pointer"
+                            style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF", border: "1px solid rgba(10,132,255,0.2)" }}
+                          >
+                            -
+                          </button>
+                          {["4", "5", "6"].map(n => (
+                            <button
+                              key={n}
+                              onClick={() => append(n)}
+                              className="py-3 rounded-xl cursor-pointer"
+                              style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
+                              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
+                              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+                            >
+                              {n}
+                            </button>
+                          ))}
+                          <button
+                            onClick={() => append("+")}
+                            className="py-3 rounded-xl cursor-pointer"
+                            style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF", border: "1px solid rgba(10,132,255,0.2)" }}
+                          >
+                            +
+                          </button>
+                          {["1", "2", "3"].map(n => (
+                            <button
+                              key={n}
+                              onClick={() => append(n)}
+                              className="py-3 rounded-xl cursor-pointer"
+                              style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
+                              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
+                              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+                            >
+                              {n}
+                            </button>
+                          ))}
+                          <button
+                            onClick={evaluate}
+                            className="row-span-2 rounded-xl cursor-pointer font-bold text-lg text-white transition-colors"
+                            style={{ background: "#0A84FF" }}
+                            onMouseEnter={e => (e.currentTarget.style.background = "#409CFF")}
+                            onMouseLeave={e => (e.currentTarget.style.background = "#0A84FF")}
+                          >
+                            =
+                          </button>
+                          <button
+                            onClick={() => append("0")}
+                            className="col-span-2 py-3 rounded-xl cursor-pointer"
+                            style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
+                            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
+                            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+                          >
+                            0
+                          </button>
+                          <button
+                            onClick={() => append(".")}
+                            className="py-3 rounded-xl cursor-pointer"
+                            style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
+                            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
+                            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
+                          >
+                            .
+                          </button>
                         </div>
+
                         {/* Log */}
-                        <div className="mt-3 border-t border-white/5 pt-2.5 font-mono text-[10px] text-slate-500 space-y-0.5">
-                          {history.slice(0, 3).map((h, i) => <p key={i} className="truncate">{h}</p>)}
+                        <div
+                          className="mt-3 pt-2.5 space-y-0.5"
+                          style={{ borderTop: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-mono)", fontSize: "0.65rem", color: "#515154" }}
+                        >
+                          {history.slice(0, 3).map((h, i) => (
+                            <p key={i} className="truncate">{h}</p>
+                          ))}
                         </div>
                       </div>
                     </motion.div>
                   )}
 
-                  {/* Subnet */}
+                  {/* ── Subnet ── */}
                   {active === "network" && (
-                    <motion.div key="net" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="w-full max-w-md mx-auto space-y-5">
+                    <motion.div
+                      key="net"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      className="w-full max-w-md mx-auto space-y-4"
+                    >
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="text-[10px] font-mono text-slate-500 uppercase block mb-1.5">IP Address</label>
-                          <input value={ip} onChange={e => setIp(e.target.value)} className="w-full bg-surface-900 border border-white/8 focus:border-brand-500 focus:outline-none rounded-xl px-3 py-2 text-sm font-mono text-white" />
+                          <label className="mono-tag block mb-1.5">IP Address</label>
+                          <input
+                            value={ip}
+                            onChange={e => setIp(e.target.value)}
+                            style={fieldStyle}
+                            onFocus={e => (e.currentTarget.style.borderColor = "rgba(10,132,255,0.4)")}
+                            onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
+                          />
                         </div>
                         <div>
-                          <label className="text-[10px] font-mono text-slate-500 uppercase block mb-1.5">CIDR /{cidr}</label>
-                          <select value={cidr} onChange={e => setCidr(+e.target.value)} className="w-full bg-surface-900 border border-white/8 focus:border-brand-500 focus:outline-none rounded-xl px-3 py-2 text-sm font-mono text-white">
-                            {Array.from({ length: 25 }, (_, i) => i + 8).map(v => <option key={v} value={v}>/{v}</option>)}
+                          <label className="mono-tag block mb-1.5">CIDR /{cidr}</label>
+                          <select
+                            value={cidr}
+                            onChange={e => setCidr(+e.target.value)}
+                            style={fieldStyle}
+                          >
+                            {Array.from({ length: 25 }, (_, i) => i + 8).map(v => (
+                              <option key={v} value={v}>/{v}</option>
+                            ))}
                           </select>
                         </div>
                       </div>
-                      {ipErr && <div className="flex items-center gap-2 text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-xl p-3"><AlertCircle className="w-4 h-4 flex-shrink-0" />{ipErr}</div>}
-                      <div className="grid grid-cols-2 gap-3 font-mono">
+
+                      {ipErr && (
+                        <div
+                          className="flex items-center gap-2 p-3 rounded-xl text-xs"
+                          style={{ background: "rgba(255,55,95,0.08)", border: "1px solid rgba(255,55,95,0.2)", color: "#FF375F" }}
+                        >
+                          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                          {ipErr}
+                        </div>
+                      )}
+
+                      <div className="grid grid-cols-2 gap-3">
                         {[
-                          { label: "Subnet Mask", value: subnet.mask, color: "text-brand-400" },
-                          { label: "Network Address", value: subnet.network, color: "text-white" },
-                          { label: "Broadcast Address", value: subnet.broadcast, color: "text-white" },
-                          { label: "Usable Hosts", value: `${subnet.hosts} IPs`, color: "text-emerald-400" },
+                          { label: "Subnet Mask", value: subnet.mask, color: "#0A84FF" },
+                          { label: "Network Address", value: subnet.network, color: "#F5F5F7" },
+                          { label: "Broadcast Address", value: subnet.broadcast, color: "#F5F5F7" },
+                          { label: "Usable Hosts", value: `${subnet.hosts} IPs`, color: "#30D158" },
                         ].map(({ label, value, color }) => (
-                          <div key={label} className="p-3.5 rounded-xl bg-surface-900 border border-white/6">
-                            <p className="text-[9px] text-slate-500 uppercase mb-1">{label}</p>
-                            <p className={`text-sm font-semibold ${color}`}>{value}</p>
+                          <div
+                            key={label}
+                            className="p-3.5 rounded-xl"
+                            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                          >
+                            <p className="mono-tag mb-1">{label}</p>
+                            <p
+                              className="text-sm font-semibold"
+                              style={{ color, fontFamily: "var(--font-mono)" }}
+                            >
+                              {value}
+                            </p>
                           </div>
                         ))}
                       </div>
-                      <div className="p-4 rounded-xl bg-surface-900 border border-white/6 text-xs">
-                        <div className="flex items-center gap-2 text-brand-400 mb-2 font-semibold">
-                          <BookOpen className="w-3.5 h-3.5" />Protocol Reference
+
+                      <div
+                        className="p-4 rounded-xl"
+                        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                      >
+                        <div className="flex items-center gap-2 mb-3">
+                          <BookOpen className="w-3.5 h-3.5" style={{ color: "#0A84FF" }} />
+                          <span className="text-xs font-semibold" style={{ color: "#F5F5F7" }}>Protocol Reference</span>
                         </div>
-                        <div className="grid grid-cols-2 gap-1.5 text-slate-400">
-                          <p><span className="text-white font-medium">TCP</span> — Reliable delivery</p>
-                          <p><span className="text-white font-medium">IP</span> — Addressing & routing</p>
-                          <p><span className="text-white font-medium">DHCP</span> — Auto IP config</p>
-                          <p><span className="text-white font-medium">DNS</span> — Name resolution</p>
+                        <div className="grid grid-cols-2 gap-1.5 text-xs" style={{ color: "#86868B" }}>
+                          <p><span style={{ color: "#F5F5F7", fontWeight: 500 }}>TCP</span> — Reliable delivery</p>
+                          <p><span style={{ color: "#F5F5F7", fontWeight: 500 }}>IP</span>  — Addressing & routing</p>
+                          <p><span style={{ color: "#F5F5F7", fontWeight: 500 }}>DHCP</span>— Auto IP config</p>
+                          <p><span style={{ color: "#F5F5F7", fontWeight: 500 }}>DNS</span> — Name resolution</p>
                         </div>
                       </div>
                     </motion.div>
                   )}
 
-                  {/* Portfolio theme */}
+                  {/* ── Theme ── */}
                   {active === "portfolio" && (
-                    <motion.div key="port" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="w-full max-w-sm mx-auto space-y-6 text-center">
-                      <p className="text-sm text-slate-400">Change the portfolio's accent color live.</p>
+                    <motion.div
+                      key="theme"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      className="w-full max-w-xs mx-auto text-center space-y-6"
+                    >
+                      <p className="text-sm" style={{ color: "#86868B" }}>
+                        Change the portfolio accent color live.
+                      </p>
                       <div className="flex justify-center gap-5">
-                        {colorPresets.map(p => (
-                          <button key={p.name} onClick={() => applyColor(p.hex)} className="flex flex-col items-center gap-1.5 cursor-pointer group">
-                            <span className="w-10 h-10 rounded-full border-2 transition-transform group-hover:scale-110 flex items-center justify-center"
-                              style={{ backgroundColor: p.hex, borderColor: accentColor === p.hex ? "#fff" : "transparent" }}>
-                              {accentColor === p.hex && <CheckCircle2 className="w-4 h-4 text-white" />}
+                        {COLORS.map(c => (
+                          <button
+                            key={c.name}
+                            onClick={() => applyColor(c.hex)}
+                            className="flex flex-col items-center gap-1.5 cursor-pointer group"
+                          >
+                            <span
+                              className="w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+                              style={{
+                                background: c.hex,
+                                border: `2px solid ${accentColor === c.hex ? "#fff" : "transparent"}`,
+                              }}
+                            >
+                              {accentColor === c.hex && <CheckCircle2 className="w-4 h-4 text-white" />}
                             </span>
-                            <span className="text-[9px] font-mono text-slate-500 group-hover:text-white transition-colors">{p.name}</span>
+                            <span className="mono-tag">{c.name}</span>
                           </button>
                         ))}
                       </div>
-                      <div className="flex items-center gap-2 justify-center">
-                        <button onClick={() => applyColor("#0ea5e9")} className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors cursor-pointer">
-                          <RotateCcw className="w-3.5 h-3.5" /> Reset to default
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => applyColor("#0A84FF")}
+                        className="flex items-center gap-1.5 text-xs mx-auto cursor-pointer transition-colors"
+                        style={{ color: "#515154", background: "none", border: "none" }}
+                        onMouseEnter={e => (e.currentTarget.style.color = "#F5F5F7")}
+                        onMouseLeave={e => (e.currentTarget.style.color = "#515154")}
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        Reset to default
+                      </button>
                     </motion.div>
                   )}
 
@@ -268,15 +497,27 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
               </div>
 
               {/* Panel footer */}
-              <div className="px-6 py-3 border-t border-white/6 flex justify-between text-[10px] font-mono text-slate-600">
-                <span>PROTOTYPE · INTERACTIVE</span>
-                <button onClick={() => { if (active === "calculator") calcClear(); if (active === "network") { setIp("192.168.1.45"); setCidr(24); } }} className="hover:text-white transition-colors cursor-pointer">
+              <div
+                className="px-6 py-3 flex justify-between flex-shrink-0"
+                style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+              >
+                <span className="mono-tag">PROTOTYPE · INTERACTIVE</span>
+                <button
+                  onClick={() => {
+                    if (active === "calculator") clear();
+                    if (active === "network") { setIp("192.168.1.45"); setCidr(24); }
+                  }}
+                  className="mono-tag cursor-pointer transition-colors"
+                  style={{ background: "none", border: "none" }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "#F5F5F7")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "")}
+                >
                   [reset]
                 </button>
               </div>
-
             </div>
           </div>
+
         </div>
       </div>
     </section>

@@ -26,32 +26,24 @@ export default function App() {
   const [projects] = useState<Project[]>(defaultProjects);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [resumeOpen, setResumeOpen] = useState(false);
-  const [accentColor, setAccentColor] = useState("#0ea5e9");
+  const [accentColor, setAccentColor] = useState("#0A84FF");
   const [bgConfig, setBgConfig] = useState<BgConfig>(DEFAULT_BG);
 
   const updateBg = (next: Partial<BgConfig>) =>
     setBgConfig(prev => ({ ...prev, ...next }));
 
-  const dark = bgConfig.dark;
-
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        color: dark ? "#F1F5F9" : "#0F172A",
-        position: "relative",
-        transition: "color 0.4s ease",
-      }}
-    >
-      {/* ── Fixed canvas layer — sits behind everything ── */}
+    <div style={{ minHeight: "100vh", background: "#0A0A0F", color: "#F5F5F7", position: "relative" }}>
+
+      {/* Fixed animated canvas — behind everything */}
       <AnimatedBackground config={bgConfig} />
 
-      {/* ── All page content — sits above canvas (z-index: 1+) ── */}
+      {/* Page content */}
       <div style={{ position: "relative", zIndex: 1 }}>
         <Navbar fullName={profile.fullName} />
 
         <main>
-          <Hero profile={profile} dark={dark} />
+          <Hero profile={profile} dark={bgConfig.dark} />
           <About profile={profile} />
           <Skills skills={skills} />
           <Projects
@@ -63,7 +55,7 @@ export default function App() {
           <Contact
             profile={profile}
             messages={messages}
-            onAddMessage={(m) => setMessages(p => [m, ...p])}
+            onAddMessage={m => setMessages(p => [m, ...p])}
           />
         </main>
 
@@ -73,15 +65,24 @@ export default function App() {
         />
       </div>
 
-      {/* ── Resume modal ── */}
+      {/* Resume modal */}
       <ResumeModal
         isOpen={resumeOpen}
         onClose={() => setResumeOpen(false)}
         profile={profile}
       />
 
-      {/* ── Floating controls bar — highest z-index ── */}
-      <ControlsBar config={bgConfig} onChange={updateBg} />
+      {/* Controls bar — top-right corner, above everything */}
+      <div
+        style={{
+          position: "fixed",
+          top: "4.5rem",
+          right: "1rem",
+          zIndex: 100,
+        }}
+      >
+        <ControlsBar config={bgConfig} onChange={updateBg} />
+      </div>
     </div>
   );
 }

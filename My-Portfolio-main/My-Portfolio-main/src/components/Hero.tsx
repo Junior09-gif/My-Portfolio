@@ -1,11 +1,5 @@
-/**
- * Hero v2
- * Frosted-glass card layout that sits above AnimatedBackground.
- * Receives `dark` from App so glass tints match the active theme.
- * Updated: 2026-08-20
- */
 import { motion } from "motion/react";
-import { ArrowDown, Github, Mail, FileText, Shield, Code2 } from "lucide-react";
+import { ArrowDown, Github, Mail, FileText } from "lucide-react";
 import { UserProfile } from "../types";
 
 interface HeroProps {
@@ -13,476 +7,241 @@ interface HeroProps {
   dark?: boolean;
 }
 
-// ─── Animation helpers ────────────────────────────────────────────────────────
-
 const rise = (delay = 0) => ({
-  initial: { opacity: 0, y: 32 },
+  initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1], delay },
+  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay },
 });
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { duration: 0.9, ease: "easeOut", delay },
+  transition: { duration: 0.8, ease: "easeOut", delay },
 });
 
-const slideLeft = (delay = 0) => ({
-  initial: { opacity: 0, x: -20 },
-  animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1], delay },
-});
-
-// ─── Glass card style helper ──────────────────────────────────────────────────
-
-function glassStyle(dark: boolean): React.CSSProperties {
-  return {
-    background: dark
-      ? "rgba(8, 14, 28, 0.55)"
-      : "rgba(255, 255, 255, 0.45)",
-    backdropFilter: "blur(18px)",
-    WebkitBackdropFilter: "blur(18px)",
-    border: `1px solid ${dark
-      ? "rgba(56,189,248,0.1)"
-      : "rgba(14,165,233,0.18)"}`,
-    borderRadius: "1rem",
-  };
-}
-
-// ─── Small reusable components ────────────────────────────────────────────────
-
-function Tag({
-  children,
-  dark,
-}: {
-  children: React.ReactNode;
-  dark: boolean;
-}) {
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        padding: "0.2rem 0.65rem",
-        borderRadius: "999px",
-        fontSize: "0.68rem",
-        fontFamily: "monospace",
-        letterSpacing: "0.08em",
-        background: dark ? "rgba(56,189,248,0.08)" : "rgba(14,165,233,0.1)",
-        border: `1px solid ${dark ? "rgba(56,189,248,0.2)" : "rgba(14,165,233,0.25)"}`,
-        color: dark ? "#7DD3FC" : "#0369A1",
-      }}
-    >
-      {children}
-    </span>
-  );
-}
-
-function GlassButton({
-  children,
-  onClick,
-  href,
-  target,
-  rel,
-  icon,
-  variant = "outline",
-  dark,
-}: {
-  children: React.ReactNode;
-  onClick?: (e: React.MouseEvent) => void;
-  href?: string;
-  target?: string;
-  rel?: string;
-  icon?: React.ReactNode;
-  variant?: "primary" | "outline" | "ghost";
-  dark: boolean;
-}) {
-  const styles: Record<string, React.CSSProperties> = {
-    primary: {
-      background: dark ? "rgba(14,165,233,0.18)" : "rgba(14,165,233,0.15)",
-      border: `1px solid ${dark ? "rgba(56,189,248,0.35)" : "rgba(14,165,233,0.4)"}`,
-      color: dark ? "#BAE6FD" : "#0369A1",
-    },
-    outline: {
-      background: dark ? "rgba(15,39,68,0.4)" : "rgba(255,255,255,0.3)",
-      border: `1px solid ${dark ? "rgba(56,189,248,0.15)" : "rgba(14,165,233,0.2)"}`,
-      color: dark ? "#94A3B8" : "#475569",
-    },
-    ghost: {
-      background: "transparent",
-      border: "1px solid transparent",
-      color: dark ? "#475569" : "#94A3B8",
-    },
-  };
-
-  const hoverStyles: Record<string, React.CSSProperties> = {
-    primary: {
-      background: dark ? "rgba(14,165,233,0.28)" : "rgba(14,165,233,0.22)",
-      border: `1px solid ${dark ? "rgba(103,232,249,0.55)" : "rgba(14,165,233,0.55)"}`,
-      color: dark ? "#E0F2FE" : "#0C4A6E",
-    },
-    outline: {
-      background: dark ? "rgba(15,39,68,0.6)" : "rgba(255,255,255,0.5)",
-      border: `1px solid ${dark ? "rgba(56,189,248,0.35)" : "rgba(14,165,233,0.4)"}`,
-      color: dark ? "#E2E8F0" : "#0F172A",
-    },
-    ghost: {
-      background: "transparent",
-      border: "1px solid transparent",
-      color: dark ? "#94A3B8" : "#475569",
-    },
-  };
-
-  const base = styles[variant];
-  const hover = hoverStyles[variant];
-
-  const shared: React.CSSProperties = {
-    ...base,
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "0.45rem",
-    padding: "0.55rem 1.1rem",
-    borderRadius: "0.6rem",
-    fontSize: "0.82rem",
-    fontWeight: 500,
-    cursor: "pointer",
-    transition: "all 0.2s ease",
-    backdropFilter: "blur(8px)",
-    WebkitBackdropFilter: "blur(8px)",
-    textDecoration: "none",
-    whiteSpace: "nowrap" as const,
-  };
-
-  const handlers = {
-    onMouseEnter: (e: React.MouseEvent<HTMLElement>) =>
-      Object.assign((e.currentTarget as HTMLElement).style, hover),
-    onMouseLeave: (e: React.MouseEvent<HTMLElement>) =>
-      Object.assign((e.currentTarget as HTMLElement).style, base),
-  };
-
-  if (href) {
-    return (
-      <a href={href} target={target} rel={rel} onClick={onClick} style={shared} {...handlers}>
-        {icon}{children}
-      </a>
-    );
-  }
-  return (
-    <button onClick={onClick} style={shared} {...handlers}>
-      {icon}{children}
-    </button>
-  );
-}
-
-// ─── Hero ─────────────────────────────────────────────────────────────────────
-
-export default function Hero({ profile, dark = true }: HeroProps) {
+export default function Hero({ profile }: HeroProps) {
   const scroll = (id: string) =>
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
-
-  const firstName = profile.fullName.split(" ")[0];
-  const lastName = profile.fullName.split(" ").slice(1).join(" ");
-  const textPrimary = dark ? "#F1F5F9" : "#0F172A";
-  const textMuted = dark ? "#94A3B8" : "#475569";
-  const textDim = dark ? "#475569" : "#94A3B8";
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ zIndex: 1, background: "transparent" }}
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      style={{ background: "transparent", zIndex: 1 }}
     >
-      {/* ── Centre content column ── */}
-      <div
-        className="relative w-full max-w-5xl mx-auto px-5 sm:px-10 pt-28 pb-32"
-        style={{ zIndex: 2 }}
-      >
-        {/* Eyebrow label */}
-        <motion.div {...slideLeft(0.15)} className="flex items-center gap-3 mb-9">
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-24 pb-20 flex flex-col items-center text-center">
+
+        {/* Eyebrow */}
+        <motion.div {...fade(0.1)} className="mb-8">
           <span
-            className="h-px w-7 block flex-shrink-0"
-            style={{ backgroundColor: dark ? "#38BDF8" : "#0EA5E9" }}
-          />
-          <span
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium"
             style={{
-              fontSize: "0.65rem",
-              fontFamily: "monospace",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: dark ? "#38BDF8" : "#0EA5E9",
+              background: "rgba(10,132,255,0.1)",
+              border: "1px solid rgba(10,132,255,0.2)",
+              color: "#409CFF",
+              fontFamily: "var(--font-mono)",
+              letterSpacing: "0.05em",
             }}
           >
-            BSc. Information Technology &nbsp;·&nbsp; KNUST, Ghana
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: "#0A84FF", animation: "pulse-ring 2s infinite" }}
+            />
+            BSc. Information Technology · KNUST, Ghana
           </span>
         </motion.div>
 
-        {/* ── Main frosted card ── */}
-        <motion.div {...rise(0.22)} style={{ ...glassStyle(dark), padding: "2.2rem 2.4rem", marginBottom: "1.25rem" }}>
-
-          {/* Headline */}
-          <h1
-            style={{
-              fontSize: "clamp(2.6rem, 7vw, 5rem)",
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: "-0.02em",
-              fontFamily: "'Inter', sans-serif",
-              color: textPrimary,
-              marginBottom: "0.25rem",
-            }}
-          >
-            Hi, I'm{" "}
-            <span
-              style={{
-                background: dark
-                  ? "linear-gradient(135deg, #E2E8F0 0%, #7DD3FC 55%, #38BDF8 100%)"
-                  : "linear-gradient(135deg, #0369A1 0%, #0EA5E9 60%, #38BDF8 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              {firstName}
-            </span>
-          </h1>
-          <h1
-            style={{
-              fontSize: "clamp(2.6rem, 7vw, 5rem)",
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: "-0.02em",
-              fontFamily: "'Inter', sans-serif",
-              color: dark ? "#1E3A5F" : "#CBD5E1",
-              marginBottom: "1.4rem",
-            }}
-          >
-            {lastName}.
-          </h1>
-
-          {/* Bio */}
-          <p
-            style={{
-              fontSize: "clamp(1rem, 2vw, 1.2rem)",
-              lineHeight: 1.7,
-              color: textMuted,
-              maxWidth: "36rem",
-              marginBottom: "0.6rem",
-            }}
-          >
-            IT student building practical software &amp; exploring
-            the edges of cybersecurity.
-          </p>
-          <p
-            style={{
-              fontSize: "0.88rem",
-              lineHeight: 1.65,
-              color: textDim,
-              maxWidth: "30rem",
-              marginBottom: "1.8rem",
-            }}
-          >
-            {profile.tagline}
-          </p>
-
-          {/* CTA buttons */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.65rem" }}>
-            <GlassButton
-              variant="primary"
-              dark={dark}
-              onClick={() => scroll("#projects")}
-              icon={<Code2 className="w-4 h-4" />}
-            >
-              View Projects
-            </GlassButton>
-            <GlassButton
-              variant="outline"
-              dark={dark}
-              href={profile.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              icon={<Github className="w-4 h-4" />}
-            >
-              GitHub
-            </GlassButton>
-            <GlassButton
-              variant="outline"
-              dark={dark}
-              href="#contact"
-              onClick={(e) => { e.preventDefault(); scroll("#contact"); }}
-              icon={<Mail className="w-4 h-4" />}
-            >
-              Contact
-            </GlassButton>
-            <GlassButton
-              variant="ghost"
-              dark={dark}
-              href="#about"
-              onClick={(e) => { e.preventDefault(); scroll("#about"); }}
-              icon={<FileText className="w-4 h-4" />}
-            >
-              Résumé
-            </GlassButton>
-          </div>
-        </motion.div>
-
-        {/* ── Bottom row: stats card + interests card ── */}
-        <div
+        {/* Headline */}
+        <motion.h1
+          {...rise(0.18)}
+          className="font-bold tracking-tight mb-6"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "1.25rem",
+            fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
+            lineHeight: 1.06,
+            letterSpacing: "-0.03em",
+            fontFamily: "var(--font-sans)",
+            color: "#F5F5F7",
           }}
         >
-          {/* Stats card */}
-          <motion.div {...rise(0.38)} style={{ ...glassStyle(dark), padding: "1.4rem 1.8rem" }}>
-            <p
-              style={{
-                fontSize: "0.6rem",
-                fontFamily: "monospace",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: textDim,
-                marginBottom: "1rem",
-              }}
-            >
-              At a glance
-            </p>
-            <div style={{ display: "flex", gap: "2rem" }}>
-              {[
-                { value: "3+", label: "Projects" },
-                { value: "6", label: "Skills" },
-                { value: "2026", label: "Grad. Year" },
-              ].map(({ value, label }) => (
-                <div key={label}>
-                  <div
-                    style={{
-                      fontSize: "1.5rem",
-                      fontWeight: 700,
-                      fontFamily: "monospace",
-                      color: dark ? "#E2E8F0" : "#0F172A",
-                      lineHeight: 1,
-                    }}
-                  >
-                    {value}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "0.62rem",
-                      fontFamily: "monospace",
-                      letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                      color: textDim,
-                      marginTop: "0.2rem",
-                    }}
-                  >
-                    {label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Interests card */}
-          <motion.div {...rise(0.46)} style={{ ...glassStyle(dark), padding: "1.4rem 1.8rem" }}>
-            <p
-              style={{
-                fontSize: "0.6rem",
-                fontFamily: "monospace",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: textDim,
-                marginBottom: "0.9rem",
-              }}
-            >
-              Focus areas
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-              {profile.fieldsOfInterest.map(f => (
-                <Tag key={f} dark={dark}>{f}</Tag>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Security badge card */}
-          <motion.div
-            {...rise(0.54)}
+          Building software.<br />
+          <span
             style={{
-              ...glassStyle(dark),
-              padding: "1.4rem 1.8rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.9rem",
+              background: "linear-gradient(135deg, #F5F5F7 20%, #409CFF 80%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
             }}
           >
+            Securing systems.
+          </span>
+        </motion.h1>
+
+        {/* Sub */}
+        <motion.p
+          {...rise(0.28)}
+          className="mb-3 max-w-xl"
+          style={{
+            fontSize: "clamp(1rem, 2vw, 1.18rem)",
+            lineHeight: 1.65,
+            color: "#86868B",
+          }}
+        >
+          I'm <strong style={{ color: "#F5F5F7", fontWeight: 600 }}>Boadu Kofi Junior Edwin</strong> — an IT student at KNUST
+          building practical software and exploring the edges of cybersecurity.
+        </motion.p>
+
+        <motion.p
+          {...rise(0.34)}
+          className="mb-12 max-w-md"
+          style={{
+            fontSize: "0.88rem",
+            lineHeight: 1.6,
+            color: "#515154",
+          }}
+        >
+          {profile.tagline}
+        </motion.p>
+
+        {/* CTA row */}
+        <motion.div {...rise(0.42)} className="flex flex-wrap items-center justify-center gap-3 mb-20">
+          <button
+            onClick={() => scroll("#projects")}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white cursor-pointer transition-all duration-200"
+            style={{ background: "#0A84FF" }}
+            onMouseEnter={e => (e.currentTarget.style.background = "#409CFF")}
+            onMouseLeave={e => (e.currentTarget.style.background = "#0A84FF")}
+          >
+            View Projects
+          </button>
+
+          <a
+            href={profile.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200"
+            style={{
+              color: "#86868B",
+              border: "1px solid rgba(255,255,255,0.1)",
+              background: "transparent",
+              textDecoration: "none",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.color = "#F5F5F7";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.color = "#86868B";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+            }}
+          >
+            <Github className="w-4 h-4" />
+            GitHub
+          </a>
+
+          <a
+            href="#contact"
+            onClick={e => { e.preventDefault(); scroll("#contact"); }}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200"
+            style={{
+              color: "#86868B",
+              border: "1px solid rgba(255,255,255,0.1)",
+              background: "transparent",
+              textDecoration: "none",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.color = "#F5F5F7";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.color = "#86868B";
+              (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+            }}
+          >
+            <Mail className="w-4 h-4" />
+            Contact
+          </a>
+
+          <button
+            onClick={() => scroll("#about")}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200"
+            style={{ color: "#515154", background: "transparent", border: "none" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "#86868B")}
+            onMouseLeave={e => (e.currentTarget.style.color = "#515154")}
+          >
+            <FileText className="w-4 h-4" />
+            Résumé
+          </button>
+        </motion.div>
+
+        {/* Stats row */}
+        <motion.div
+          {...fade(0.58)}
+          className="flex items-center gap-0 divide-x"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2rem", divideColor: "rgba(255,255,255,0.06)" }}
+        >
+          {[
+            { value: "3+", label: "Projects built" },
+            { value: "6", label: "Core skills" },
+            { value: "KNUST", label: "University" },
+            { value: "2026", label: "Graduation" },
+          ].map(({ value, label }, i) => (
             <div
-              style={{
-                width: "2.8rem",
-                height: "2.8rem",
-                borderRadius: "0.6rem",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: dark ? "rgba(56,189,248,0.1)" : "rgba(14,165,233,0.1)",
-                border: `1px solid ${dark ? "rgba(56,189,248,0.2)" : "rgba(14,165,233,0.2)"}`,
-                flexShrink: 0,
-              }}
+              key={label}
+              className="px-8 text-center first:pl-0 last:pr-0"
+              style={{ borderColor: "rgba(255,255,255,0.06)" }}
             >
-              <Shield
-                style={{
-                  width: "1.3rem",
-                  height: "1.3rem",
-                  color: dark ? "#38BDF8" : "#0EA5E9",
-                }}
-              />
-            </div>
-            <div>
               <div
+                className="font-bold mb-0.5"
                 style={{
-                  fontSize: "0.8rem",
-                  fontWeight: 600,
-                  color: dark ? "#CBD5E1" : "#334155",
-                  marginBottom: "0.2rem",
+                  fontSize: "1.3rem",
+                  color: "#F5F5F7",
+                  fontFamily: "var(--font-sans)",
+                  letterSpacing: i < 2 ? "-0.02em" : "0",
                 }}
               >
-                Cybersecurity
+                {value}
               </div>
               <div
                 style={{
-                  fontSize: "0.68rem",
-                  color: textDim,
-                  lineHeight: 1.45,
+                  fontSize: "0.65rem",
+                  color: "#515154",
+                  fontFamily: "var(--font-mono)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
                 }}
               >
-                {profile.careerGoal.slice(0, 72)}…
+                {label}
               </div>
             </div>
-          </motion.div>
-        </div>
+          ))}
+        </motion.div>
       </div>
 
-      {/* ── Scroll cue ── */}
+      {/* Scroll cue */}
       <motion.button
-        {...fade(1.5)}
+        {...fade(1.2)}
         onClick={() => scroll("#about")}
         aria-label="Scroll down"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 group cursor-pointer"
-        style={{ color: textDim, background: "none", border: "none" }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 cursor-pointer group"
+        style={{ background: "none", border: "none", color: "#515154" }}
       >
         <span
           style={{
             fontSize: "0.58rem",
-            fontFamily: "monospace",
+            fontFamily: "var(--font-mono)",
             letterSpacing: "0.2em",
             textTransform: "uppercase",
           }}
-          className="group-hover:opacity-80 transition-opacity"
+          className="group-hover:opacity-60 transition-opacity"
         >
           scroll
         </span>
         <motion.div
-          animate={{ y: [0, 6, 0] }}
+          animate={{ y: [0, 5, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ArrowDown style={{ width: "0.85rem", height: "0.85rem" }} />
+          <ArrowDown className="w-3.5 h-3.5" />
         </motion.div>
       </motion.button>
     </section>
