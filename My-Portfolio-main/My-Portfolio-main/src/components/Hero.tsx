@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { ArrowDown, Github, Mail, FileText } from "lucide-react";
+import { ArrowDown, Github, Mail, FileText, MapPin } from "lucide-react";
 import { UserProfile } from "../types";
 
 interface HeroProps {
@@ -8,15 +8,15 @@ interface HeroProps {
 }
 
 const rise = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 28 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay },
+  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay },
 });
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { duration: 0.8, ease: "easeOut", delay },
+  transition: { duration: 0.9, ease: "easeOut", delay },
 });
 
 export default function Hero({ profile }: HeroProps) {
@@ -29,25 +29,25 @@ export default function Hero({ profile }: HeroProps) {
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{ background: "transparent", zIndex: 1 }}
     >
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 pt-24 pb-20 flex flex-col items-center text-center">
+      {/* ── Main content ── */}
+      <div
+        className="relative z-10 w-full max-w-3xl mx-auto px-6 sm:px-10 flex flex-col items-center text-center"
+        style={{ paddingTop: "7rem", paddingBottom: "9rem" }}
+      >
 
-        {/* Eyebrow */}
-        <motion.div {...fade(0.1)} className="mb-8">
+        {/* Location pill */}
+        <motion.div {...fade(0.1)} className="mb-7">
           <span
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs"
             style={{
-              background: "rgba(10,132,255,0.1)",
-              border: "1px solid rgba(10,132,255,0.2)",
-              color: "#409CFF",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              color: "#86868B",
               fontFamily: "var(--font-mono)",
-              letterSpacing: "0.05em",
+              letterSpacing: "0.06em",
             }}
           >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: "#0A84FF", animation: "pulse-ring 2s infinite" }}
-            />
+            <MapPin className="w-3 h-3" style={{ color: "#0A84FF" }} />
             BSc. Information Technology · KNUST, Ghana
           </span>
         </motion.div>
@@ -55,117 +55,176 @@ export default function Hero({ profile }: HeroProps) {
         {/* Headline */}
         <motion.h1
           {...rise(0.18)}
-          className="font-bold tracking-tight mb-6"
           style={{
-            fontSize: "clamp(2.8rem, 7vw, 5.5rem)",
-            lineHeight: 1.06,
+            fontSize: "clamp(2.6rem, 6.5vw, 5rem)",
+            lineHeight: 1.07,
             letterSpacing: "-0.03em",
             fontFamily: "var(--font-sans)",
+            fontWeight: 800,
             color: "#F5F5F7",
+            marginBottom: "0.5rem",
           }}
         >
-          Building software.<br />
-          <span
-            style={{
-              background: "linear-gradient(135deg, #F5F5F7 20%, #409CFF 80%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            Securing systems.
-          </span>
+          Building software.
         </motion.h1>
 
-        {/* Sub */}
-        <motion.p
-          {...rise(0.28)}
-          className="mb-3 max-w-xl"
+        <motion.h1
+          {...rise(0.26)}
           style={{
-            fontSize: "clamp(1rem, 2vw, 1.18rem)",
-            lineHeight: 1.65,
-            color: "#86868B",
+            fontSize: "clamp(2.6rem, 6.5vw, 5rem)",
+            lineHeight: 1.07,
+            letterSpacing: "-0.03em",
+            fontFamily: "var(--font-sans)",
+            fontWeight: 800,
+            marginBottom: "2rem",
+            background: "linear-gradient(135deg, #F5F5F7 10%, #60A5FA 60%, #0A84FF 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
           }}
         >
-          I'm <strong style={{ color: "#F5F5F7", fontWeight: 600 }}>Boadu Kofi Junior Edwin</strong> — an IT student at KNUST
-          building practical software and exploring the edges of cybersecurity.
-        </motion.p>
+          Securing systems.
+        </motion.h1>
 
+        {/* Bio */}
         <motion.p
           {...rise(0.34)}
-          className="mb-12 max-w-md"
           style={{
-            fontSize: "0.88rem",
-            lineHeight: 1.6,
-            color: "#515154",
+            fontSize: "clamp(0.95rem, 1.8vw, 1.1rem)",
+            lineHeight: 1.75,
+            color: "#86868B",
+            maxWidth: "30rem",
+            marginBottom: "2.5rem",
           }}
         >
-          {profile.tagline}
+          I'm{" "}
+          <strong style={{ color: "#E5E7EB", fontWeight: 600 }}>
+            Boadu Kofi Junior Edwin
+          </strong>{" "}
+          — an IT student at KNUST building practical software and exploring
+          the edges of cybersecurity.
         </motion.p>
 
-        {/* CTA row */}
-        <motion.div {...rise(0.42)} className="flex flex-wrap items-center justify-center gap-3 mb-20">
+        {/* CTA buttons */}
+        <motion.div
+          {...rise(0.42)}
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "0.6rem",
+            marginBottom: "3.5rem",
+          }}
+        >
+          {/* Primary */}
           <button
             onClick={() => scroll("#projects")}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white cursor-pointer transition-all duration-200"
-            style={{ background: "#0A84FF" }}
-            onMouseEnter={e => (e.currentTarget.style.background = "#409CFF")}
-            onMouseLeave={e => (e.currentTarget.style.background = "#0A84FF")}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+              padding: "0.65rem 1.4rem",
+              borderRadius: "0.75rem",
+              background: "#0A84FF",
+              color: "#fff",
+              fontSize: "0.875rem",
+              fontWeight: 600,
+              border: "none",
+              cursor: "pointer",
+              transition: "background 0.2s, transform 0.15s",
+              boxShadow: "0 0 24px rgba(10,132,255,0.25)",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = "#409CFF";
+              e.currentTarget.style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "#0A84FF";
+              e.currentTarget.style.transform = "translateY(0)";
+            }}
           >
             View Projects
           </button>
 
+          {/* GitHub */}
           <a
             href={profile.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200"
             style={{
+              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+              padding: "0.65rem 1.4rem",
+              borderRadius: "0.75rem",
+              background: "rgba(255,255,255,0.05)",
               color: "#86868B",
+              fontSize: "0.875rem",
+              fontWeight: 500,
               border: "1px solid rgba(255,255,255,0.1)",
-              background: "transparent",
+              cursor: "pointer",
+              transition: "all 0.2s",
               textDecoration: "none",
             }}
             onMouseEnter={e => {
               (e.currentTarget as HTMLElement).style.color = "#F5F5F7";
               (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)";
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
             }}
             onMouseLeave={e => {
               (e.currentTarget as HTMLElement).style.color = "#86868B";
               (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
             }}
           >
             <Github className="w-4 h-4" />
             GitHub
           </a>
 
+          {/* Contact */}
           <a
             href="#contact"
             onClick={e => { e.preventDefault(); scroll("#contact"); }}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200"
             style={{
+              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+              padding: "0.65rem 1.4rem",
+              borderRadius: "0.75rem",
+              background: "rgba(255,255,255,0.05)",
               color: "#86868B",
+              fontSize: "0.875rem",
+              fontWeight: 500,
               border: "1px solid rgba(255,255,255,0.1)",
-              background: "transparent",
+              cursor: "pointer",
+              transition: "all 0.2s",
               textDecoration: "none",
             }}
             onMouseEnter={e => {
               (e.currentTarget as HTMLElement).style.color = "#F5F5F7";
               (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)";
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
             }}
             onMouseLeave={e => {
               (e.currentTarget as HTMLElement).style.color = "#86868B";
               (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+              (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
             }}
           >
             <Mail className="w-4 h-4" />
             Contact
           </a>
 
+          {/* Resume */}
           <button
             onClick={() => scroll("#about")}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium cursor-pointer transition-all duration-200"
-            style={{ color: "#515154", background: "transparent", border: "none" }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+              padding: "0.65rem 1rem",
+              borderRadius: "0.75rem",
+              background: "transparent",
+              color: "#515154",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              border: "none",
+              cursor: "pointer",
+              transition: "color 0.2s",
+            }}
             onMouseEnter={e => (e.currentTarget.style.color = "#86868B")}
             onMouseLeave={e => (e.currentTarget.style.color = "#515154")}
           >
@@ -176,35 +235,47 @@ export default function Hero({ profile }: HeroProps) {
 
         {/* Stats row */}
         <motion.div
-          {...fade(0.58)}
-          className="flex items-center gap-0 divide-x"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "2rem", divideColor: "rgba(255,255,255,0.06)" }}
+          {...fade(0.56)}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            paddingTop: "2rem",
+            borderTop: "1px solid rgba(255,255,255,0.07)",
+            width: "100%",
+            justifyContent: "center",
+            gap: "0",
+          }}
         >
           {[
-            { value: "3+", label: "Projects built" },
-            { value: "6", label: "Core skills" },
+            { value: "3+", label: "Projects" },
+            { value: "6", label: "Skills" },
             { value: "KNUST", label: "University" },
-            { value: "2026", label: "Graduation" },
+            { value: "2029", label: "Grad. Year" },
           ].map(({ value, label }, i) => (
             <div
               key={label}
-              className="px-8 text-center first:pl-0 last:pr-0"
-              style={{ borderColor: "rgba(255,255,255,0.06)" }}
+              style={{
+                flex: 1,
+                textAlign: "center",
+                padding: "0 1rem",
+                borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none",
+              }}
             >
               <div
-                className="font-bold mb-0.5"
                 style={{
-                  fontSize: "1.3rem",
+                  fontSize: "1.4rem",
+                  fontWeight: 700,
                   color: "#F5F5F7",
-                  fontFamily: "var(--font-sans)",
-                  letterSpacing: i < 2 ? "-0.02em" : "0",
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.2,
+                  marginBottom: "0.3rem",
                 }}
               >
                 {value}
               </div>
               <div
                 style={{
-                  fontSize: "0.65rem",
+                  fontSize: "0.62rem",
                   color: "#515154",
                   fontFamily: "var(--font-mono)",
                   textTransform: "uppercase",
@@ -218,13 +289,25 @@ export default function Hero({ profile }: HeroProps) {
         </motion.div>
       </div>
 
-      {/* Scroll cue */}
+      {/* Scroll cue — enough bottom padding to clear controls bar */}
       <motion.button
-        {...fade(1.2)}
+        {...fade(1.3)}
         onClick={() => scroll("#about")}
         aria-label="Scroll down"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 cursor-pointer group"
-        style={{ background: "none", border: "none", color: "#515154" }}
+        style={{
+          position: "absolute",
+          bottom: "5.5rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.4rem",
+          background: "none",
+          border: "none",
+          color: "#3A3A3C",
+          cursor: "pointer",
+        }}
       >
         <span
           style={{
@@ -233,7 +316,6 @@ export default function Hero({ profile }: HeroProps) {
             letterSpacing: "0.2em",
             textTransform: "uppercase",
           }}
-          className="group-hover:opacity-60 transition-opacity"
         >
           scroll
         </span>
@@ -241,7 +323,7 @@ export default function Hero({ profile }: HeroProps) {
           animate={{ y: [0, 5, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ArrowDown className="w-3.5 h-3.5" />
+          <ArrowDown style={{ width: "0.85rem", height: "0.85rem" }} />
         </motion.div>
       </motion.button>
     </section>
