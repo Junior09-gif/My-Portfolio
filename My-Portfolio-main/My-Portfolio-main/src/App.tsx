@@ -14,7 +14,7 @@ import { Project, ContactMessage } from "./types";
 import { defaultProfile, defaultSkills, defaultProjects } from "./data";
 
 const DEFAULT_BG: BgConfig = {
-  mode: "aurora",
+  mode: "stardust",
   speed: 1,
   brightness: 100,
   dark: true,
@@ -26,19 +26,15 @@ export default function App() {
   const [projects] = useState<Project[]>(defaultProjects);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [resumeOpen, setResumeOpen] = useState(false);
-  const [accentColor, setAccentColor] = useState("#3B82F6");
+  const [accentColor, setAccentColor] = useState("#2563eb");
   const [bgConfig, setBgConfig] = useState<BgConfig>(DEFAULT_BG);
 
   const updateBg = (next: Partial<BgConfig>) =>
     setBgConfig(prev => ({ ...prev, ...next }));
 
   return (
-    <div style={{ minHeight: "100vh", background: "#080D1A", color: "#F0F4FF", position: "relative" }}>
-
-      {/* Fixed aurora canvas */}
+    <div style={{ minHeight: "100vh", background: "#090d16", color: "#f1f5f9", position: "relative" }}>
       <AnimatedBackground config={bgConfig} />
-
-      {/* Page content above canvas */}
       <div style={{ position: "relative", zIndex: 1 }}>
         <Navbar fullName={profile.fullName} />
         <main>
@@ -62,14 +58,11 @@ export default function App() {
           onOpenResume={() => setResumeOpen(true)}
         />
       </div>
-
       <ResumeModal
         isOpen={resumeOpen}
         onClose={() => setResumeOpen(false)}
         profile={profile}
       />
-
-      {/* Blended controls pill */}
       <ControlsBar config={bgConfig} onChange={updateBg} />
     </div>
   );

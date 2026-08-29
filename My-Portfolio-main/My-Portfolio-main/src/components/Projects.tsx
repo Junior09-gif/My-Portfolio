@@ -19,12 +19,15 @@ const inView = (delay = 0) => ({
   transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay },
 });
 
+// Monochromatic — single cobalt accent only
 const COLORS = [
-  { name: "Blue", hex: "#0A84FF" },
-  { name: "Indigo", hex: "#5E5CE6" },
-  { name: "Green", hex: "#30D158" },
-  { name: "Pink", hex: "#FF375F" },
+  { name: "Cobalt", hex: "#2563eb" },
+  { name: "Slate", hex: "#475569" },
+  { name: "Muted", hex: "#1e293b" },
 ];
+
+const CARD: React.CSSProperties = { background: "#0d1120", border: "1px solid #1e293b", borderRadius: "0.75rem" };
+const FIELD: React.CSSProperties = { width: "100%", padding: "0.5rem 0.8rem", background: "#090d16", border: "1px solid #1e293b", borderRadius: "0.5rem", fontSize: "0.8rem", color: "#f1f5f9", outline: "none", fontFamily: "var(--font-mono)" };
 
 export default function Projects({ projects, accentColor, setAccentColor }: ProjectsProps) {
   const [active, setActive] = useState("calculator");
@@ -97,39 +100,26 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
     return <Terminal className="w-4 h-4" />;
   };
 
-  const fieldStyle: React.CSSProperties = {
-    background: "rgba(255,255,255,0.04)",
-    border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "0.65rem",
-    padding: "0.5rem 0.8rem",
-    fontSize: "0.82rem",
-    color: "#F5F5F7",
-    outline: "none",
-    fontFamily: "var(--font-mono)",
-    width: "100%",
-  };
+  const fieldStyle: React.CSSProperties = { ...FIELD };
 
   return (
-    <section id="projects" className="section relative" style={{ background: "#0F0F17" }}>
-      <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none" />
+    <section id="projects" className="section" style={{ background: "#0d1120", position: "relative", zIndex: 1 }}>
+      <div className="section-sep" style={{ position: "absolute", top: 0, left: 0, right: 0 }} />
 
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
+      <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem", position: "relative" }}>
 
         {/* Header */}
-        <motion.div {...inView()} className="mb-16">
-          <p className="label mb-3">Projects</p>
-          <h2
-            className="font-bold tracking-tight"
-            style={{ fontSize: "clamp(2rem, 4vw, 2.8rem)", color: "#F5F5F7", letterSpacing: "-0.02em" }}
-          >
+        <motion.div {...inView()} style={{ marginBottom: "3rem" }}>
+          <p className="label" style={{ marginBottom: "0.5rem" }}>Projects</p>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.4rem)", fontWeight: 800, color: "#f1f5f9", letterSpacing: "-0.02em" }}>
             Practical solutions I've built
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
 
           {/* Project list */}
-          <div className="xl:col-span-5 space-y-3">
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
             {projects.map((proj, i) => {
               const isActive = active === proj.id;
               return (
@@ -137,43 +127,26 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
                   key={proj.id}
                   {...inView(i * 0.07)}
                   onClick={() => setActive(proj.id)}
-                  className="p-5 rounded-xl cursor-pointer transition-all duration-200"
                   style={{
-                    background: isActive ? "rgba(10,132,255,0.07)" : "rgba(255,255,255,0.03)",
-                    border: `1px solid ${isActive ? "rgba(10,132,255,0.25)" : "rgba(255,255,255,0.07)"}`,
+                    padding: "1rem", borderRadius: "0.65rem", cursor: "pointer",
+                    background: isActive ? "rgba(37,99,235,0.07)" : "#0d1120",
+                    border: `1px solid ${isActive ? "rgba(37,99,235,0.28)" : "#1e293b"}`,
+                    transition: "all 0.18s",
                   }}
                   whileHover={{ y: -1 }}
                 >
-                  <div className="flex items-start gap-3">
-                    <div
-                      className="p-2 rounded-lg mt-0.5 flex-shrink-0"
-                      style={{
-                        background: isActive ? "rgba(10,132,255,0.1)" : "rgba(255,255,255,0.04)",
-                        color: isActive ? "#0A84FF" : "#515154",
-                      }}
-                    >
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                    <div style={{ padding: "0.4rem", borderRadius: "0.4rem", flexShrink: 0, marginTop: "0.05rem", background: isActive ? "rgba(37,99,235,0.1)" : "#151c2c", color: isActive ? "#2563eb" : "#475569" }}>
                       {tabIcon(proj.id)}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold mb-1" style={{ color: "#F5F5F7" }}>{proj.title}</h3>
-                      <p className="text-xs leading-relaxed mb-3 line-clamp-2" style={{ color: "#86868B" }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h3 style={{ fontSize: "0.875rem", fontWeight: 600, color: "#f1f5f9", marginBottom: "0.25rem" }}>{proj.title}</h3>
+                      <p style={{ fontSize: "0.78rem", lineHeight: 1.55, color: "#94a3b8", marginBottom: "0.65rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
                         {proj.description}
                       </p>
-                      <div className="flex flex-wrap gap-1.5">
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
                         {proj.techStack.slice(0, 3).map(t => (
-                          <span
-                            key={t}
-                            className="px-2 py-0.5 rounded-md"
-                            style={{
-                              background: "rgba(255,255,255,0.04)",
-                              border: "1px solid rgba(255,255,255,0.07)",
-                              color: "#515154",
-                              fontFamily: "var(--font-mono)",
-                              fontSize: "0.65rem",
-                            }}
-                          >
-                            {t}
-                          </span>
+                          <span key={t} style={{ padding: "0.12rem 0.5rem", background: "#090d16", border: "1px solid #1e293b", color: "#475569", fontFamily: "var(--font-mono)", fontSize: "0.62rem", borderRadius: "0.3rem" }}>{t}</span>
                         ))}
                       </div>
                     </div>

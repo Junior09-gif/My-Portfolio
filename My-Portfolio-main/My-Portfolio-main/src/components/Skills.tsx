@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import { Skill } from "../types";
 import { Terminal, Code2, Paintbrush, Cpu, Network, ShieldCheck, CheckCircle2 } from "lucide-react";
@@ -15,7 +15,7 @@ const DETAILS: Record<string, { desc: string; points: string[] }> = {
 };
 
 const getIcon = (name?: string) => {
-  const s = { width: "1rem", height: "1rem" };
+  const s: React.CSSProperties = { width: "1rem", height: "1rem" };
   switch (name) {
     case "Python": return <Terminal style={s} />;
     case "Html5": return <Code2 style={s} />;
@@ -34,26 +34,27 @@ const inView = (delay = 0) => ({
   transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay },
 });
 
+const CARD: React.CSSProperties = { background: "#0d1120", border: "1px solid #1e293b", borderRadius: "0.75rem" };
+
 export default function Skills({ skills }: SkillsProps) {
   const [selected, setSelected] = useState<Skill>(skills[0]);
 
   return (
-    <section id="skills" className="section" style={{ background: "rgba(13,21,40,0.9)", position: "relative", zIndex: 1 }}>
+    <section id="skills" className="section" style={{ background: "#0d1120", position: "relative", zIndex: 1 }}>
       <div className="section-sep" style={{ position: "absolute", top: 0, left: 0, right: 0 }} />
       <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
 
-        <motion.div {...inView()} style={{ marginBottom: "3.5rem" }}>
+        <motion.div {...inView()} style={{ marginBottom: "3rem" }}>
           <p className="label" style={{ marginBottom: "0.5rem" }}>Skills</p>
-          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 800, color: "#F0F4FF", letterSpacing: "-0.02em" }}>
+          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.4rem)", fontWeight: 800, color: "#f1f5f9", letterSpacing: "-0.02em" }}>
             Tech stack &amp; competencies
           </h2>
-          <p style={{ fontSize: "0.95rem", color: "#8FA3C8", marginTop: "0.5rem" }}>Click any skill to explore proficiency and depth.</p>
         </motion.div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2.5rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
 
           {/* Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.65rem", alignContent: "start" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem", alignContent: "start" }}>
             {skills.map((skill, i) => {
               const isActive = selected?.name === skill.name;
               return (
@@ -61,33 +62,32 @@ export default function Skills({ skills }: SkillsProps) {
                   key={skill.name}
                   {...inView(i * 0.05)}
                   onClick={() => setSelected(skill)}
-                  whileHover={{ y: -2 }}
+                  whileHover={{ y: -1 }}
                   style={{
-                    textAlign: "left", padding: "1rem", borderRadius: "0.75rem", cursor: "pointer",
-                    background: isActive ? "rgba(59,130,246,0.1)" : "rgba(255,255,255,0.03)",
-                    border: `1px solid ${isActive ? "rgba(59,130,246,0.3)" : "rgba(255,255,255,0.07)"}`,
-                    boxShadow: isActive ? "0 4px 20px rgba(59,130,246,0.15)" : "none",
-                    transition: "all 0.2s",
+                    textAlign: "left", padding: "0.95rem", borderRadius: "0.65rem", cursor: "pointer",
+                    background: isActive ? "rgba(37,99,235,0.07)" : "#0d1120",
+                    border: `1px solid ${isActive ? "rgba(37,99,235,0.28)" : "#1e293b"}`,
+                    transition: "all 0.18s",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.65rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.6rem" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <div style={{ padding: "0.35rem", borderRadius: "0.4rem", background: isActive ? "rgba(59,130,246,0.15)" : "rgba(255,255,255,0.06)", color: isActive ? "#60A5FA" : "#4A5F80" }}>
+                      <div style={{ padding: "0.3rem", borderRadius: "0.35rem", background: isActive ? "rgba(37,99,235,0.12)" : "#151c2c", color: isActive ? "#2563eb" : "#475569" }}>
                         {getIcon(skill.iconName)}
                       </div>
-                      <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#F0F4FF" }}>{skill.name}</span>
+                      <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#f1f5f9" }}>{skill.name}</span>
                     </div>
-                    <span style={{ fontSize: "0.72rem", fontWeight: 700, color: isActive ? "#60A5FA" : "#4A5F80", fontFamily: "var(--font-mono)" }}>{skill.level}%</span>
+                    <span style={{ fontSize: "0.68rem", fontWeight: 700, color: isActive ? "#2563eb" : "#475569", fontFamily: "var(--font-mono)" }}>{skill.level}%</span>
                   </div>
-                  <div style={{ height: "3px", background: "rgba(255,255,255,0.07)", borderRadius: "999px", overflow: "hidden" }}>
+                  <div style={{ height: "2px", background: "#1e293b", borderRadius: "999px", overflow: "hidden" }}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${skill.level}%` }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
-                      style={{ height: "100%", background: isActive ? "linear-gradient(90deg,#3B82F6,#06B6D4)" : "rgba(255,255,255,0.2)", borderRadius: "999px" }}
+                      style={{ height: "100%", background: isActive ? "#2563eb" : "#263347", borderRadius: "999px" }}
                     />
                   </div>
-                  <p style={{ fontSize: "0.68rem", color: "#4A5F80", marginTop: "0.3rem", fontFamily: "var(--font-mono)" }}>{skill.category}</p>
+                  <p style={{ fontSize: "0.65rem", color: "#475569", marginTop: "0.3rem", fontFamily: "var(--font-mono)" }}>{skill.category}</p>
                 </motion.button>
               );
             })}
@@ -98,40 +98,48 @@ export default function Skills({ skills }: SkillsProps) {
             key={selected?.name}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{ padding: "1.5rem", background: "rgba(13,21,40,0.8)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "1rem", boxShadow: "0 8px 32px rgba(0,0,0,0.3)", position: "sticky", top: "5.5rem", alignSelf: "start" }}
+            transition={{ duration: 0.25 }}
+            style={{ ...CARD, padding: "1.35rem", position: "sticky", top: "5rem", alignSelf: "start" }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem", paddingBottom: "1.25rem", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-              <div style={{ padding: "0.6rem", borderRadius: "0.6rem", background: "rgba(59,130,246,0.12)", color: "#60A5FA" }}>{getIcon(selected?.iconName)}</div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.7rem", marginBottom: "1.1rem", paddingBottom: "1.1rem", borderBottom: "1px solid #1e293b" }}>
+              <div style={{ padding: "0.55rem", borderRadius: "0.5rem", background: "rgba(37,99,235,0.1)", color: "#2563eb" }}>
+                {getIcon(selected?.iconName)}
+              </div>
               <div>
                 <p className="mono-tag">{selected?.category}</p>
-                <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#F0F4FF", marginTop: "0.15rem" }}>{selected?.name}</h3>
+                <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#f1f5f9", marginTop: "0.12rem" }}>{selected?.name}</h3>
               </div>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.25rem" }}>
-              <div style={{ position: "relative", width: "3.5rem", height: "3.5rem", flexShrink: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.9rem", marginBottom: "1.1rem" }}>
+              <div style={{ position: "relative", width: "3.2rem", height: "3.2rem", flexShrink: 0 }}>
                 <svg style={{ width: "100%", height: "100%", transform: "rotate(-90deg)" }} viewBox="0 0 52 52">
-                  <circle cx="26" cy="26" r="20" fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="4" />
-                  <circle cx="26" cy="26" r="20" fill="none" stroke="#3B82F6" strokeWidth="4" strokeLinecap="round"
+                  <circle cx="26" cy="26" r="20" fill="none" stroke="#1e293b" strokeWidth="4" />
+                  <circle cx="26" cy="26" r="20" fill="none" stroke="#2563eb" strokeWidth="4" strokeLinecap="round"
                     strokeDasharray={`${(2 * Math.PI * 20 * (selected?.level ?? 0)) / 100} 999`} />
                 </svg>
-                <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.62rem", fontWeight: 700, color: "#60A5FA", fontFamily: "var(--font-mono)" }}>{selected?.level}%</span>
+                <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.6rem", fontWeight: 700, color: "#2563eb", fontFamily: "var(--font-mono)" }}>
+                  {selected?.level}%
+                </span>
               </div>
               <div>
-                <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#F0F4FF" }}>Proficiency</p>
-                <p style={{ fontSize: "0.8rem", color: "#8FA3C8", marginTop: "0.1rem" }}>{(selected?.level ?? 0) >= 85 ? "Advanced" : (selected?.level ?? 0) >= 70 ? "Intermediate" : "Foundational"}</p>
+                <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#f1f5f9" }}>Proficiency</p>
+                <p style={{ fontSize: "0.78rem", color: "#94a3b8", marginTop: "0.1rem" }}>
+                  {(selected?.level ?? 0) >= 85 ? "Advanced" : (selected?.level ?? 0) >= 70 ? "Intermediate" : "Foundational"}
+                </p>
               </div>
             </div>
 
-            <p style={{ fontSize: "0.875rem", lineHeight: 1.7, color: "#8FA3C8", marginBottom: "1.25rem" }}>{DETAILS[selected?.name ?? ""]?.desc}</p>
+            <p style={{ fontSize: "0.875rem", lineHeight: 1.72, color: "#94a3b8", marginBottom: "1.1rem" }}>
+              {DETAILS[selected?.name ?? ""]?.desc}
+            </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <p className="mono-tag" style={{ marginBottom: "0.25rem" }}>Key competencies</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+              <p className="mono-tag" style={{ marginBottom: "0.2rem" }}>Key competencies</p>
               {(DETAILS[selected?.name ?? ""]?.points ?? []).map(pt => (
-                <div key={pt} style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
-                  <CheckCircle2 style={{ width: "0.85rem", height: "0.85rem", color: "#22C55E", flexShrink: 0, marginTop: "0.12rem" }} />
-                  <span style={{ fontSize: "0.825rem", color: "#8FA3C8" }}>{pt}</span>
+                <div key={pt} style={{ display: "flex", alignItems: "flex-start", gap: "0.45rem" }}>
+                  <CheckCircle2 style={{ width: "0.825rem", height: "0.825rem", color: "#2563eb", flexShrink: 0, marginTop: "0.12rem" }} />
+                  <span style={{ fontSize: "0.825rem", color: "#94a3b8" }}>{pt}</span>
                 </div>
               ))}
             </div>
