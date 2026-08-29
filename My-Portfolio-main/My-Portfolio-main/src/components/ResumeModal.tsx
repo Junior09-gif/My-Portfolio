@@ -1,4 +1,4 @@
-import { X, Printer, Download, GraduationCap, Briefcase, Shield, Award, MapPin, Mail, Phone, Globe } from "lucide-react";
+import { X, Printer, GraduationCap, Award, MapPin, Mail, Globe } from "lucide-react";
 import { UserProfile } from "../types";
 
 interface ResumeModalProps {
@@ -10,169 +10,154 @@ interface ResumeModalProps {
 export default function ResumeModal({ isOpen, onClose, profile }: ResumeModalProps) {
   if (!isOpen) return null;
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-navy-950/90 backdrop-blur-xs flex justify-center items-center p-4">
-      {/* Container holding Resume Box */}
-      <div className="relative w-full max-w-4xl bg-white text-gray-900 rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col h-[90vh] print:h-auto print:border-none print:shadow-none animate-in scale-in duration-200">
-        
-        {/* Action Toolbars (Hidden on Print) */}
-        <div className="flex justify-between items-center px-6 py-4 bg-navy-900 border-b border-navy-800 text-white flex-shrink-0 print:hidden">
-          <div className="flex items-center gap-2">
-            <span className="p-1 bg-brand-500/15 rounded-lg text-brand-400">
-              <Award className="w-4 h-4" />
-            </span>
-            <span className="font-display font-bold text-sm">Pre-formatted Applicant Resume</span>
+    <div style={{
+      position: "fixed", inset: 0, zIndex: 200,
+      background: "rgba(4,8,16,0.92)",
+      backdropFilter: "blur(12px)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+      padding: "1rem", overflowY: "auto",
+    }}>
+      <div style={{
+        position: "relative", width: "100%", maxWidth: "52rem",
+        background: "#fff", color: "#111827",
+        borderRadius: "1rem", overflow: "hidden",
+        boxShadow: "0 24px 64px rgba(0,0,0,0.6)",
+        display: "flex", flexDirection: "column",
+        maxHeight: "90vh",
+      }}>
+
+        {/* Toolbar */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "0.9rem 1.5rem",
+          background: "#0D1528", borderBottom: "1px solid rgba(255,255,255,0.08)",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+            <div style={{ padding: "0.3rem", background: "rgba(59,130,246,0.12)", borderRadius: "0.4rem", color: "#60A5FA" }}>
+              <Award style={{ width: "0.9rem", height: "0.9rem" }} />
+            </div>
+            <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#F0F4FF" }}>Applicant Résumé</span>
           </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-navy-800 hover:bg-navy-750 text-white rounded-lg text-xs font-semibold cursor-pointer transition-colors"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Print Resume</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <button onClick={() => window.print()}
+              style={{ display: "flex", alignItems: "center", gap: "0.4rem", padding: "0.4rem 0.9rem", background: "rgba(255,255,255,0.08)", color: "#F0F4FF", border: "1px solid rgba(255,255,255,0.12)", borderRadius: "0.45rem", fontSize: "0.78rem", fontWeight: 500, cursor: "pointer" }}>
+              <Printer style={{ width: "0.8rem", height: "0.8rem" }} />Print
             </button>
-            <button
-              onClick={onClose}
-              className="p-1.5 hover:bg-navy-800 rounded-lg text-navy-400 hover:text-white transition-colors cursor-pointer"
+            <button onClick={onClose}
+              style={{ padding: "0.4rem", background: "none", border: "none", cursor: "pointer", color: "#8FA3C8", borderRadius: "0.4rem" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "#F0F4FF")}
+              onMouseLeave={e => (e.currentTarget.style.color = "#8FA3C8")}
             >
-              <X className="w-5 h-5" />
+              <X style={{ width: "1.1rem", height: "1.1rem" }} />
             </button>
           </div>
         </div>
 
-        {/* CV Paper Area (Can be scrolled on-screen, completely layout-friendly) */}
-        <div className="p-8 sm:p-12 overflow-y-auto bg-white flex-grow font-sans text-sm tracking-normal underline-offset-4 print:overflow-visible" id="resume_paper_content">
-          <div className="max-w-3xl mx-auto space-y-8">
-            
-            {/* Header / Name Block */}
-            <div className="text-center sm:text-left sm:flex justify-between items-start border-b border-gray-200 pb-6">
+        {/* Resume content */}
+        <div style={{ padding: "2.5rem 3rem", overflowY: "auto", background: "#fff", flexGrow: 1, fontFamily: "var(--font-sans)", fontSize: "0.875rem", color: "#111827" }}>
+          <div style={{ maxWidth: "44rem", margin: "0 auto" }}>
+
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "1.5rem", borderBottom: "2px solid #E5E7EB", marginBottom: "1.75rem", flexWrap: "wrap", gap: "1rem" }}>
               <div>
-                <h1 className="text-3xl font-display font-extrabold text-navy-950 tracking-tight">{profile.fullName}</h1>
-                <p className="text-sm font-semibold text-brand-600 mt-1 font-display tracking-tight">Information Technology Specialist | Creative Website Designer | Cyber Security Enthusiast</p>
-                <p className="text-xs text-gray-500 italic mt-0.5">Pursuing BSc. IT at KNUST, Kumasi</p>
+                <h1 style={{ fontSize: "1.75rem", fontWeight: 800, color: "#111827", letterSpacing: "-0.02em", marginBottom: "0.25rem" }}>{profile.fullName}</h1>
+                <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#2563EB", marginBottom: "0.2rem" }}>Information Technology Specialist · Cybersecurity Enthusiast</p>
+                <p style={{ fontSize: "0.78rem", color: "#6B7280", fontStyle: "italic" }}>BSc. IT — KNUST, Kumasi</p>
               </div>
-
-              {/* Direct applicant markers */}
-              <div className="mt-4 sm:mt-0 text-xs text-gray-600 space-y-1 sm:text-right font-mono flex-shrink-0">
-                <div className="flex items-center sm:justify-end gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-navy-600" />
-                  <span>{profile.email}</span>
-                </div>
-                <div className="flex items-center sm:justify-end gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-navy-600" />
-                  <span>{profile.location}</span>
-                </div>
-                <div className="flex items-center sm:justify-end gap-1.5">
-                  <Globe className="w-3.5 h-3.5 text-navy-600" />
-                  <span>github.com/kingslayer5543</span>
-                </div>
+              <div style={{ fontSize: "0.78rem", color: "#6B7280", display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+                {[
+                  { icon: Mail, text: profile.email },
+                  { icon: MapPin, text: profile.location },
+                  { icon: Globe, text: "github.com/kingslayer5543" },
+                ].map(({ icon: Icon, text }) => (
+                  <div key={text} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <Icon style={{ width: "0.8rem", height: "0.8rem", color: "#2563EB" }} />
+                    <span>{text}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Profile Summary statement */}
-            <div className="space-y-2.5">
-              <h3 className="text-xs font-bold font-mono text-gray-500 uppercase tracking-widest border-b border-gray-100 pb-1">Professional Statement</h3>
-              <p className="text-gray-700 leading-relaxed text-sm">
-                Passionate and solution-oriented Information Technology undergraduate student at Kwame Nkrumah University of Science and Technology. Equipped with robust foundational abilities in computer desktop automation (Python), responsive interface engineering, client/server networking protocols, and basic cybersecurity baselines. Committed to building practical computing applications that mitigate software system vulnerabilities and thwart cybercrime frameworks.
+            {/* Section helper */}
+            {([
+              {
+                title: "Professional Statement",
+                content: (
+                  <p style={{ color: "#374151", lineHeight: 1.75 }}>
+                    Passionate and solution-oriented Information Technology undergraduate at KNUST. Equipped with
+                    foundational abilities in Python automation, responsive web engineering, networking protocols,
+                    and cybersecurity baselines. Committed to building practical computing applications that
+                    mitigate software vulnerabilities and thwart cybercrime.
+                  </p>
+                ),
+              },
+              {
+                title: "Education",
+                content: (
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "0.5rem" }}>
+                    <div>
+                      <h4 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#111827", display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.25rem" }}>
+                        <GraduationCap style={{ width: "0.9rem", height: "0.9rem", color: "#2563EB" }} />
+                        BSc. Information Technology
+                      </h4>
+                      <p style={{ fontSize: "0.8rem", color: "#6B7280", marginBottom: "0.2rem" }}>Kwame Nkrumah University of Science and Technology (KNUST)</p>
+                      <p style={{ fontSize: "0.78rem", color: "#9CA3AF" }}>Computing topologies, databases, web technologies, and security audits.</p>
+                    </div>
+                    <span style={{ fontSize: "0.72rem", fontWeight: 600, color: "#374151", background: "#F3F4F6", padding: "0.2rem 0.65rem", borderRadius: "0.35rem", whiteSpace: "nowrap" }}>2026 – Present</span>
+                  </div>
+                ),
+              },
+              {
+                title: "Core Capabilities",
+                content: (
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "0.5rem" }}>
+                    {["Python Programming", "HTML5 Markup", "CSS3 Styling", "JavaScript Logic", "IPv4 Subnetting", "Cybersecurity Basics"].map(skill => (
+                      <div key={skill} style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.8rem", color: "#374151" }}>
+                        <span style={{ width: "0.4rem", height: "0.4rem", borderRadius: "50%", background: "#2563EB", flexShrink: 0 }} />
+                        <strong>{skill}</strong>
+                      </div>
+                    ))}
+                  </div>
+                ),
+              },
+              {
+                title: "Project Deliverables",
+                content: (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    {[
+                      { title: "Personal Portfolio Platform", role: "Frontend Developer · React, Tailwind CSS", points: ["Adaptive interface with responsive grid systems.", "Real-time workspace preview controllers."] },
+                      { title: "Python Calculator", role: "Software Engineer · Python, React", points: ["Arithmetic parsing with proper operator precedence.", "Validation logs catching NaN and syntax errors."] },
+                      { title: "Network Subnet Study Project", role: "Network Architect · IPv4 CIDR Algorithms", points: ["IPv4 CIDR conversion from binary masks.", "Instant network/broadcast/host count output."] },
+                    ].map(p => (
+                      <div key={p.title}>
+                        <h4 style={{ fontSize: "0.875rem", fontWeight: 700, color: "#111827", marginBottom: "0.15rem" }}>{p.title}</h4>
+                        <p style={{ fontSize: "0.75rem", color: "#6B7280", fontStyle: "italic", marginBottom: "0.35rem" }}>{p.role}</p>
+                        <ul style={{ paddingLeft: "1rem", display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                          {p.points.map(pt => <li key={pt} style={{ fontSize: "0.78rem", color: "#374151" }}>{pt}</li>)}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                ),
+              },
+            ] as { title: string; content: React.ReactNode }[]).map(({ title, content }) => (
+              <div key={title} style={{ marginBottom: "1.75rem" }}>
+                <h3 style={{ fontSize: "0.68rem", fontWeight: 700, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.12em", borderBottom: "1px solid #E5E7EB", paddingBottom: "0.4rem", marginBottom: "0.9rem", fontFamily: "var(--font-mono)" }}>
+                  {title}
+                </h3>
+                {content}
+              </div>
+            ))}
+
+            {/* Footer */}
+            <div style={{ borderTop: "1px solid #E5E7EB", paddingTop: "1.25rem", textAlign: "center" }}>
+              <p style={{ fontSize: "0.7rem", color: "#9CA3AF", fontStyle: "italic" }}>
+                Verified candidate. Generated for BSc. IT academic review — KNUST.
               </p>
             </div>
-
-            {/* Academic history */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-bold font-mono text-gray-500 uppercase tracking-widest border-b border-gray-100 pb-1">Education Background</h3>
-              
-              <div className="flex justify-between items-start">
-                <div>
-                  <h4 className="font-bold text-navy-950 text-base flex items-center gap-1.5 leading-none">
-                    <GraduationCap className="w-4 h-4 text-brand-600" />
-                    BSc. Information Technology
-                  </h4>
-                  <p className="text-xs text-gray-600 font-medium mt-1">Kwame Nkrumah University of Science and Technology (KNUST)</p>
-                  <p className="text-xs text-gray-500 mt-1">Focusing on computing topologies, databases, client-side web technologies, and security audits.</p>
-                </div>
-                <span className="text-xs font-semibold text-gray-600 font-mono bg-gray-100 px-2 py-0.5 rounded-md flex-shrink-0">2026 - Present</span>
-              </div>
-            </div>
-
-            {/* Skills grid section formatted for resume templates */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-bold font-mono text-gray-500 uppercase tracking-widest border-b border-gray-100 pb-1">Core Capabilities</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs text-gray-700">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                  <strong>Python Programming</strong>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                  <strong>Hypertext Markup (HTML)</strong>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                  <strong>Cascading Styles (CSS)</strong>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                  <strong>JavaScript Logic Development</strong>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                  <strong>IPv4 Subnetting & Routing</strong>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                  <strong>Cybersecurity Baselines</strong>
-                </div>
-              </div>
-            </div>
-
-            {/* Projects resume bullet lists */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-bold font-mono text-gray-500 uppercase tracking-widest border-b border-gray-100 pb-1">Select Laboratory Deliverables</h3>
-              
-              <div className="space-y-3">
-                <div>
-                  <h4 className="font-bold text-gray-900 text-sm">Personal Portfolio Platform</h4>
-                  <p className="text-xs text-gray-500 italic">Core Dev, Frontend Layout | Tech: HTML, CSS, React, Customizers</p>
-                  <ul className="list-disc list-inside text-xs text-gray-650 mt-1 pl-1 space-y-0.5">
-                    <li>Designed an adaptive interface utilizing custom styling blocks and responsive grid systems.</li>
-                    <li>Integrated real-time workspace preview controllers to support on-demand template customization.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-gray-900 text-sm">In-shell Python Calculators</h4>
-                  <p className="text-xs text-gray-505 italic">Software Engineer | Tech: Python, Regex Solvers, React Prototypes</p>
-                  <ul className="list-disc list-inside text-xs text-gray-650 mt-1 pl-1 space-y-0.5">
-                    <li>Built an arithmetic parsing module capable of resolving equations with proper operators.</li>
-                    <li>Designed validation logs in user interfaces to catch dividing deviations and division/NaN syntax errors.</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-gray-900 text-sm">Computer Subnet Addressing Project</h4>
-                  <p className="text-xs text-gray-505 italic">Network Architect | Tech: Binary Conversion, CIDR Formulas</p>
-                  <ul className="list-disc list-inside text-xs text-gray-650 mt-1 pl-1 space-y-0.5">
-                    <li>Created IPv4 CIDR conversion algorithms mapping binary masks directly from selection parameters.</li>
-                    <li>Outputs network addresses, broadcast boundaries, and exact usable node counts instantly with zero server latency.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Declaration signatures */}
-            <div className="border-t border-gray-250 pt-6 mt-8">
-              <p className="text-[11px] text-gray-500 leading-normal text-center italic">
-                Verified candidate track. Generated for BSc. Information Technology academic review board, KNUST.
-              </p>
-            </div>
-
           </div>
         </div>
-
       </div>
     </div>
   );
