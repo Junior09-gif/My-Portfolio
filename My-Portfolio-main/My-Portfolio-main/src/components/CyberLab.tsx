@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ShieldCheck, ShieldAlert, Terminal, Play, Lock, Unlock, Key,

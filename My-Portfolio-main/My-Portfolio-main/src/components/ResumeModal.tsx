@@ -1,3 +1,4 @@
+import React from "react";
 import { X, Printer, GraduationCap, Award, MapPin, Mail, Globe } from "lucide-react";
 import { UserProfile } from "../types";
 

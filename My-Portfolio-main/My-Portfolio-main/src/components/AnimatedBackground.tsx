@@ -22,15 +22,16 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 // ─── AURORA PLASMA ────────────────────────────────────────────────────────────
 
-interface Blob {
+interface PlasmaBlob {
   x: number; y: number;
   vx: number; vy: number;
-  tx: number; ty: number;      // target for smooth wandering
+  tx: number; ty: number;
   radius: number;
   hue: number; sat: number; lit: number;
   alpha: number;
   pulsePhase: number;
   pulseSpeed: number;
+  z: number;
 }
 
 interface Star {
@@ -49,7 +50,7 @@ interface FlowLine {
   phase: number;
 }
 
-function makeBlobs(w: number, h: number): Blob[] {
+function makeBlobs(w: number, h: number): PlasmaBlob[] {
   const HUES = [220, 195, 260, 210, 240, 200, 280];
   return Array.from({ length: 7 }, (_, i) => ({
     x: rand(w * 0.1, w * 0.9),
@@ -64,6 +65,7 @@ function makeBlobs(w: number, h: number): Blob[] {
     alpha: rand(0.055, 0.11),
     pulsePhase: rand(0, Math.PI * 2),
     pulseSpeed: rand(0.003, 0.008),
+    z: rand(0.3, 1.0),
   }));
 }
 
@@ -103,7 +105,7 @@ function makeFlowLines(w: number, h: number): FlowLine[] {
 function drawAurora(
   ctx: CanvasRenderingContext2D,
   w: number, h: number, t: number,
-  blobs: Blob[], stars: Star[], lines: FlowLine[],
+  blobs: PlasmaBlob[], stars: Star[], lines: FlowLine[],
   mouse: { x: number; y: number },
   speed: number
 ) {
@@ -305,7 +307,7 @@ export default function AnimatedBackground({ config }: Props) {
   const state = useRef<{
     t: number; raf: number;
     mouse: { x: number; y: number };
-    blobs: Blob[]; stars: Star[]; lines: FlowLine[];
+    blobs: PlasmaBlob[]; stars: Star[]; lines: FlowLine[];
     dust: Dust[]; grid: GNode[];
     config: BgConfig;
   }>({ t: 0, raf: 0, mouse: { x: 0, y: 0 }, blobs: [], stars: [], lines: [], dust: [], grid: [], config });
