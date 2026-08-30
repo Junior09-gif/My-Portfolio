@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Project } from "../types";
-import {
-  Terminal, Calculator, Network, AlertCircle,
-  BookOpen, Wifi, RotateCcw, CheckCircle2
-} from "lucide-react";
+import { Terminal, Calculator, Network, AlertCircle, BookOpen, Wifi, RotateCcw, CheckCircle2 } from "lucide-react";
 
 interface ProjectsProps {
   projects: Project[];
@@ -19,20 +16,21 @@ const inView = (delay = 0) => ({
   transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay },
 });
 
-// Monochromatic — single cobalt accent only
-const COLORS = [
+const CARD: React.CSSProperties = { background: "#0d1120", border: "1px solid #1e293b", borderRadius: "0.75rem" };
+const FIELD: React.CSSProperties = { width: "100%", padding: "0.5rem 0.8rem", background: "#090d16", border: "1px solid #1e293b", borderRadius: "0.45rem", fontSize: "0.8rem", color: "#f1f5f9", outline: "none", fontFamily: "var(--font-mono)", transition: "border-color 0.2s" };
+const BTN_NUM: React.CSSProperties = { padding: "0.7rem", borderRadius: "0.45rem", cursor: "pointer", background: "#151c2c", border: "1px solid #1e293b", color: "#f1f5f9", fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" };
+const BTN_OP: React.CSSProperties = { padding: "0.7rem", borderRadius: "0.45rem", cursor: "pointer", background: "rgba(37,99,235,0.1)", border: "1px solid rgba(37,99,235,0.25)", color: "#2563eb", fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, transition: "background 0.15s" };
+
+const ACCENT_OPTIONS = [
   { name: "Cobalt", hex: "#2563eb" },
   { name: "Slate", hex: "#475569" },
-  { name: "Muted", hex: "#1e293b" },
+  { name: "Indigo", hex: "#6366f1" },
 ];
-
-const CARD: React.CSSProperties = { background: "#0d1120", border: "1px solid #1e293b", borderRadius: "0.75rem" };
-const FIELD: React.CSSProperties = { width: "100%", padding: "0.5rem 0.8rem", background: "#090d16", border: "1px solid #1e293b", borderRadius: "0.5rem", fontSize: "0.8rem", color: "#f1f5f9", outline: "none", fontFamily: "var(--font-mono)" };
 
 export default function Projects({ projects, accentColor, setAccentColor }: ProjectsProps) {
   const [active, setActive] = useState("calculator");
 
-  // ── Calculator ──
+  // Calculator
   const [input, setInput] = useState("");
   const [screen, setScreen] = useState("0");
   const [history, setHistory] = useState<string[]>(["# shell ready"]);
@@ -57,20 +55,15 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
     } catch { setScreen("Error"); setInput(""); }
   };
 
-  // ── Subnet ──
+  // Subnet
   const [ip, setIp] = useState("192.168.1.45");
   const [cidr, setCidr] = useState(24);
   const [ipErr, setIpErr] = useState("");
-  const [subnet, setSubnet] = useState({
-    mask: "255.255.255.0", network: "192.168.1.0",
-    broadcast: "192.168.1.255", hosts: "254",
-  });
+  const [subnet, setSubnet] = useState({ mask: "255.255.255.0", network: "192.168.1.0", broadcast: "192.168.1.255", hosts: "254" });
 
   useEffect(() => {
     const parts = ip.split(".").map(Number);
-    if (parts.length !== 4 || parts.some(p => isNaN(p) || p < 0 || p > 255)) {
-      setIpErr("Enter a valid IPv4 address"); return;
-    }
+    if (parts.length !== 4 || parts.some(p => isNaN(p) || p < 0 || p > 255)) { setIpErr("Enter a valid IPv4 address"); return; }
     setIpErr("");
     const c = Math.max(0, Math.min(32, cidr));
     const mb = "1".repeat(c).padEnd(32, "0");
@@ -79,34 +72,26 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
     const hb = "0".repeat(c).padEnd(32, "1");
     const hp = [0, 8, 16, 24].map(o => parseInt(hb.slice(o, o + 8), 2));
     const bp = np.map((p, i) => p | hp[i]);
-    setSubnet({
-      mask: mp.join("."),
-      network: np.join("."),
-      broadcast: bp.join("."),
-      hosts: c >= 31 ? "0" : (Math.pow(2, 32 - c) - 2).toLocaleString(),
-    });
+    setSubnet({ mask: mp.join("."), network: np.join("."), broadcast: bp.join("."), hosts: c >= 31 ? "0" : (Math.pow(2, 32 - c) - 2).toLocaleString() });
   }, [ip, cidr]);
 
   const applyColor = (hex: string) => {
     setAccentColor(hex);
-    document.documentElement.style.setProperty("--color-brand-500", hex);
-    document.documentElement.style.setProperty("--color-brand-400", hex);
-    document.documentElement.style.setProperty("--color-brand-600", hex);
+    document.documentElement.style.setProperty("--color-accent", hex);
   };
 
   const tabIcon = (id: string) => {
-    if (id === "calculator") return <Calculator className="w-4 h-4" />;
-    if (id === "network") return <Network className="w-4 h-4" />;
-    return <Terminal className="w-4 h-4" />;
+    const s: React.CSSProperties = { width: "0.9rem", height: "0.9rem" };
+    if (id === "calculator") return <Calculator style={s} />;
+    if (id === "network") return <Network style={s} />;
+    return <Terminal style={s} />;
   };
-
-  const fieldStyle: React.CSSProperties = { ...FIELD };
 
   return (
     <section id="projects" className="section" style={{ background: "#0d1120", position: "relative", zIndex: 1 }}>
       <div className="section-sep" style={{ position: "absolute", top: 0, left: 0, right: 0 }} />
 
-      <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem", position: "relative" }}>
+      <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
 
         {/* Header */}
         <motion.div {...inView()} style={{ marginBottom: "3rem" }}>
@@ -118,35 +103,37 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem" }}>
 
-          {/* Project list */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+          {/* Project cards */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {projects.map((proj, i) => {
               const isActive = active === proj.id;
               return (
-                <motion.div
-                  key={proj.id}
-                  {...inView(i * 0.07)}
-                  onClick={() => setActive(proj.id)}
+                <motion.div key={proj.id} {...inView(i * 0.07)} onClick={() => setActive(proj.id)} whileHover={{ y: -1 }}
                   style={{
-                    padding: "1rem", borderRadius: "0.65rem", cursor: "pointer",
+                    padding: "1rem", borderRadius: "0.65rem", cursor: "pointer", transition: "all 0.18s",
                     background: isActive ? "rgba(37,99,235,0.07)" : "#0d1120",
                     border: `1px solid ${isActive ? "rgba(37,99,235,0.28)" : "#1e293b"}`,
-                    transition: "all 0.18s",
                   }}
-                  whileHover={{ y: -1 }}
                 >
                   <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
-                    <div style={{ padding: "0.4rem", borderRadius: "0.4rem", flexShrink: 0, marginTop: "0.05rem", background: isActive ? "rgba(37,99,235,0.1)" : "#151c2c", color: isActive ? "#2563eb" : "#475569" }}>
+                    <div style={{
+                      padding: "0.4rem", borderRadius: "0.4rem", flexShrink: 0,
+                      background: isActive ? "rgba(37,99,235,0.1)" : "#151c2c",
+                      color: isActive ? "#2563eb" : "#475569"
+                    }}>
                       {tabIcon(proj.id)}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, color: "#f1f5f9", marginBottom: "0.25rem" }}>{proj.title}</h3>
-                      <p style={{ fontSize: "0.78rem", lineHeight: 1.55, color: "#94a3b8", marginBottom: "0.65rem", overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                      <p style={{
+                        fontSize: "0.78rem", lineHeight: 1.55, color: "#94a3b8", marginBottom: "0.6rem",
+                        overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical"
+                      }}>
                         {proj.description}
                       </p>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem" }}>
                         {proj.techStack.slice(0, 3).map(t => (
-                          <span key={t} style={{ padding: "0.12rem 0.5rem", background: "#090d16", border: "1px solid #1e293b", color: "#475569", fontFamily: "var(--font-mono)", fontSize: "0.62rem", borderRadius: "0.3rem" }}>{t}</span>
+                          <span key={t} style={{ padding: "0.1rem 0.45rem", background: "#090d16", border: "1px solid #1e293b", color: "#475569", fontFamily: "var(--font-mono)", fontSize: "0.6rem", borderRadius: "0.3rem" }}>{t}</span>
                         ))}
                       </div>
                     </div>
@@ -157,340 +144,159 @@ export default function Projects({ projects, accentColor, setAccentColor }: Proj
           </div>
 
           {/* Demo panel */}
-          <div className="xl:col-span-7">
-            <div
-              className="rounded-2xl flex flex-col"
-              style={{ background: "#141420", border: "1px solid rgba(255,255,255,0.07)", minHeight: "480px" }}
-            >
-              {/* Panel header */}
-              <div
-                className="flex items-center justify-between px-6 py-4 flex-shrink-0"
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <div
-                    className="p-1.5 rounded-lg"
-                    style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF" }}
-                  >
-                    <Terminal className="w-3.5 h-3.5" />
-                  </div>
-                  <div>
-                    <p className="mono-tag">Interactive Demo</p>
-                    <h3 className="text-sm font-semibold mt-0.5" style={{ color: "#F5F5F7" }}>
-                      {active === "calculator" && "Python Calculator"}
-                      {active === "network" && "IPv4 Subnet Tool"}
-                      {active === "portfolio" && "Theme Configurator"}
-                    </h3>
-                  </div>
+          <div style={{ ...CARD, display: "flex", flexDirection: "column", minHeight: "420px" }}>
+
+            {/* Panel header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.85rem 1.1rem", borderBottom: "1px solid #1e293b", flexShrink: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                <div style={{ padding: "0.35rem", borderRadius: "0.35rem", background: "rgba(37,99,235,0.1)", color: "#2563eb" }}>
+                  <Terminal style={{ width: "0.8rem", height: "0.8rem" }} />
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Wifi className="w-3 h-3" style={{ color: "#30D158" }} />
-                  <span className="mono-tag" style={{ color: "#30D158" }}>LIVE</span>
+                <div>
+                  <p className="mono-tag">Interactive Demo</p>
+                  <p style={{ fontSize: "0.8rem", fontWeight: 600, color: "#f1f5f9", marginTop: "0.1rem" }}>
+                    {active === "calculator" ? "Python Calculator" : active === "network" ? "IPv4 Subnet Tool" : "Theme Configurator"}
+                  </p>
                 </div>
               </div>
-
-              {/* Demo content */}
-              <div className="flex-1 p-6 flex items-center justify-center">
-                <AnimatePresence mode="wait">
-
-                  {/* ── Calculator ── */}
-                  {active === "calculator" && (
-                    <motion.div
-                      key="calc"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      className="w-full max-w-xs mx-auto"
-                    >
-                      <div
-                        className="rounded-2xl p-4"
-                        style={{ background: "#0A0A0F", border: "1px solid rgba(255,255,255,0.07)" }}
-                      >
-                        {/* Screen */}
-                        <div
-                          className="rounded-xl px-4 py-3 mb-4 text-right"
-                          style={{ background: "#141420", border: "1px solid rgba(255,255,255,0.06)" }}
-                        >
-                          <p
-                            className="min-h-4 truncate"
-                            style={{ fontSize: "0.65rem", color: "#515154", fontFamily: "var(--font-mono)" }}
-                          >
-                            {input || "0"}
-                          </p>
-                          <p
-                            className="text-2xl font-bold truncate"
-                            style={{ color: "#F5F5F7", fontFamily: "var(--font-mono)" }}
-                          >
-                            {screen}
-                          </p>
-                        </div>
-
-                        {/* Buttons */}
-                        <div className="grid grid-cols-4 gap-2 text-sm font-semibold" style={{ fontFamily: "var(--font-mono)" }}>
-                          <button
-                            onClick={clear}
-                            className="col-span-2 py-3 rounded-xl cursor-pointer transition-all duration-150"
-                            style={{ background: "rgba(255,55,95,0.12)", color: "#FF375F", border: "1px solid rgba(255,55,95,0.2)" }}
-                          >
-                            AC
-                          </button>
-                          {["/", "*"].map(op => (
-                            <button
-                              key={op}
-                              onClick={() => append(op)}
-                              className="py-3 rounded-xl cursor-pointer transition-all duration-150"
-                              style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF", border: "1px solid rgba(10,132,255,0.2)" }}
-                            >
-                              {op}
-                            </button>
-                          ))}
-                          {["7", "8", "9"].map(n => (
-                            <button
-                              key={n}
-                              onClick={() => append(n)}
-                              className="py-3 rounded-xl cursor-pointer transition-colors"
-                              style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
-                              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
-                              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
-                            >
-                              {n}
-                            </button>
-                          ))}
-                          <button
-                            onClick={() => append("-")}
-                            className="py-3 rounded-xl cursor-pointer"
-                            style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF", border: "1px solid rgba(10,132,255,0.2)" }}
-                          >
-                            -
-                          </button>
-                          {["4", "5", "6"].map(n => (
-                            <button
-                              key={n}
-                              onClick={() => append(n)}
-                              className="py-3 rounded-xl cursor-pointer"
-                              style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
-                              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
-                              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
-                            >
-                              {n}
-                            </button>
-                          ))}
-                          <button
-                            onClick={() => append("+")}
-                            className="py-3 rounded-xl cursor-pointer"
-                            style={{ background: "rgba(10,132,255,0.1)", color: "#0A84FF", border: "1px solid rgba(10,132,255,0.2)" }}
-                          >
-                            +
-                          </button>
-                          {["1", "2", "3"].map(n => (
-                            <button
-                              key={n}
-                              onClick={() => append(n)}
-                              className="py-3 rounded-xl cursor-pointer"
-                              style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
-                              onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
-                              onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
-                            >
-                              {n}
-                            </button>
-                          ))}
-                          <button
-                            onClick={evaluate}
-                            className="row-span-2 rounded-xl cursor-pointer font-bold text-lg text-white transition-colors"
-                            style={{ background: "#0A84FF" }}
-                            onMouseEnter={e => (e.currentTarget.style.background = "#409CFF")}
-                            onMouseLeave={e => (e.currentTarget.style.background = "#0A84FF")}
-                          >
-                            =
-                          </button>
-                          <button
-                            onClick={() => append("0")}
-                            className="col-span-2 py-3 rounded-xl cursor-pointer"
-                            style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
-                            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
-                            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
-                          >
-                            0
-                          </button>
-                          <button
-                            onClick={() => append(".")}
-                            className="py-3 rounded-xl cursor-pointer"
-                            style={{ background: "rgba(255,255,255,0.05)", color: "#F5F5F7" }}
-                            onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.09)")}
-                            onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
-                          >
-                            .
-                          </button>
-                        </div>
-
-                        {/* Log */}
-                        <div
-                          className="mt-3 pt-2.5 space-y-0.5"
-                          style={{ borderTop: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-mono)", fontSize: "0.65rem", color: "#515154" }}
-                        >
-                          {history.slice(0, 3).map((h, i) => (
-                            <p key={i} className="truncate">{h}</p>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* ── Subnet ── */}
-                  {active === "network" && (
-                    <motion.div
-                      key="net"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      className="w-full max-w-md mx-auto space-y-4"
-                    >
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="mono-tag block mb-1.5">IP Address</label>
-                          <input
-                            value={ip}
-                            onChange={e => setIp(e.target.value)}
-                            style={fieldStyle}
-                            onFocus={e => (e.currentTarget.style.borderColor = "rgba(10,132,255,0.4)")}
-                            onBlur={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
-                          />
-                        </div>
-                        <div>
-                          <label className="mono-tag block mb-1.5">CIDR /{cidr}</label>
-                          <select
-                            value={cidr}
-                            onChange={e => setCidr(+e.target.value)}
-                            style={fieldStyle}
-                          >
-                            {Array.from({ length: 25 }, (_, i) => i + 8).map(v => (
-                              <option key={v} value={v}>/{v}</option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-
-                      {ipErr && (
-                        <div
-                          className="flex items-center gap-2 p-3 rounded-xl text-xs"
-                          style={{ background: "rgba(255,55,95,0.08)", border: "1px solid rgba(255,55,95,0.2)", color: "#FF375F" }}
-                        >
-                          <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                          {ipErr}
-                        </div>
-                      )}
-
-                      <div className="grid grid-cols-2 gap-3">
-                        {[
-                          { label: "Subnet Mask", value: subnet.mask, color: "#0A84FF" },
-                          { label: "Network Address", value: subnet.network, color: "#F5F5F7" },
-                          { label: "Broadcast Address", value: subnet.broadcast, color: "#F5F5F7" },
-                          { label: "Usable Hosts", value: `${subnet.hosts} IPs`, color: "#30D158" },
-                        ].map(({ label, value, color }) => (
-                          <div
-                            key={label}
-                            className="p-3.5 rounded-xl"
-                            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-                          >
-                            <p className="mono-tag mb-1">{label}</p>
-                            <p
-                              className="text-sm font-semibold"
-                              style={{ color, fontFamily: "var(--font-mono)" }}
-                            >
-                              {value}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div
-                        className="p-4 rounded-xl"
-                        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-                      >
-                        <div className="flex items-center gap-2 mb-3">
-                          <BookOpen className="w-3.5 h-3.5" style={{ color: "#0A84FF" }} />
-                          <span className="text-xs font-semibold" style={{ color: "#F5F5F7" }}>Protocol Reference</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-1.5 text-xs" style={{ color: "#86868B" }}>
-                          <p><span style={{ color: "#F5F5F7", fontWeight: 500 }}>TCP</span> — Reliable delivery</p>
-                          <p><span style={{ color: "#F5F5F7", fontWeight: 500 }}>IP</span>  — Addressing & routing</p>
-                          <p><span style={{ color: "#F5F5F7", fontWeight: 500 }}>DHCP</span>— Auto IP config</p>
-                          <p><span style={{ color: "#F5F5F7", fontWeight: 500 }}>DNS</span> — Name resolution</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* ── Theme ── */}
-                  {active === "portfolio" && (
-                    <motion.div
-                      key="theme"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      className="w-full max-w-xs mx-auto text-center space-y-6"
-                    >
-                      <p className="text-sm" style={{ color: "#86868B" }}>
-                        Change the portfolio accent color live.
-                      </p>
-                      <div className="flex justify-center gap-5">
-                        {COLORS.map(c => (
-                          <button
-                            key={c.name}
-                            onClick={() => applyColor(c.hex)}
-                            className="flex flex-col items-center gap-1.5 cursor-pointer group"
-                          >
-                            <span
-                              className="w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
-                              style={{
-                                background: c.hex,
-                                border: `2px solid ${accentColor === c.hex ? "#fff" : "transparent"}`,
-                              }}
-                            >
-                              {accentColor === c.hex && <CheckCircle2 className="w-4 h-4 text-white" />}
-                            </span>
-                            <span className="mono-tag">{c.name}</span>
-                          </button>
-                        ))}
-                      </div>
-                      <button
-                        onClick={() => applyColor("#0A84FF")}
-                        className="flex items-center gap-1.5 text-xs mx-auto cursor-pointer transition-colors"
-                        style={{ color: "#515154", background: "none", border: "none" }}
-                        onMouseEnter={e => (e.currentTarget.style.color = "#F5F5F7")}
-                        onMouseLeave={e => (e.currentTarget.style.color = "#515154")}
-                      >
-                        <RotateCcw className="w-3.5 h-3.5" />
-                        Reset to default
-                      </button>
-                    </motion.div>
-                  )}
-
-                </AnimatePresence>
-              </div>
-
-              {/* Panel footer */}
-              <div
-                className="px-6 py-3 flex justify-between flex-shrink-0"
-                style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-              >
-                <span className="mono-tag">PROTOTYPE · INTERACTIVE</span>
-                <button
-                  onClick={() => {
-                    if (active === "calculator") clear();
-                    if (active === "network") { setIp("192.168.1.45"); setCidr(24); }
-                  }}
-                  className="mono-tag cursor-pointer transition-colors"
-                  style={{ background: "none", border: "none" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "#F5F5F7")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "")}
-                >
-                  [reset]
-                </button>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                <Wifi style={{ width: "0.75rem", height: "0.75rem", color: "#2563eb" }} />
+                <span style={{ fontSize: "0.62rem", fontFamily: "var(--font-mono)", color: "#2563eb", letterSpacing: "0.06em" }}>LIVE</span>
               </div>
             </div>
-          </div>
 
+            {/* Demo content */}
+            <div style={{ flex: 1, padding: "1.25rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <AnimatePresence mode="wait">
+
+                {/* Calculator */}
+                {active === "calculator" && (
+                  <motion.div key="calc" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                    style={{ width: "100%", maxWidth: "18rem" }}>
+                    <div style={{ background: "#090d16", border: "1px solid #1e293b", borderRadius: "0.65rem", padding: "0.9rem" }}>
+                      {/* Screen */}
+                      <div style={{ background: "#0d1120", border: "1px solid #1e293b", borderRadius: "0.5rem", padding: "0.65rem 0.85rem", marginBottom: "0.75rem", textAlign: "right" }}>
+                        <p style={{ fontSize: "0.62rem", color: "#475569", fontFamily: "var(--font-mono)", marginBottom: "0.15rem" }}>{input || "0"}</p>
+                        <p style={{ fontSize: "1.5rem", fontWeight: 700, color: "#f1f5f9", fontFamily: "var(--font-mono)" }}>{screen}</p>
+                      </div>
+                      {/* Buttons */}
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.4rem" }}>
+                        <button onClick={clear} style={{ ...BTN_OP, gridColumn: "span 2", color: "#ef4444", borderColor: "rgba(239,68,68,0.2)", background: "rgba(239,68,68,0.08)" }}>AC</button>
+                        {["/", "*"].map(op => <button key={op} onClick={() => append(op)} style={BTN_OP}>{op}</button>)}
+                        {["7", "8", "9"].map(n => <button key={n} onClick={() => append(n)} style={BTN_NUM}>{n}</button>)}
+                        <button onClick={() => append("-")} style={BTN_OP}>-</button>
+                        {["4", "5", "6"].map(n => <button key={n} onClick={() => append(n)} style={BTN_NUM}>{n}</button>)}
+                        <button onClick={() => append("+")} style={BTN_OP}>+</button>
+                        {["1", "2", "3"].map(n => <button key={n} onClick={() => append(n)} style={BTN_NUM}>{n}</button>)}
+                        <button onClick={evaluate} style={{ ...BTN_OP, gridRow: "span 2", background: "#2563eb", color: "#fff", borderColor: "#2563eb", fontSize: "1.1rem" }}>=</button>
+                        <button onClick={() => append("0")} style={{ ...BTN_NUM, gridColumn: "span 2" }}>0</button>
+                        <button onClick={() => append(".")} style={BTN_NUM}>.</button>
+                      </div>
+                      <div style={{ borderTop: "1px solid #1e293b", marginTop: "0.65rem", paddingTop: "0.5rem" }}>
+                        {history.slice(0, 3).map((h, i) => (
+                          <p key={i} style={{ fontSize: "0.62rem", fontFamily: "var(--font-mono)", color: "#475569", marginBottom: "0.1rem" }}>{h}</p>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Subnet */}
+                {active === "network" && (
+                  <motion.div key="net" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                    style={{ width: "100%", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
+                      <div>
+                        <label className="mono-tag" style={{ display: "block", marginBottom: "0.35rem" }}>IP Address</label>
+                        <input value={ip} onChange={e => setIp(e.target.value)} style={FIELD}
+                          onFocus={e => (e.currentTarget.style.borderColor = "rgba(37,99,235,0.4)")}
+                          onBlur={e => (e.currentTarget.style.borderColor = "#1e293b")} />
+                      </div>
+                      <div>
+                        <label className="mono-tag" style={{ display: "block", marginBottom: "0.35rem" }}>CIDR /{cidr}</label>
+                        <select value={cidr} onChange={e => setCidr(+e.target.value)} style={FIELD}>
+                          {Array.from({ length: 25 }, (_, i) => i + 8).map(v => <option key={v} value={v}>/{v}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                    {ipErr && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.65rem 0.85rem", background: "rgba(239,68,68,0.07)", border: "1px solid rgba(239,68,68,0.18)", borderRadius: "0.45rem", fontSize: "0.78rem", color: "#fca5a5" }}>
+                        <AlertCircle style={{ width: "0.875rem", height: "0.875rem", flexShrink: 0 }} />{ipErr}
+                      </div>
+                    )}
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
+                      {[
+                        { label: "Subnet Mask", value: subnet.mask, color: "#2563eb" },
+                        { label: "Network Address", value: subnet.network, color: "#f1f5f9" },
+                        { label: "Broadcast Address", value: subnet.broadcast, color: "#f1f5f9" },
+                        { label: "Usable Hosts", value: `${subnet.hosts} IPs`, color: "#2563eb" },
+                      ].map(({ label, value, color }) => (
+                        <div key={label} style={{ ...CARD, padding: "0.65rem 0.85rem" }}>
+                          <p className="mono-tag" style={{ marginBottom: "0.2rem" }}>{label}</p>
+                          <p style={{ fontSize: "0.8rem", fontWeight: 700, color, fontFamily: "var(--font-mono)" }}>{value}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ ...CARD, padding: "0.85rem 1rem" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", marginBottom: "0.55rem" }}>
+                        <BookOpen style={{ width: "0.8rem", height: "0.8rem", color: "#2563eb" }} />
+                        <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#f1f5f9" }}>Protocol Reference</span>
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.3rem" }}>
+                        {[["TCP", "Reliable delivery"], ["IP", "Addressing & routing"], ["DHCP", "Auto IP config"], ["DNS", "Name resolution"]].map(([k, v]) => (
+                          <p key={k} style={{ fontSize: "0.72rem", color: "#94a3b8" }}>
+                            <span style={{ color: "#f1f5f9", fontWeight: 600 }}>{k} </span>— {v}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Theme configurator */}
+                {active === "portfolio" && (
+                  <motion.div key="theme" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+                    style={{ width: "100%", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "1.25rem" }}>
+                    <p style={{ fontSize: "0.875rem", color: "#94a3b8" }}>Change the portfolio accent colour live.</p>
+                    <div style={{ display: "flex", gap: "1.25rem", justifyContent: "center" }}>
+                      {ACCENT_OPTIONS.map(c => (
+                        <button key={c.name} onClick={() => applyColor(c.hex)}
+                          style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem", background: "none", border: "none", cursor: "pointer" }}>
+                          <span style={{
+                            width: "2.5rem", height: "2.5rem", borderRadius: "50%", background: c.hex, display: "flex", alignItems: "center", justifyContent: "center",
+                            border: `2px solid ${accentColor === c.hex ? "#fff" : "transparent"}`,
+                            boxShadow: accentColor === c.hex ? `0 0 12px ${c.hex}` : "none",
+                            transition: "all 0.2s"
+                          }}>
+                            {accentColor === c.hex && <CheckCircle2 style={{ width: "1rem", height: "1rem", color: "#fff" }} />}
+                          </span>
+                          <span className="mono-tag">{c.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <button onClick={() => applyColor("#2563eb")}
+                      style={{ display: "flex", alignItems: "center", gap: "0.4rem", background: "none", border: "none", cursor: "pointer", fontSize: "0.75rem", color: "#475569", fontFamily: "var(--font-mono)", transition: "color 0.15s" }}
+                      onMouseEnter={e => (e.currentTarget.style.color = "#f1f5f9")}
+                      onMouseLeave={e => (e.currentTarget.style.color = "#475569")}
+                    >
+                      <RotateCcw style={{ width: "0.75rem", height: "0.75rem" }} />Reset to default
+                    </button>
+                  </motion.div>
+                )}
+
+              </AnimatePresence>
+            </div>
+
+            {/* Panel footer */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.65rem 1.1rem", borderTop: "1px solid #1e293b", flexShrink: 0 }}>
+              <span className="mono-tag">PROTOTYPE · INTERACTIVE</span>
+              <button onClick={() => { if (active === "calculator") clear(); if (active === "network") { setIp("192.168.1.45"); setCidr(24); } }}
+                className="mono-tag" style={{ background: "none", border: "none", cursor: "pointer", transition: "color 0.15s" }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#f1f5f9")}
+                onMouseLeave={e => (e.currentTarget.style.color = "")}
+              >[reset]</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
