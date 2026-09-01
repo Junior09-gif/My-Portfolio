@@ -35,7 +35,8 @@ function TerminalWidget() {
     let i = 0;
     const iv = setInterval(() => {
       if (i < TERMINAL_LINES.length) {
-        setLines(p => [...p, TERMINAL_LINES[i]]);
+        const line = TERMINAL_LINES[i];
+        if (line) setLines(p => [...p, line]);
         i++;
       } else {
         clearInterval(iv);
@@ -78,7 +79,7 @@ function TerminalWidget() {
         minHeight: "11rem",
         display: "flex", flexDirection: "column", gap: "0.25rem",
       }}>
-        {lines.map((l, i) => (
+        {lines.filter(Boolean).map((l, i) => (
           <div key={i} style={{ display: "flex", gap: "0.3rem" }}>
             {l.prefix && <span style={{ color: "#2563eb", userSelect: "none" }}>{l.prefix}</span>}
             <span style={{ color: l.color }}>{l.text}</span>
