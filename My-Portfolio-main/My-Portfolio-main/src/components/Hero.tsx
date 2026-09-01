@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { ArrowDown, Github, Linkedin, Mail, Terminal } from "lucide-react";
+import { ArrowDown, Terminal } from "lucide-react";
 import { UserProfile } from "../types";
 
 interface HeroProps { profile: UserProfile; }
@@ -158,79 +158,6 @@ export default function Hero({ profile }: HeroProps) {
             and grow my skills through real-world projects at{" "}
             <strong style={{ color: "#2563eb", fontWeight: 600 }}>KNUST</strong>.
           </motion.p>
-
-          {/* Stat badges — monochromatic */}
-          <motion.div {...rise(0.28)} style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-            {[
-              { label: "Projects", value: "3+" },
-              { label: "Skills", value: "6" },
-              { label: "University", value: "KNUST" },
-              { label: "Grad", value: "2029" },
-            ].map(({ label, value }) => (
-              <div key={label} style={{
-                display: "inline-flex", alignItems: "center",
-                borderRadius: "0.35rem", overflow: "hidden",
-                border: "1px solid #1e293b",
-              }}>
-                <span style={{
-                  padding: "0.25rem 0.65rem",
-                  background: "#0d1120",
-                  fontSize: "0.65rem", fontWeight: 600,
-                  color: "#475569", fontFamily: "var(--font-mono)",
-                  textTransform: "uppercase", letterSpacing: "0.08em",
-                }}>{label}</span>
-                <span style={{
-                  padding: "0.25rem 0.6rem",
-                  background: "#2563eb",
-                  fontSize: "0.72rem", fontWeight: 700,
-                  color: "#fff", fontFamily: "var(--font-mono)",
-                }}>{value}</span>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Social buttons — unified style */}
-          <motion.div {...rise(0.36)} style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-            {[
-              { icon: Github, label: "GitHub", href: profile.githubUrl, bg: "#0d1120", border: "#1e293b" },
-              { icon: Linkedin, label: "LinkedIn", href: profile.linkedinUrl, bg: "#0d1120", border: "#1e293b" },
-              { icon: Mail, label: "Contact", href: "#contact", bg: "#2563eb", border: "#2563eb" },
-            ].map(({ icon: Icon, label, href, bg, border }) => (
-              <a key={label}
-                href={href}
-                onClick={href === "#contact" ? (e) => { e.preventDefault(); scroll("#contact"); } : undefined}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: "0.45rem",
-                  padding: "0.55rem 1.1rem",
-                  background: bg, color: href === "#contact" ? "#fff" : "#94a3b8",
-                  borderRadius: "0.45rem",
-                  fontSize: "0.78rem", fontWeight: 600,
-                  letterSpacing: "0.06em", textTransform: "uppercase",
-                  textDecoration: "none",
-                  border: `1px solid ${border}`,
-                  fontFamily: "var(--font-mono)",
-                  transition: "all 0.18s ease",
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.color = "#f1f5f9";
-                  el.style.borderColor = "#263347";
-                  el.style.background = href === "#contact" ? "#1d4ed8" : "#151c2c";
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.color = href === "#contact" ? "#fff" : "#94a3b8";
-                  el.style.borderColor = border;
-                  el.style.background = bg;
-                }}
-              >
-                <Icon style={{ width: "0.85rem", height: "0.85rem" }} />
-                {label}
-              </a>
-            ))}
-          </motion.div>
         </div>
 
         {/* ── Right: terminal ── */}
