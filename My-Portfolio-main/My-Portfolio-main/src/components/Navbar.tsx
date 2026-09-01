@@ -78,21 +78,12 @@ export default function Navbar({ fullName }: NavbarProps) {
                 <Code2 style={{ width: "1rem", height: "1rem", color: "#fff" }} />
               </div>
               {/* Wordmark */}
-              <div style={{ display: "flex", flexDirection: "column", lineHeight: 1 }}>
-                <span style={{
-                  fontSize: "0.9rem", fontWeight: 800, color: "#f1f5f9",
-                  fontFamily: "var(--font-mono)", letterSpacing: "-0.02em",
-                }}>
-                  edwin<span style={{ color: "#2563eb" }}>.dev</span>
-                </span>
-                <span style={{
-                  fontSize: "0.58rem", color: "#475569",
-                  fontFamily: "var(--font-mono)", letterSpacing: "0.12em",
-                  textTransform: "uppercase", marginTop: "0.15rem",
-                }}>
-                  IT Student · KNUST
-                </span>
-              </div>
+              <span style={{
+                fontSize: "0.9rem", fontWeight: 800, color: "#f1f5f9",
+                fontFamily: "var(--font-mono)", letterSpacing: "-0.02em",
+              }}>
+                edwin<span style={{ color: "#2563eb" }}>.dev</span>
+              </span>
             </button>
 
             {/* ── Desktop nav ── */}
@@ -131,30 +122,6 @@ export default function Navbar({ fullName }: NavbarProps) {
 
             {/* ── Right side ── */}
             <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-
-              {/* Status dot — desktop only */}
-              {!isMobile && (
-                <div style={{
-                  display: "flex", alignItems: "center", gap: "0.4rem",
-                  padding: "0.3rem 0.75rem",
-                  background: "rgba(34,197,94,0.07)",
-                  border: "1px solid rgba(34,197,94,0.18)",
-                  borderRadius: "999px",
-                }}>
-                  <span style={{
-                    width: "0.4rem", height: "0.4rem", borderRadius: "50%",
-                    background: "#22c55e",
-                    boxShadow: "0 0 5px #22c55e",
-                    flexShrink: 0,
-                  }} />
-                  <span style={{
-                    fontSize: "0.68rem", color: "#86efac",
-                    fontFamily: "var(--font-mono)", letterSpacing: "0.05em",
-                  }}>
-                    Open to work
-                  </span>
-                </div>
-              )}
 
               {/* Hire Me CTA */}
               {!isMobile && (
