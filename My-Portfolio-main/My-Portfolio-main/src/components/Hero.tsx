@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { ArrowDown, Terminal } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { UserProfile } from "../types";
 
 interface HeroProps { profile: UserProfile; }
@@ -17,76 +16,6 @@ const fade = (delay = 0) => ({
   transition: { duration: 0.8, ease: "easeOut", delay },
 });
 
-const TERMINAL_LINES: { prefix: string; text: string; color: string }[] = [
-  { prefix: "$ ", text: "whoami", color: "#60a5fa" },
-  { prefix: "", text: "boadu-kofi-junior-edwin", color: "#f1f5f9" },
-  { prefix: "$ ", text: "cat skills.txt", color: "#60a5fa" },
-  { prefix: "", text: "Python · HTML · CSS · JS · Networking · Cybersecurity", color: "#94a3b8" },
-  { prefix: "$ ", text: "echo $GOAL", color: "#60a5fa" },
-  { prefix: "", text: "Build. Secure. Grow.", color: "#f1f5f9" },
-];
-
-function TerminalWidget() {
-  const [count, setCount] = useState(0);
-  const [cursor, setCursor] = useState(true);
-
-  useEffect(() => {
-    if (count >= TERMINAL_LINES.length) return;
-    const t = setTimeout(() => setCount(c => Math.min(c + 1, TERMINAL_LINES.length)), 480);
-    return () => clearTimeout(t);
-  }, [count]);
-
-  useEffect(() => {
-    const t = setInterval(() => setCursor(c => !c), 550);
-    return () => clearInterval(t);
-  }, []);
-
-  const visibleLines = TERMINAL_LINES.slice(0, count);
-  const done = count >= TERMINAL_LINES.length;
-
-  return (
-    <div style={{
-      background: "#020408", border: "1px solid #1e293b",
-      borderRadius: "0.75rem", overflow: "hidden",
-      boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-      maxWidth: "32rem", width: "100%",
-    }}>
-      {/* Title bar */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: "0.5rem",
-        padding: "0.65rem 1rem", background: "#0d1120",
-        borderBottom: "1px solid #1e293b",
-      }}>
-        {["#ef4444", "#f59e0b", "#22c55e"].map(c => (
-          <span key={c} style={{ width: "0.55rem", height: "0.55rem", borderRadius: "50%", background: c, opacity: 0.7 }} />
-        ))}
-        <span style={{ marginLeft: "0.5rem", fontSize: "0.68rem", color: "#475569", fontFamily: "var(--font-mono)" }}>
-          ~/portfolio — bash
-        </span>
-        <Terminal style={{ width: "0.75rem", height: "0.75rem", color: "#475569", marginLeft: "auto" }} />
-      </div>
-
-      {/* Body */}
-      <div style={{
-        padding: "1rem 1.1rem 1.1rem", fontFamily: "var(--font-mono)",
-        fontSize: "0.78rem", minHeight: "11rem",
-        display: "flex", flexDirection: "column", gap: "0.25rem",
-      }}>
-        {visibleLines.map((l, i) => (
-          <div key={i} style={{ display: "flex", gap: "0.3rem" }}>
-            {l.prefix ? <span style={{ color: "#2563eb", userSelect: "none" }}>{l.prefix}</span> : null}
-            <span style={{ color: l.color }}>{l.text}</span>
-          </div>
-        ))}
-        <div style={{ display: "flex", gap: "0.3rem" }}>
-          <span style={{ color: "#2563eb" }}>$ </span>
-          <span style={{ color: done ? "#475569" : "#f1f5f9", opacity: cursor ? 1 : 0 }}>▋</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Hero({ profile }: HeroProps) {
   const scroll = (id: string) =>
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
@@ -101,69 +30,60 @@ export default function Hero({ profile }: HeroProps) {
     }}>
       <div style={{
         position: "relative", zIndex: 2,
-        maxWidth: "68rem", margin: "0 auto",
+        maxWidth: "52rem", margin: "0 auto",
         padding: "7rem 1.5rem 8rem",
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-        gap: "3.5rem",
-        alignItems: "center",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", textAlign: "center",
+        gap: "1.5rem",
       }}>
 
-        {/* ── Left: text content ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-
-          {/* Status badge */}
-          <motion.div {...fade(0.05)}>
-            <span style={{
-              display: "inline-flex", alignItems: "center", gap: "0.5rem",
-              padding: "0.3rem 0.85rem",
-              background: "rgba(37,99,235,0.08)",
-              border: "1px solid rgba(37,99,235,0.2)",
-              borderRadius: "999px",
-              fontSize: "0.72rem", color: "#60a5fa",
-              fontFamily: "var(--font-mono)", letterSpacing: "0.06em",
-            }}>
-              <span style={{ width: "0.4rem", height: "0.4rem", borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 5px #22c55e", flexShrink: 0 }} />
-              Available for internships
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.div {...rise(0.1)}>
-            <h1 style={{
-              fontSize: "clamp(2.4rem, 5vw, 3.8rem)",
-              fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1,
-              color: "#f1f5f9",
-            }}>
-              Hi, I'm{" "}
-              <span style={{ color: "#2563eb" }}>Edwin</span>
-              <span style={{ color: "#1e293b" }}>.</span>
-            </h1>
-            <p style={{
-              fontSize: "clamp(1rem, 2vw, 1.2rem)",
-              color: "#475569", marginTop: "0.5rem",
-              fontFamily: "var(--font-mono)", letterSpacing: "0.02em",
-            }}>
-              IT Student &nbsp;·&nbsp; Developer &nbsp;·&nbsp; Cybersecurity
-            </p>
-          </motion.div>
-
-          {/* Bio */}
-          <motion.p {...rise(0.2)} style={{
-            fontSize: "0.95rem", lineHeight: 1.78,
-            color: "#94a3b8", maxWidth: "30rem",
+        {/* Status badge */}
+        <motion.div {...fade(0.05)}>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: "0.5rem",
+            padding: "0.3rem 0.85rem",
+            background: "rgba(37,99,235,0.08)",
+            border: "1px solid rgba(37,99,235,0.2)",
+            borderRadius: "999px",
+            fontSize: "0.72rem", color: "#60a5fa",
+            fontFamily: "var(--font-mono)", letterSpacing: "0.06em",
           }}>
-            I build <strong style={{ color: "#f1f5f9", fontWeight: 600 }}>secure &amp; practical software</strong>,
-            explore the edges of <strong style={{ color: "#f1f5f9", fontWeight: 600 }}>cybersecurity</strong>,
-            and grow my skills through real-world projects at{" "}
-            <strong style={{ color: "#2563eb", fontWeight: 600 }}>KNUST</strong>.
-          </motion.p>
-        </div>
-
-        {/* ── Right: terminal ── */}
-        <motion.div {...fade(0.45)} style={{ display: "flex", justifyContent: "center" }}>
-          <TerminalWidget />
+            <span style={{ width: "0.4rem", height: "0.4rem", borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 5px #22c55e", flexShrink: 0 }} />
+            Available for internships
+          </span>
         </motion.div>
+
+        {/* Headline */}
+        <motion.div {...rise(0.1)}>
+          <h1 style={{
+            fontSize: "clamp(2.8rem, 6vw, 4.5rem)",
+            fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1,
+            color: "#f1f5f9",
+          }}>
+            Hi, I'm{" "}
+            <span style={{ color: "#2563eb" }}>Edwin</span>
+            <span style={{ color: "#1e293b" }}>.</span>
+          </h1>
+          <p style={{
+            fontSize: "clamp(1rem, 2vw, 1.2rem)",
+            color: "#475569", marginTop: "0.75rem",
+            fontFamily: "var(--font-mono)", letterSpacing: "0.02em",
+          }}>
+            IT Student &nbsp;·&nbsp; Developer &nbsp;·&nbsp; Cybersecurity
+          </p>
+        </motion.div>
+
+        {/* Bio */}
+        <motion.p {...rise(0.2)} style={{
+          fontSize: "1rem", lineHeight: 1.8,
+          color: "#94a3b8", maxWidth: "34rem",
+        }}>
+          I build <strong style={{ color: "#f1f5f9", fontWeight: 600 }}>secure &amp; practical software</strong>,
+          explore the edges of <strong style={{ color: "#f1f5f9", fontWeight: 600 }}>cybersecurity</strong>,
+          and grow my skills through real-world projects at{" "}
+          <strong style={{ color: "#2563eb", fontWeight: 600 }}>KNUST</strong>.
+        </motion.p>
+
       </div>
 
       {/* Scroll cue */}
