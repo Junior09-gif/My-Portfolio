@@ -17,8 +17,7 @@ const fade = (delay = 0) => ({
   transition: { duration: 0.8, ease: "easeOut", delay },
 });
 
-// Terminal typewriter lines
-const TERMINAL_LINES = [
+const TERMINAL_LINES: { prefix: string; text: string; color: string }[] = [
   { prefix: "$ ", text: "whoami", color: "#60a5fa" },
   { prefix: "", text: "boadu-kofi-junior-edwin", color: "#f1f5f9" },
   { prefix: "$ ", text: "cat skills.txt", color: "#60a5fa" },
@@ -28,39 +27,34 @@ const TERMINAL_LINES = [
 ];
 
 function TerminalWidget() {
-  const [lines, setLines] = useState<typeof TERMINAL_LINES>([]);
+  const [count, setCount] = useState(0);
   const [cursor, setCursor] = useState(true);
 
   useEffect(() => {
-    let i = 0;
-    const iv = setInterval(() => {
-      if (i < TERMINAL_LINES.length) {
-        const line = TERMINAL_LINES[i];
-        if (line) setLines(p => [...p, line]);
-        i++;
-      } else {
-        clearInterval(iv);
-      }
-    }, 480);
-    const blink = setInterval(() => setCursor(c => !c), 550);
-    return () => { clearInterval(iv); clearInterval(blink); };
+    if (count >= TERMINAL_LINES.length) return;
+    const t = setTimeout(() => setCount(c => Math.min(c + 1, TERMINAL_LINES.length)), 480);
+    return () => clearTimeout(t);
+  }, [count]);
+
+  useEffect(() => {
+    const t = setInterval(() => setCursor(c => !c), 550);
+    return () => clearInterval(t);
   }, []);
+
+  const visibleLines = TERMINAL_LINES.slice(0, count);
+  const done = count >= TERMINAL_LINES.length;
 
   return (
     <div style={{
-      background: "#020408",
-      border: "1px solid #1e293b",
-      borderRadius: "0.75rem",
-      overflow: "hidden",
+      background: "#020408", border: "1px solid #1e293b",
+      borderRadius: "0.75rem", overflow: "hidden",
       boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-      maxWidth: "32rem",
-      width: "100%",
+      maxWidth: "32rem", width: "100%",
     }}>
       {/* Title bar */}
       <div style={{
         display: "flex", alignItems: "center", gap: "0.5rem",
-        padding: "0.65rem 1rem",
-        background: "#0d1120",
+        padding: "0.65rem 1rem", background: "#0d1120",
         borderBottom: "1px solid #1e293b",
       }}>
         {["#ef4444", "#f59e0b", "#22c55e"].map(c => (
@@ -74,29 +68,20 @@ function TerminalWidget() {
 
       {/* Body */}
       <div style={{
-        padding: "1rem 1.1rem 1.1rem",
-        fontFamily: "var(--font-mono)", fontSize: "0.78rem",
-        minHeight: "11rem",
+        padding: "1rem 1.1rem 1.1rem", fontFamily: "var(--font-mono)",
+        fontSize: "0.78rem", minHeight: "11rem",
         display: "flex", flexDirection: "column", gap: "0.25rem",
       }}>
-        {lines.filter(Boolean).map((l, i) => (
+        {visibleLines.map((l, i) => (
           <div key={i} style={{ display: "flex", gap: "0.3rem" }}>
-            {l.prefix && <span style={{ color: "#2563eb", userSelect: "none" }}>{l.prefix}</span>}
+            {l.prefix ? <span style={{ color: "#2563eb", userSelect: "none" }}>{l.prefix}</span> : null}
             <span style={{ color: l.color }}>{l.text}</span>
           </div>
         ))}
-        {lines.length < TERMINAL_LINES.length && (
-          <div style={{ display: "flex", gap: "0.3rem" }}>
-            <span style={{ color: "#2563eb" }}>$ </span>
-            <span style={{ color: "#f1f5f9", opacity: cursor ? 1 : 0 }}>▋</span>
-          </div>
-        )}
-        {lines.length === TERMINAL_LINES.length && (
-          <div style={{ display: "flex", gap: "0.3rem" }}>
-            <span style={{ color: "#2563eb" }}>$ </span>
-            <span style={{ color: "#475569", opacity: cursor ? 1 : 0 }}>▋</span>
-          </div>
-        )}
+        <div style={{ display: "flex", gap: "0.3rem" }}>
+          <span style={{ color: "#2563eb" }}>$ </span>
+          <span style={{ color: done ? "#475569" : "#f1f5f9", opacity: cursor ? 1 : 0 }}>▋</span>
+        </div>
       </div>
     </div>
   );
