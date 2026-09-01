@@ -22,16 +22,17 @@ const DEFAULT_BG: BgConfig = {
 
 export default function App() {
   const profile = defaultProfile;
-  const skills = defaultSkills;
-  const [projects] = useState<Project[]>(defaultProjects);
-  const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const skills  = defaultSkills;
+  const [projects]   = useState<Project[]>(defaultProjects);
+  const [messages,   setMessages]   = useState<ContactMessage[]>([]);
   const [resumeOpen, setResumeOpen] = useState(false);
-  const [accentColor, setAccentColor] = useState("#2563eb");
-  const [bgConfig, setBgConfig] = useState<BgConfig>(DEFAULT_BG);
+  const [accentColor,setAccentColor]= useState("#2563eb");
+  const [bgConfig,   setBgConfig]   = useState<BgConfig>(DEFAULT_BG);
 
   const updateBg = (next: Partial<BgConfig>) =>
     setBgConfig(prev => ({ ...prev, ...next }));
 
+  // Wrap each section in error boundary via try-catch via ErrorBoundary
   return (
     <div style={{ minHeight: "100vh", background: "#090d16", color: "#f1f5f9", position: "relative" }}>
       <AnimatedBackground config={bgConfig} />
