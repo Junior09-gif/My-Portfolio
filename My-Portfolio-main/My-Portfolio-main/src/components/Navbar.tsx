@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Code2 } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 interface NavbarProps { fullName: string; }
 
@@ -67,17 +67,6 @@ export default function Navbar({ fullName }: NavbarProps) {
               background: "none", border: "none", cursor: "pointer",
               textDecoration: "none",
             }}>
-              {/* Icon */}
-              <div style={{
-                width: "2.1rem", height: "2.1rem", borderRadius: "0.5rem",
-                background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 0 12px rgba(37,99,235,0.35)",
-                flexShrink: 0,
-              }}>
-                <Code2 style={{ width: "1rem", height: "1rem", color: "#fff" }} />
-              </div>
-              {/* Wordmark */}
               <span style={{
                 fontSize: "0.9rem", fontWeight: 800, color: "#f1f5f9",
                 fontFamily: "var(--font-mono)", letterSpacing: "-0.02em",
