@@ -59,13 +59,33 @@ export default function Hero() {
         </motion.div>
 
         {/* Subheading */}
-        <motion.p {...rise(0.2)} style={{
-          fontSize: "clamp(1rem, 2vw, 1.2rem)",
-          color: "#64748b", fontFamily: "var(--font-mono)",
-          letterSpacing: "0.02em", maxWidth: "42rem",
-        }}>
-          Information Technology Student &nbsp;·&nbsp; Aspiring Cybersecurity Professional &nbsp;·&nbsp; Developer
-        </motion.p>
+        <motion.div {...rise(0.2)} style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.5rem" }}>
+          {[
+            "Information Technology Student",
+            "Aspiring Cybersecurity Professional",
+            "Developer",
+          ].map((item, i) => (
+            <span key={item} style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{
+                padding: "0.35rem 1rem",
+                background: "rgba(6,182,212,0.07)",
+                border: "1px solid rgba(6,182,212,0.2)",
+                borderRadius: "0.4rem",
+                fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)",
+                fontWeight: 500,
+                color: "#22d3ee",
+                fontFamily: "var(--font-mono)",
+                letterSpacing: "0.02em",
+                whiteSpace: "nowrap",
+              }}>
+                {item}
+              </span>
+              {i < 2 && (
+                <span style={{ color: "#1e293b", fontSize: "1.1rem", fontWeight: 300 }}>·</span>
+              )}
+            </span>
+          ))}
+        </motion.div>
 
         {/* Intro */}
         <motion.p {...rise(0.28)} style={{
