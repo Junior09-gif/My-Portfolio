@@ -55,13 +55,6 @@ export default function Hero() {
             <span style={{ color: "#06b6d4" }}>Boadu Kofi</span>
             <br />
             <span style={{ color: "#f1f5f9" }}>Junior Edwin</span>
-            <span style={{
-              display: "inline-block", marginLeft: "0.5rem",
-              fontSize: "clamp(1.2rem, 3vw, 2rem)",
-              color: "#334155", fontWeight: 400,
-            }}>
-              (eii.jnr)
-            </span>
           </h1>
         </motion.div>
 
