@@ -44,9 +44,6 @@ export default function About() {
 
         <motion.div {...inView()} style={{ marginBottom: "3rem" }}>
           <p className="label" style={{ marginBottom: "0.5rem" }}>About</p>
-          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 800, color: "#f1f5f9", letterSpacing: "-0.02em" }}>
-            A little about me
-          </h2>
         </motion.div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "3rem", alignItems: "start" }}>
