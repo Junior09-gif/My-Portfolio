@@ -1,32 +1,31 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
-
-interface NavbarProps { fullName: string; }
+import { Menu, X, Download } from "lucide-react";
+import { profile } from "../data";
 
 const NAV = [
-  { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
-  { label: "Cyber Lab", href: "#cyber-lab" },
+  { label: "Experience", href: "#experience" },
+  { label: "Education", href: "#education" },
   { label: "Contact", href: "#contact" },
 ];
 
-export default function Navbar({ fullName }: NavbarProps) {
+export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState("#home");
+  const [active, setActive] = useState("");
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const check = () => setIsMobile(window.innerWidth < 900);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20);
+    const fn = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
@@ -36,10 +35,7 @@ export default function Navbar({ fullName }: NavbarProps) {
       es => es.forEach(e => { if (e.isIntersecting) setActive(`#${e.target.id}`); }),
       { rootMargin: "-40% 0px -55% 0px" }
     );
-    NAV.forEach(({ href }) => {
-      const el = document.querySelector(href);
-      if (el) io.observe(el);
-    });
+    NAV.forEach(({ href }) => { const el = document.querySelector(href); if (el) io.observe(el); });
     return () => io.disconnect();
   }, []);
 
@@ -49,162 +45,105 @@ export default function Navbar({ fullName }: NavbarProps) {
   };
 
   return (
-    <>
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-        transition: "all 0.3s ease",
-        background: scrolled ? "rgba(9,13,22,0.95)" : "rgba(9,13,22,0.4)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderBottom: `1px solid ${scrolled ? "#1e293b" : "rgba(30,41,59,0.3)"}`,
-      }}>
-        <div style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "4rem" }}>
+    <nav style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+      background: scrolled ? "rgba(10,15,30,0.94)" : "rgba(10,15,30,0.5)",
+      backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)",
+      borderBottom: `1px solid ${scrolled ? "#1e293b" : "rgba(30,41,59,0.4)"}`,
+      transition: "all 0.3s ease",
+    }}>
+      <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "3.75rem" }}>
 
-            {/* ── Logo ── */}
-            <button onClick={() => go("#home")} style={{
-              display: "flex", alignItems: "center", gap: "0.6rem",
-              background: "none", border: "none", cursor: "pointer",
-              textDecoration: "none",
-            }}>
-              <span style={{
-                fontSize: "0.9rem", fontWeight: 800, color: "#f1f5f9",
-                fontFamily: "var(--font-mono)", letterSpacing: "-0.02em",
-              }}>
-                edwin<span style={{ color: "#2563eb" }}>.dev</span>
-              </span>
-            </button>
+        {/* Logo */}
+        <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#e2e8f0", fontFamily: "var(--font-mono)" }}>
+            eii<span style={{ color: "#06b6d4" }}>.jnr</span>
+          </span>
+        </button>
 
-            {/* ── Desktop nav ── */}
-            {!isMobile && (
-              <div style={{
-                display: "flex", alignItems: "center",
-                gap: "0.1rem",
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid #1e293b",
-                borderRadius: "0.6rem",
-                padding: "0.25rem",
-              }}>
-                {NAV.map(({ label, href }) => {
-                  const isActive = active === href;
-                  return (
-                    <button key={label} onClick={() => go(href)} style={{
-                      padding: "0.35rem 0.85rem",
-                      borderRadius: "0.45rem",
-                      fontSize: "0.8rem",
-                      fontWeight: isActive ? 600 : 400,
-                      color: isActive ? "#f1f5f9" : "#475569",
-                      background: isActive ? "#1e293b" : "transparent",
-                      border: "none", cursor: "pointer",
-                      transition: "all 0.15s",
-                      whiteSpace: "nowrap",
-                    }}
-                      onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = "#94a3b8"; }}
-                      onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = "#475569"; }}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* ── Right side ── */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-
-              {/* Hire Me CTA */}
-              {!isMobile && (
-                <button onClick={() => go("#contact")} style={{
-                  display: "flex", alignItems: "center", gap: "0.4rem",
-                  padding: "0.45rem 1.1rem",
-                  background: "#2563eb", color: "#fff",
-                  borderRadius: "0.45rem",
-                  fontSize: "0.8rem", fontWeight: 700,
-                  border: "none", cursor: "pointer",
-                  transition: "all 0.2s",
-                  fontFamily: "var(--font-mono)",
-                  letterSpacing: "0.04em",
-                  boxShadow: "0 0 16px rgba(37,99,235,0.3)",
+        {/* Desktop links */}
+        {!isMobile && (
+          <div style={{ display: "flex", alignItems: "center", gap: "0.15rem" }}>
+            {NAV.map(({ label, href }) => {
+              const isActive = active === href;
+              return (
+                <button key={label} onClick={() => go(href)} style={{
+                  padding: "0.35rem 0.85rem", borderRadius: "0.4rem",
+                  fontSize: "0.825rem", fontWeight: isActive ? 600 : 400,
+                  color: isActive ? "#22d3ee" : "#64748b",
+                  background: isActive ? "rgba(6,182,212,0.08)" : "transparent",
+                  border: "none", cursor: "pointer", transition: "all 0.15s",
                 }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = "#1d4ed8";
-                    e.currentTarget.style.boxShadow = "0 0 20px rgba(37,99,235,0.5)";
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = "#2563eb";
-                    e.currentTarget.style.boxShadow = "0 0 16px rgba(37,99,235,0.3)";
-                  }}
-                >
-                  Hire Me
-                </button>
-              )}
-
-              {/* Mobile hamburger */}
-              {isMobile && (
-                <button onClick={() => setOpen(!open)} style={{
-                  padding: "0.4rem",
-                  background: open ? "#1e293b" : "transparent",
-                  border: "1px solid #1e293b",
-                  borderRadius: "0.4rem",
-                  cursor: "pointer", color: "#94a3b8",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  transition: "all 0.2s",
-                }}>
-                  {open
-                    ? <X style={{ width: "1.1rem", height: "1.1rem" }} />
-                    : <Menu style={{ width: "1.1rem", height: "1.1rem" }} />
-                  }
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* ── Mobile menu ── */}
-        {isMobile && open && (
-          <div style={{
-            background: "rgba(9,13,22,0.98)",
-            backdropFilter: "blur(20px)",
-            borderTop: "1px solid #1e293b",
-          }}>
-            <div style={{
-              maxWidth: "72rem", margin: "0 auto",
-              padding: "1rem 1.5rem 1.25rem",
-              display: "flex", flexDirection: "column", gap: "0.25rem",
-            }}>
-              {NAV.map(({ label, href }) => {
-                const isActive = active === href;
-                return (
-                  <button key={label} onClick={() => go(href)} style={{
-                    textAlign: "left", padding: "0.65rem 0.85rem",
-                    borderRadius: "0.45rem", fontSize: "0.875rem",
-                    fontWeight: isActive ? 600 : 400,
-                    color: isActive ? "#f1f5f9" : "#94a3b8",
-                    background: isActive ? "rgba(37,99,235,0.1)" : "transparent",
-                    border: `1px solid ${isActive ? "rgba(37,99,235,0.2)" : "transparent"}`,
-                    cursor: "pointer", transition: "all 0.15s",
-                  }}>
-                    {label}
-                  </button>
-                );
-              })}
-
-              <div style={{ height: "1px", background: "#1e293b", margin: "0.5rem 0" }} />
-
-              <button onClick={() => go("#contact")} style={{
-                padding: "0.7rem",
-                background: "#2563eb", color: "#fff",
-                borderRadius: "0.45rem",
-                fontSize: "0.875rem", fontWeight: 700,
-                border: "none", cursor: "pointer",
-                fontFamily: "var(--font-mono)",
-              }}>
-                Hire Me
-              </button>
-            </div>
+                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = "#94a3b8"; }}
+                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = "#64748b"; }}
+                >{label}</button>
+              );
+            })}
           </div>
         )}
-      </nav>
-    </>
+
+        {/* Right CTAs */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+          {!isMobile && (
+            <a href={profile.cvUrl} download
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                padding: "0.4rem 1rem", background: "#06b6d4", color: "#fff",
+                borderRadius: "0.4rem", fontSize: "0.8rem", fontWeight: 600,
+                border: "none", cursor: "pointer", textDecoration: "none",
+                transition: "background 0.2s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = "#0891b2")}
+              onMouseLeave={e => (e.currentTarget.style.background = "#06b6d4")}
+            >
+              <Download style={{ width: "0.8rem", height: "0.8rem" }} />
+              Download CV
+            </a>
+          )}
+
+          {isMobile && (
+            <button onClick={() => setOpen(!open)} style={{
+              padding: "0.4rem", background: open ? "#1e293b" : "transparent",
+              border: "1px solid #1e293b", borderRadius: "0.4rem",
+              cursor: "pointer", color: "#94a3b8",
+              display: "flex", alignItems: "center",
+            }}>
+              {open ? <X style={{ width: "1.1rem", height: "1.1rem" }} /> : <Menu style={{ width: "1.1rem", height: "1.1rem" }} />}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile drawer */}
+      {isMobile && open && (
+        <div style={{
+          background: "rgba(10,15,30,0.98)", backdropFilter: "blur(20px)",
+          borderTop: "1px solid #1e293b",
+        }}>
+          <div style={{ padding: "1rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+            {NAV.map(({ label, href }) => (
+              <button key={label} onClick={() => go(href)} style={{
+                textAlign: "left", padding: "0.65rem 0.85rem", borderRadius: "0.45rem",
+                fontSize: "0.875rem", fontWeight: active === href ? 600 : 400,
+                color: active === href ? "#22d3ee" : "#94a3b8",
+                background: active === href ? "rgba(6,182,212,0.08)" : "transparent",
+                border: active === href ? "1px solid rgba(6,182,212,0.2)" : "1px solid transparent",
+                cursor: "pointer",
+              }}>{label}</button>
+            ))}
+            <div style={{ height: "1px", background: "#1e293b", margin: "0.5rem 0" }} />
+            <a href={profile.cvUrl} download style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "0.45rem",
+              padding: "0.7rem", background: "#06b6d4", color: "#fff",
+              borderRadius: "0.45rem", fontSize: "0.875rem", fontWeight: 600, textDecoration: "none",
+            }}>
+              <Download style={{ width: "0.9rem", height: "0.9rem" }} />
+              Download CV
+            </a>
+          </div>
+        </div>
+      )}
+    </nav>
   );
 }

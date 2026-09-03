@@ -1,72 +1,186 @@
-import { UserProfile, Skill, Project } from "./types";
-
-export const defaultProfile: UserProfile = {
-  fullName: "Boadu Kofi Junior Edwin",
-  university: "Kwame Nkrumah University of Science and Technology (KNUST)",
-  program: "BSc. Information Technology",
-  location: "Kumasi, Ghana",
-  fieldsOfInterest: ["Technology", "Software Development", "Networking", "Cybersecurity"],
-  careerGoal: "To become an IT professional focused on building real-world solutions and contributing to cybersecurity and cybercrime prevention.",
-  tagline: "Building practical IT solutions and safeguarding the digital frontier through cybersecurity.",
-  bio: "I am Boadu Kofi Junior Edwin, a student at Kwame Nkrumah University of Science and Technology (KNUST) pursuing a BSc. in Information Technology. I have a strong interest in the technology field, especially in areas related to computing and digital systems.\n\nMy goal is to become a skilled IT professional focused on building practical solutions that address real-world challenges, especially in the area of cybersecurity and cybercrime prevention.",
-  email: "kingslayer5543@gmail.com",
-  githubUrl: "https://github.com/kingslayer5543", // user email suggests user username might be kingslayer5543
-  linkedinUrl: "https://linkedin.com/in/boadu-kofi-junior-edwin",
-  phone1: "0558170318",
-  phone2: "0554355883",
-  whatsapp: "0554355883",
-  snapchat: "@eii.jnr",
-  instagram: "@eii.jnr",
-  tiktok: "@eii.jnr",
-  avatarUrl: "",
+// ─── Personal profile ─────────────────────────────────────────────────────────
+export const profile = {
+  name: "Boadu Kofi Junior Edwin",
+  alias: "eii.jnr",
+  title: "Information Technology Student | Aspiring Cybersecurity Professional | Developer",
+  location: "KNUST Campus, Kumasi, Ghana",
+  email: "boaduedwin5543@gmail.com",
+  github: "https://github.com/Junior09-gif",
+  linkedin: "https://linkedin.com/in/boadu-kofi-junior-edwin",
+  cvUrl: "#", // replace with real CV link when available
+  bio: [
+    "I'm Boadu Kofi Junior Edwin — known online as eii.jnr — an Information Technology student at the Kwame Nkrumah University of Science and Technology (KNUST) in Kumasi, Ghana. My fascination with technology started in childhood, tinkering with computers and wondering how software made machines think.",
+    "Today that curiosity drives me to pursue a career at the intersection of software development and cybersecurity. I believe that building secure, well-engineered systems is one of the most meaningful contributions a technologist can make — especially in a rapidly digitising continent like Africa.",
+    "I am currently building my technical foundation through hands-on coursework, personal projects, and self-directed learning in networking, ethical hacking, and full-stack development. My long-term goal is to become a skilled cybersecurity professional and software engineer who designs systems that are both innovative and resilient.",
+  ],
 };
 
-export const defaultSkills: Skill[] = [
-  { name: "Python", category: "Language", level: 85, iconName: "Python" },
-  { name: "HTML", category: "Language", level: 90, iconName: "Html5" },
-  { name: "CSS", category: "Language", level: 85, iconName: "Css3" },
-  { name: "JavaScript", category: "Language", level: 80, iconName: "Javascript" },
-  { name: "Networking", category: "Core IT", level: 75, iconName: "Network" },
-  { name: "Cybersecurity Basics", category: "Concepts", level: 80, iconName: "ShieldSec" },
+// ─── Skills ───────────────────────────────────────────────────────────────────
+export const skillCategories = [
+  {
+    title: "Programming Languages",
+    icon: "code",
+    skills: ["C++", "Python", "JavaScript", "TypeScript", "SQL"],
+  },
+  {
+    title: "Web Development",
+    icon: "globe",
+    skills: ["HTML5", "CSS3", "Tailwind CSS", "React", "Node.js"],
+  },
+  {
+    title: "Networking",
+    icon: "network",
+    skills: ["Network Fundamentals", "TCP/IP", "Router & Switch Config", "Cisco Packet Tracer", "DNS & DHCP"],
+  },
+  {
+    title: "Cybersecurity",
+    icon: "shield",
+    skills: ["Security Fundamentals", "Linux Administration", "Ethical Hacking Basics", "Vulnerability Assessment", "Security Tools"],
+  },
+  {
+    title: "IT & Systems",
+    icon: "cpu",
+    skills: ["Windows Administration", "Linux/Unix", "System Troubleshooting", "System Administration", "OS Management"],
+  },
+  {
+    title: "Tools & Workflow",
+    icon: "tool",
+    skills: ["Git & GitHub", "VS Code", "Bash / Shell Scripting", "Command Line Interface", "Figma (Basic)"],
+  },
 ];
 
-export const defaultProjects: Project[] = [
+// ─── Projects ─────────────────────────────────────────────────────────────────
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  problem: string;
+  solution: string;
+  tech: string[];
+  github: string;
+  demo: string;
+  status: "completed" | "in-progress" | "planned";
+}
+
+export const projects: Project[] = [
   {
     id: "portfolio",
     title: "Personal Portfolio Website",
-    description: "A highly responsive and customisable developer portfolio designed to showcase skills, certificates, and academic achievements. Features an interactive workspace customiser and smooth content scrolling.",
-    techStack: ["React", "HTML", "CSS", "Tailwind CSS", "Motion"],
-    features: ["Responsive Grid System", "Live Portfolio Customiser Mode", "Smooth Page Transitions"],
-    demoType: "portfolio-customizer"
+    description: "A responsive single-page developer portfolio showcasing skills, projects, and academic background.",
+    problem: "Needed a professional online presence that accurately reflects technical skills without fabricated metrics.",
+    solution: "Built a clean React + Tailwind SPA with modular section components and a dark technical aesthetic.",
+    tech: ["React", "TypeScript", "Tailwind CSS", "Vite", "Framer Motion"],
+    github: "https://github.com/Junior09-gif/My-Portfolio",
+    demo: "https://boadu-kofi-junior-edwin.vercel.app",
+    status: "completed",
   },
   {
     id: "calculator",
-    title: "Python Calculator",
-    description: "An interactive, fully functional calculator inspired by Python console syntax. Handles standard equations with instant validation, interactive button controls, and historical expression tracking.",
-    techStack: ["React (Simulated Engine)", "State Management", "Regex Validation"],
-    features: ["Standard Operator Precedence", "Error Handling & Feedback", "Floating Node Precedence"],
-    demoType: "calculator"
+    title: "Python CLI Calculator",
+    description: "A terminal-based arithmetic calculator built in Python with expression parsing and error handling.",
+    problem: "Needed a reliable command-line tool to evaluate complex arithmetic expressions with proper operator precedence.",
+    solution: "Implemented recursive expression evaluation with regex validation, division-by-zero handling, and a clean shell interface.",
+    tech: ["Python", "Regex", "CLI"],
+    github: "https://github.com/Junior09-gif",
+    demo: "",
+    status: "completed",
   },
   {
-    id: "network",
-    title: "Network Study Project",
-    description: "An educational platform summarizing critical IP network routing protocols (TCP/IP, IPv4 subnetting, DNS, routing gates) joined with an interactive live subnetting calculator.",
-    techStack: ["IPv4 Addressing Logic", "Binary Mask Converters", "CIDR Translation"],
-    features: ["Dynamic Subnet Mask Calculation", "Network & Broadcast Address Solver", "Protocol Cheat Sheets"],
-    demoType: "subnet-calc"
-  }
+    id: "subnet",
+    title: "IPv4 Subnet Calculator",
+    description: "An interactive web tool for computing IPv4 subnet masks, network addresses, broadcast addresses, and host ranges.",
+    problem: "Manual subnet calculations are error-prone and time-consuming during networking study sessions.",
+    solution: "Built a real-time browser tool that computes all subnet properties instantly from an IP address and CIDR prefix.",
+    tech: ["React", "TypeScript", "IPv4 Logic", "CIDR"],
+    github: "https://github.com/Junior09-gif",
+    demo: "https://boadu-kofi-junior-edwin.vercel.app/#projects",
+    status: "completed",
+  },
 ];
-export const timelineEvents = [
+
+// ─── Experience ───────────────────────────────────────────────────────────────
+export interface Experience {
+  id: string;
+  role: string;
+  org: string;
+  period: string;
+  type: string;
+  bullets: string[];
+}
+
+export const experiences: Experience[] = [
   {
-    year: "2026 - Present",
-    title: "BSc. Information Technology Undergraduate",
-    institution: "KNUST, Ghana",
-    details: "Focusing on software systems, digital design, computer networking, client-side web development, and cybersecurity principles."
+    id: "knust-labs",
+    role: "IT Laboratory Practice",
+    org: "KNUST — Department of Computer Science",
+    period: "2026 – Present",
+    type: "Academic",
+    bullets: [
+      "Completed structured laboratory exercises in networking fundamentals using Cisco Packet Tracer.",
+      "Practised IPv4 subnetting, VLAN configuration, and basic routing protocols.",
+      "Engaged in operating systems coursework covering file systems, process management, and shell scripting.",
+    ],
   },
   {
-    year: "Self-Guided Training",
-    title: "Cybersecurity & Network Systems Study",
-    institution: "Online Platforms",
-    details: "Exploring IP routing protocols, security fundamentals, defensive coding with Python, and malware analysis paradigms."
-  }
+    id: "self-study",
+    role: "Independent Technical Study",
+    org: "Self-Directed (Online Platforms)",
+    period: "2024 – Present",
+    type: "Self-Study",
+    bullets: [
+      "Studied Python programming, data structures, and algorithm fundamentals through structured online curricula.",
+      "Explored ethical hacking concepts including reconnaissance, vulnerability scanning, and basic exploit techniques.",
+      "Completed web development projects using React, Tailwind CSS, and Vite.",
+    ],
+  },
+];
+
+// ─── Education ────────────────────────────────────────────────────────────────
+export const education = {
+  degree: "Bachelor of Science — Information Technology",
+  institution: "Kwame Nkrumah University of Science and Technology (KNUST)",
+  location: "Kumasi, Ghana",
+  period: "2026 – Expected 2029",
+  highlights: [
+    "Core modules: Networking, Algorithms & Data Structures, Database Systems, Web Technologies, OS Fundamentals",
+    "Active member of the university computing community",
+    "Focus areas: Cybersecurity, Network Engineering, Software Development",
+  ],
+};
+
+// ─── Certifications ───────────────────────────────────────────────────────────
+export interface Certification {
+  id: string;
+  title: string;
+  issuer: string;
+  year: string;
+  link: string;
+  status: "earned" | "in-progress" | "planned";
+}
+
+export const certifications: Certification[] = [
+  {
+    id: "cisco-net",
+    title: "Cisco Networking Basics",
+    issuer: "Cisco Networking Academy",
+    year: "Planned",
+    link: "#",
+    status: "planned",
+  },
+  {
+    id: "google-cyber",
+    title: "Google Cybersecurity Certificate",
+    issuer: "Google / Coursera",
+    year: "In Progress",
+    link: "#",
+    status: "in-progress",
+  },
+  {
+    id: "comptia-sec",
+    title: "CompTIA Security+",
+    issuer: "CompTIA",
+    year: "Planned",
+    link: "#",
+    status: "planned",
+  },
 ];
