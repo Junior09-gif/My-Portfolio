@@ -1,16 +1,22 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Mail, MapPin, Github, Linkedin, Send, CheckCircle, AlertCircle, Loader } from "lucide-react";
+import { Mail, MapPin, Github, Linkedin, Send, CheckCircle, Loader } from "lucide-react";
 import { profile } from "../data";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
 const inView = (delay = 0) => ({
-  initial: { opacity: 0, y: 18 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1], delay },
+  viewport: { once: true, margin: "-15%" },
+  transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1], delay },
 });
+
+// Shake keyframes for validation errors
+const shakeVariants = {
+  idle: { x: 0 },
+  shake: { x: [0, -6, 6, -4, 4, -2, 2, 0], transition: { duration: 0.4 } },
+};
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -34,7 +40,12 @@ export default function Contact() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const errs = validate();
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      setFormState("error");
+      setTimeout(() => setFormState("idle"), 500);
+      return;
+    }
     setFormState("loading");
     setTimeout(() => {
       setFormState("success");
@@ -109,7 +120,10 @@ export default function Contact() {
                         { name: "name", label: "Name *", type: "text", placeholder: "Ama Serwaa" },
                         { name: "email", label: "Email *", type: "email", placeholder: "ama@email.com" },
                       ].map(({ name, label, type, placeholder }) => (
-                        <div key={name}>
+                        <motion.div key={name}
+                          variants={shakeVariants}
+                          animate={errors[name] ? "shake" : "idle"}
+                        >
                           <label style={{ display: "block", fontSize: "0.68rem", fontFamily: "var(--font-mono)", color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.4rem" }}>{label}</label>
                           <input name={name} type={type} value={form[name as keyof typeof form]}
                             onChange={handleChange} placeholder={placeholder}
@@ -117,8 +131,13 @@ export default function Contact() {
                             aria-invalid={!!errors[name]}
                             style={{ borderColor: errors[name] ? "rgba(239,68,68,0.5)" : undefined }}
                           />
-                          {errors[name] && <p style={{ fontSize: "0.72rem", color: "#f87171", marginTop: "0.3rem" }}>{errors[name]}</p>}
-                        </div>
+                          {errors[name] && (
+                            <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
+                              style={{ fontSize: "0.72rem", color: "#f87171", marginTop: "0.3rem" }}>
+                              {errors[name]}
+                            </motion.p>
+                          )}
+                        </motion.div>
                       ))}
                     </div>
 
@@ -128,25 +147,36 @@ export default function Contact() {
                         placeholder="e.g. Internship enquiry" className="input-field" />
                     </div>
 
-                    <div>
+                    <motion.div
+                      variants={shakeVariants}
+                      animate={errors.message ? "shake" : "idle"}
+                    >
                       <label style={{ display: "block", fontSize: "0.68rem", fontFamily: "var(--font-mono)", color: "#475569", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.4rem" }}>Message *</label>
                       <textarea name="message" value={form.message} onChange={handleChange}
                         placeholder="Tell me about your project or opportunity..." rows={5}
                         className="input-field" style={{ resize: "none", borderColor: errors.message ? "rgba(239,68,68,0.5)" : undefined }}
                         aria-invalid={!!errors.message}
                       />
-                      {errors.message && <p style={{ fontSize: "0.72rem", color: "#f87171", marginTop: "0.3rem" }}>{errors.message}</p>}
-                    </div>
+                      {errors.message && (
+                        <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}
+                          style={{ fontSize: "0.72rem", color: "#f87171", marginTop: "0.3rem" }}>
+                          {errors.message}
+                        </motion.p>
+                      )}
+                    </motion.div>
 
-                    <button type="submit" disabled={formState === "loading"}
+                    <motion.button type="submit" disabled={formState === "loading"}
                       className="btn-primary"
-                      style={{ justifyContent: "center", opacity: formState === "loading" ? 0.7 : 1, cursor: formState === "loading" ? "not-allowed" : "pointer" }}
+                      style={{ justifyContent: "center", opacity: formState === "loading" ? 0.8 : 1, cursor: formState === "loading" ? "not-allowed" : "pointer" }}
+                      whileHover={formState !== "loading" ? { scale: 1.03 } : {}}
+                      whileTap={formState !== "loading" ? { scale: 0.97 } : {}}
+                      transition={{ duration: 0.15 }}
                     >
                       {formState === "loading"
                         ? <><Loader style={{ width: "0.9rem", height: "0.9rem" }} className="animate-spin" />Sending...</>
                         : <><Send style={{ width: "0.9rem", height: "0.9rem" }} />Send Message</>
                       }
-                    </button>
+                    </motion.button>
                   </motion.form>
                 )}
               </AnimatePresence>

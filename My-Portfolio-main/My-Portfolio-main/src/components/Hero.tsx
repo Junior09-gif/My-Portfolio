@@ -1,20 +1,25 @@
+import { useState } from "react";
 import { motion } from "motion/react";
 import { ArrowDown, Download, Github, Linkedin, Mail, ArrowRight } from "lucide-react";
 import { profile } from "../data";
 
-const rise = (delay = 0) => ({
-  initial: { opacity: 0, y: 22 },
+// ── Animation helpers ─────────────────────────────────────────────────────────
+// Fade-up: opacity 0→1, translateY 15px→0, fast ease-out
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 15 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1], delay },
+  transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1], delay },
 });
-const fade = (delay = 0) => ({
+
+const fadeIn = (delay = 0) => ({
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { duration: 0.8, ease: "easeOut", delay },
+  transition: { duration: 0.3, ease: "easeOut", delay },
 });
 
 export default function Hero() {
   const scroll = (id: string) => document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+  const [primaryHover, setPrimaryHover] = useState(false);
 
   return (
     <section id="home" style={{
@@ -22,14 +27,34 @@ export default function Hero() {
       alignItems: "center", justifyContent: "center",
       position: "relative", zIndex: 1, overflow: "hidden",
     }}>
+
+      {/* ── Hero background: faint grid + corner glow ── */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: "linear-gradient(rgba(30,41,59,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(30,41,59,0.35) 1px, transparent 1px)",
+        backgroundSize: "48px 48px",
+        opacity: 0.5,
+      }} />
+      <motion.div
+        animate={{ opacity: [0.12, 0.2, 0.12] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          position: "absolute", top: "-20%", right: "-10%",
+          width: "55vw", height: "55vw",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(6,182,212,0.14) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
       <div className="container" style={{
         display: "flex", flexDirection: "column", alignItems: "center",
         textAlign: "center", paddingTop: "6rem", paddingBottom: "6rem",
         gap: "1.75rem",
       }}>
 
-        {/* Status */}
-        <motion.div {...fade(0.05)}>
+        {/* 1. Status — delay 0ms */}
+        <motion.div {...fadeIn(0)}>
           <span style={{
             display: "inline-flex", alignItems: "center", gap: "0.5rem",
             padding: "0.3rem 0.9rem",
@@ -44,8 +69,8 @@ export default function Hero() {
           </span>
         </motion.div>
 
-        {/* Headline */}
-        <motion.div {...rise(0.1)}>
+        {/* 2. Name/Title — delay 0ms */}
+        <motion.div {...fadeUp(0)}>
           <h1 style={{
             fontSize: "clamp(2.6rem, 6vw, 4.8rem)",
             fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1,
@@ -58,8 +83,8 @@ export default function Hero() {
           </h1>
         </motion.div>
 
-        {/* Subheading */}
-        <motion.div {...rise(0.2)} style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.5rem" }}>
+        {/* 3. Subheading badges — delay 100ms */}
+        <motion.div {...fadeUp(0.1)} style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.5rem" }}>
           {[
             "Information Technology Student",
             "Aspiring Cybersecurity Professional",
@@ -72,64 +97,84 @@ export default function Hero() {
                 border: "1px solid rgba(6,182,212,0.2)",
                 borderRadius: "0.4rem",
                 fontSize: "clamp(0.78rem, 1.5vw, 0.95rem)",
-                fontWeight: 500,
-                color: "#22d3ee",
-                fontFamily: "var(--font-mono)",
-                letterSpacing: "0.02em",
+                fontWeight: 500, color: "#22d3ee",
+                fontFamily: "var(--font-mono)", letterSpacing: "0.02em",
                 whiteSpace: "nowrap",
               }}>
                 {item}
               </span>
-              {i < 2 && (
-                <span style={{ color: "#1e293b", fontSize: "1.1rem", fontWeight: 300 }}>·</span>
-              )}
+              {i < 2 && <span style={{ color: "#1e293b", fontSize: "1.1rem", fontWeight: 300 }}>·</span>}
             </span>
           ))}
         </motion.div>
 
-        {/* Intro */}
-        <motion.p {...rise(0.28)} style={{
-          fontSize: "1rem", lineHeight: 1.8,
-          color: "#94a3b8", maxWidth: "38rem",
-        }}>
+        {/* 4. Bio text — delay 100ms */}
+        <motion.p {...fadeUp(0.1)} style={{ fontSize: "1rem", lineHeight: 1.8, color: "#94a3b8", maxWidth: "38rem" }}>
           Driven by a childhood passion for technology, I'm building the skills to develop{" "}
           <strong style={{ color: "#e2e8f0", fontWeight: 600 }}>secure, innovative solutions</strong>{" "}
           to real-world problems — starting at KNUST and reaching far beyond Ghana.
         </motion.p>
 
-        {/* Action buttons */}
-        <motion.div {...rise(0.36)} style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", justifyContent: "center" }}>
-          <button className="btn-primary" onClick={() => scroll("#projects")}>
-            <ArrowRight style={{ width: "0.9rem", height: "0.9rem" }} />
+        {/* 5. CTA buttons — delay 200ms */}
+        <motion.div {...fadeUp(0.2)} style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", justifyContent: "center" }}>
+          {/* Primary with arrow slide on hover */}
+          <motion.button
+            className="btn-primary"
+            onClick={() => scroll("#projects")}
+            onHoverStart={() => setPrimaryHover(true)}
+            onHoverEnd={() => setPrimaryHover(false)}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: "0.45rem" }}
+          >
+            <motion.span
+              animate={{ x: primaryHover ? 4 : 0 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <ArrowRight style={{ width: "0.9rem", height: "0.9rem" }} />
+            </motion.span>
             View Projects
-          </button>
-          <a href={profile.cvUrl} download className="btn-secondary">
+          </motion.button>
+
+          <motion.a
+            href={profile.cvUrl}
+            download
+            className="btn-secondary"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+          >
             <Download style={{ width: "0.9rem", height: "0.9rem" }} />
             Download CV
-          </a>
+          </motion.a>
         </motion.div>
 
-        {/* Social links */}
-        <motion.div {...fade(0.48)} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        {/* 6. Social links — delay 300ms */}
+        <motion.div {...fadeIn(0.3)} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
           {[
             { icon: Github, href: profile.github, label: "GitHub" },
             { icon: Linkedin, href: profile.linkedin, label: "LinkedIn" },
             { icon: Mail, href: `mailto:${profile.email}`, label: "Email" },
           ].map(({ icon: Icon, href, label }) => (
-            <a key={label} href={href}
+            <motion.a key={label} href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
               rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
               aria-label={label}
               className="btn-ghost"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
             >
               <Icon style={{ width: "0.9rem", height: "0.9rem" }} />
               {label}
-            </a>
+            </motion.a>
           ))}
         </motion.div>
 
         {/* Stats */}
-        <motion.div {...fade(0.56)} style={{
+        <motion.div {...fadeIn(0.35)} style={{
           display: "flex", flexWrap: "wrap", justifyContent: "center",
           gap: "0", paddingTop: "1.75rem",
           borderTop: "1px solid #1e293b", width: "100%", maxWidth: "32rem",
@@ -152,7 +197,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll cue */}
-      <motion.button {...fade(1.3)} onClick={() => scroll("#about")} aria-label="Scroll to About"
+      <motion.button {...fadeIn(0.5)} onClick={() => scroll("#about")} aria-label="Scroll to About"
         style={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.35rem", background: "none", border: "none", cursor: "pointer", color: "#1e293b" }}>
         <span style={{ fontSize: "0.58rem", fontFamily: "var(--font-mono)", letterSpacing: "0.18em", textTransform: "uppercase" }}>scroll</span>
         <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>

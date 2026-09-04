@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "motion/react";
 import { Menu, X, Download } from "lucide-react";
 import { profile } from "../data";
 
@@ -115,12 +116,18 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer — slide in from top */}
       {isMobile && open && (
-        <div style={{
-          background: "rgba(10,15,30,0.98)", backdropFilter: "blur(20px)",
-          borderTop: "1px solid #1e293b",
-        }}>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            background: "rgba(10,15,30,0.98)", backdropFilter: "blur(20px)",
+            borderTop: "1px solid #1e293b",
+          }}
+        >
           <div style={{ padding: "1rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.2rem" }}>
             {NAV.map(({ label, href }) => (
               <button key={label} onClick={() => go(href)} style={{
@@ -142,7 +149,7 @@ export default function Navbar() {
               Download CV
             </a>
           </div>
-        </div>
+        </motion.div>
       )}
     </nav>
   );

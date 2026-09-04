@@ -2,38 +2,19 @@ import { motion } from "motion/react";
 import { Shield, Network, Code2, Cpu } from "lucide-react";
 import { profile } from "../data";
 
+// Viewport reveal: opacity 0→1, translateY 20px→0, once only
 const inView = (delay = 0) => ({
-  initial: { opacity: 0, y: 18 },
+  initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay },
+  viewport: { once: true, margin: "-15%" },
+  transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1], delay },
 });
 
 const FOCUS = [
-  {
-    icon: Shield,
-    title: "Cybersecurity & Defense",
-    desc: "Security fundamentals, ethical hacking basics, vulnerability assessment, and building defensive security mindsets.",
-    color: "#06b6d4",
-  },
-  {
-    icon: Network,
-    title: "Network Infrastructure",
-    desc: "TCP/IP networking, subnetting, router & switch configuration, and designing reliable network architectures.",
-    color: "#06b6d4",
-  },
-  {
-    icon: Code2,
-    title: "Software & Web Development",
-    desc: "Full-stack web development with React, Node.js, and modern tooling — building clean, functional applications.",
-    color: "#06b6d4",
-  },
-  {
-    icon: Cpu,
-    title: "IT Systems & Automation",
-    desc: "System administration, OS management, shell scripting, and automating repetitive IT tasks with Python and Bash.",
-    color: "#06b6d4",
-  },
+  { icon: Shield, title: "Cybersecurity & Defense", desc: "Security fundamentals, ethical hacking basics, vulnerability assessment, and building defensive security mindsets." },
+  { icon: Network, title: "Network Infrastructure", desc: "TCP/IP networking, subnetting, router & switch configuration, and designing reliable network architectures." },
+  { icon: Code2, title: "Software & Web Development", desc: "Full-stack web development with React, Node.js, and modern tooling — building clean, functional applications." },
+  { icon: Cpu, title: "IT Systems & Automation", desc: "System administration, OS management, shell scripting, and automating repetitive IT tasks with Python and Bash." },
 ];
 
 export default function About() {
@@ -49,11 +30,10 @@ export default function About() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "3rem", alignItems: "start" }}>
 
           {/* Bio */}
-          <motion.div {...inView(0.08)} style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
+          <motion.div {...inView(0.05)} style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
             {profile.bio.map((para, i) => (
               <p key={i} style={{ fontSize: "0.95rem", lineHeight: 1.82, color: "#94a3b8" }}>{para}</p>
             ))}
-
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem", marginTop: "0.5rem" }}>
               {[
                 { label: "Name", value: "Boadu Kofi Junior Edwin" },
@@ -69,16 +49,27 @@ export default function About() {
             </div>
           </motion.div>
 
-          {/* Focus cards */}
+          {/* Focus cards — staggered, card hover elevation */}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
             {FOCUS.map((f, i) => (
-              <motion.div key={f.title} {...inView(0.1 + i * 0.07)}
-                className="card card-accent"
-                style={{ padding: "1.1rem 1.25rem", display: "flex", gap: "1rem", alignItems: "flex-start" }}
+              <motion.div key={f.title}
+                {...inView(0.05 + i * 0.05)}
+                whileHover={{ y: -4, transition: { duration: 0.2, ease: "easeOut" } }}
+                style={{
+                  padding: "1.1rem 1.25rem", display: "flex", gap: "1rem", alignItems: "flex-start",
+                  background: "#0d1424", borderRadius: "0.75rem", cursor: "default",
+                  border: "1px solid #1e293b",
+                  transition: "border-color 0.2s",
+                }}
+                onHoverStart={e => { (e.target as HTMLElement).closest?.("div[data-card]"); }}
               >
-                <div style={{ padding: "0.5rem", background: "rgba(6,182,212,0.08)", borderRadius: "0.45rem", flexShrink: 0 }}>
+                <motion.div
+                  whileHover={{ borderColor: "rgba(6,182,212,0.4)" }}
+                  transition={{ duration: 0.2 }}
+                  style={{ padding: "0.5rem", background: "rgba(6,182,212,0.08)", borderRadius: "0.45rem", flexShrink: 0, border: "1px solid transparent" }}
+                >
                   <f.icon style={{ width: "1.1rem", height: "1.1rem", color: "#06b6d4" }} />
-                </div>
+                </motion.div>
                 <div>
                   <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#f1f5f9", marginBottom: "0.3rem" }}>{f.title}</h3>
                   <p style={{ fontSize: "0.82rem", lineHeight: 1.65, color: "#64748b" }}>{f.desc}</p>
