@@ -1,11 +1,10 @@
 /**
- * AnimatedBackground — Monochromatic ambient canvas
- * Subtle stardust nodes + fine geometric grid
- * No nebula blobs, no aurora, no competing colour
+ * AnimatedBackground — Monochromatic ambient canvas & Cyber Shaders
+ * Modes: Stardust nodes, Elastic Cyber Grid, Matrix Digital Stream, None
  */
 import { useEffect, useRef } from "react";
 
-export type ShaderMode = "stardust" | "grid" | "none";
+export type ShaderMode = "stardust" | "grid" | "matrix" | "none";
 
 export interface BgConfig {
   mode: ShaderMode;
@@ -56,14 +55,17 @@ function makeGrid(w: number, h: number): GridNode[] {
   return nodes;
 }
 
+const MATRIX_CHARS = "010101ABCDEF0123456789KNUST_CYBER_SEC_TCP_IP_SYN_ACK_PACKET_";
+
 export default function AnimatedBackground({ config }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stateRef = useRef<{
     t: number; raf: number;
     mouse: { x: number; y: number };
     stars: Star[]; grid: GridNode[];
+    matrixDrops: number[];
     config: BgConfig;
-  }>({ t: 0, raf: 0, mouse: { x: 0, y: 0 }, stars: [], grid: [], config });
+  }>({ t: 0, raf: 0, mouse: { x: 0, y: 0 }, stars: [], grid: [], matrixDrops: [], config });
 
   useEffect(() => { stateRef.current.config = config; }, [config]);
 
@@ -79,6 +81,9 @@ export default function AnimatedBackground({ config }: Props) {
       stateRef.current.stars = makeStars(canvas.width, canvas.height);
       stateRef.current.grid = makeGrid(canvas.width, canvas.height);
       stateRef.current.mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+
+      const cols = Math.floor(canvas.width / 18);
+      stateRef.current.matrixDrops = Array.from({ length: cols }, () => Math.floor(Math.random() * -50));
     };
     init();
 
@@ -97,8 +102,13 @@ export default function AnimatedBackground({ config }: Props) {
       const my = s.mouse.y;
 
       // Deep midnight base
-      ctx.fillStyle = "#090d16";
-      ctx.fillRect(0, 0, w, h);
+      if (s.config.mode === "matrix") {
+        ctx.fillStyle = "rgba(7, 11, 20, 0.15)"; // trail fade
+        ctx.fillRect(0, 0, w, h);
+      } else {
+        ctx.fillStyle = "#090d16";
+        ctx.fillRect(0, 0, w, h);
+      }
 
       // Soft top-center glow — very faint
       const glow = ctx.createRadialGradient(w / 2, 0, 0, w / 2, 0, w * 0.55);
@@ -112,8 +122,37 @@ export default function AnimatedBackground({ config }: Props) {
         return;
       }
 
+      // ── Mode: Matrix Stream ──
+      if (s.config.mode === "matrix") {
+        ctx.font = "12px 'JetBrains Mono', monospace";
+        const fontSize = 18;
+        const drops = s.matrixDrops;
+
+        for (let i = 0; i < drops.length; i++) {
+          const char = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+
+          // Leading character is cyan-white glow
+          ctx.fillStyle = "#67e8f9";
+          ctx.fillText(char, x, y);
+
+          // Second trail
+          ctx.fillStyle = "rgba(6, 182, 212, 0.4)";
+          ctx.fillText(char, x, y - fontSize);
+
+          if (y > h && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i] += 0.65 * s.config.speed;
+        }
+
+        s.raf = requestAnimationFrame(tick);
+        return;
+      }
+
+      // ── Mode: Elastic Cyber Grid ──
       if (s.config.mode === "grid") {
-        // Elastic grid with mouse repulsion
         const cols = Math.ceil(w / 60) + 1;
         const K = 0.035 * s.config.speed;
         const D = 0.88;
@@ -164,13 +203,12 @@ export default function AnimatedBackground({ config }: Props) {
         }
       }
 
-      // Stardust (always drawn on top of grid or alone)
+      // ── Mode: Stardust Nodes ──
       if (s.config.mode === "stardust" || s.config.mode === "grid") {
         for (const star of s.stars) {
           star.twinkle += star.twinkleSpeed * s.config.speed;
           const tw = 0.6 + 0.4 * Math.sin(star.twinkle);
 
-          // Gentle mouse repulsion
           const dx = star.x - mx;
           const dy = star.y - my;
           const dist = Math.hypot(dx, dy);
@@ -178,8 +216,8 @@ export default function AnimatedBackground({ config }: Props) {
             star.vx += (dx / dist) * 0.004;
             star.vy += (dy / dist) * 0.004;
           }
-          star.vx = star.vx * 0.996 + star.vx * 0.004;
-          star.vy = star.vy * 0.996 + star.vy * 0.004;
+          star.vx = star.vx * 0.992;
+          star.vy = star.vy * 0.992;
 
           star.x += star.vx * s.config.speed;
           star.y += star.vy * s.config.speed;

@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail, ArrowUp, Download } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUp, Download, FileText } from "lucide-react";
 import { profile } from "../data";
 
 const NAV = [
@@ -10,7 +10,11 @@ const NAV = [
   { label: "Contact", href: "#contact" },
 ];
 
-export default function Footer() {
+interface Props {
+  onOpenResume?: () => void;
+}
+
+export default function Footer({ onOpenResume }: Props) {
   const scroll = (href: string) => document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
 
   return (
@@ -25,7 +29,7 @@ export default function Footer() {
               eii<span style={{ color: "#06b6d4" }}>.jnr</span>
             </span>
             <p style={{ fontSize: "0.82rem", color: "#475569", lineHeight: 1.65, maxWidth: "16rem" }}>
-              IT student at KNUST building practical software and exploring the frontiers of cybersecurity.
+              Information Technology student at KNUST building practical software, network systems, and exploring cybersecurity frontiers.
             </p>
             <div style={{ display: "flex", gap: "0.45rem" }}>
               {[
@@ -63,9 +67,13 @@ export default function Footer() {
           <div>
             <p style={{ fontSize: "0.65rem", fontFamily: "var(--font-mono)", color: "#475569", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "0.85rem" }}>Quick Actions</p>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <a href={profile.cvUrl} download className="btn-ghost" style={{ justifyContent: "flex-start" }}>
-                <Download style={{ width: "0.825rem", height: "0.825rem" }} />Download CV
-              </a>
+              <button
+                onClick={() => onOpenResume ? onOpenResume() : null}
+                className="btn-ghost"
+                style={{ justifyContent: "flex-start", cursor: "pointer" }}
+              >
+                <FileText style={{ width: "0.825rem", height: "0.825rem" }} />Curriculum Vitae
+              </button>
               <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="btn-ghost"
                 style={{ justifyContent: "flex-start" }}>
                 <ArrowUp style={{ width: "0.825rem", height: "0.825rem" }} />Back to Top
