@@ -7,7 +7,7 @@ export const profile = {
   email: "boaduedwin5543@gmail.com",
   github: "https://github.com/Junior09-gif",
   linkedin: "https://linkedin.com/in/boadu-kofi-junior-edwin",
-  cvUrl: "#", // replace with real CV link when available
+  cvUrl: "#", // TODO: Replace with your Google Drive PDF link e.g. "https://drive.google.com/uc?export=download&id=YOUR_FILE_ID"
   bio: [
     "I'm Boadu Kofi Junior Edwin — known online as eii.jnr — an Information Technology student at the Kwame Nkrumah University of Science and Technology (KNUST) in Kumasi, Ghana. My fascination with technology started in childhood, tinkering with computers and exploring how software makes hardware come to life.",
     "Today that curiosity drives me to pursue a career at the intersection of software development, network engineering, and cybersecurity. I believe that building secure, resilient, and well-engineered systems is one of the most meaningful contributions a technologist can make — especially in Africa's rapidly transforming digital economy.",

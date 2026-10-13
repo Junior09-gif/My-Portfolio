@@ -18,6 +18,9 @@ const shakeVariants = {
   shake: { x: [0, -6, 6, -4, 4, -2, 2, 0], transition: { duration: 0.4 } },
 };
 
+// Formspree endpoint — sign up free at formspree.io and replace with your form ID
+const FORMSPREE_URL = "https://formspree.io/f/xzzbnwvj";
+
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -37,7 +40,7 @@ export default function Contact() {
     return e;
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
@@ -47,10 +50,28 @@ export default function Contact() {
       return;
     }
     setFormState("loading");
-    setTimeout(() => {
-      setFormState("success");
-      setForm({ name: "", email: "", subject: "", message: "" });
-    }, 1600);
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          subject: form.subject || "Portfolio Contact",
+          message: form.message,
+        }),
+      });
+      if (res.ok) {
+        setFormState("success");
+        setForm({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setFormState("error");
+        setTimeout(() => setFormState("idle"), 3000);
+      }
+    } catch {
+      setFormState("error");
+      setTimeout(() => setFormState("idle"), 3000);
+    }
   };
 
   return (
