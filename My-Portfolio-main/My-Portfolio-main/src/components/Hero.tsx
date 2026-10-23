@@ -51,21 +51,31 @@ export default function Hero({ onOpenResume }: HeroProps) {
 
             {/* Eyebrow */}
             <motion.p {...fadeIn(0.05)} style={{
-              fontSize: "0.875rem", color: "#315EFB", fontWeight: 600,
-              display: "flex", alignItems: "center", gap: "0.5rem",
+              fontSize: "1rem", color: "#315EFB",
+              display: "flex", alignItems: "center", gap: "0.6rem",
             }}>
-              <span style={{ width: "1.5rem", height: "2px", background: "#315EFB", display: "inline-block", borderRadius: "999px" }} />
-              Hello, I'm
+              <span style={{ width: "1.5rem", height: "2px", background: "#315EFB", display: "inline-block", borderRadius: "999px", flexShrink: 0 }} />
+              <em style={{ fontWeight: 700, fontStyle: "italic", letterSpacing: "0.01em" }}>Hello, I'm</em>
             </motion.p>
 
             {/* Name */}
             <motion.div {...fadeUp(0.1)}>
               <h1 style={{
-                fontSize: "clamp(2.8rem, 5.5vw, 4.2rem)",
-                fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.08,
-                color: "#171A21",
+                fontSize: "clamp(2.2rem, 5.5vw, 4rem)",
+                fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
+                wordBreak: "keep-all", overflowWrap: "break-word",
               }}>
-                Edwin Boadu
+                {/* BOADU KOFI — blue gradient */}
+                <span style={{
+                  background: "linear-gradient(135deg, #315EFB 0%, #2563EB 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}>
+                  BOADU KOFI
+                </span>
+                {/* JUNIOR EDWIN — dark charcoal */}
+                <span style={{ color: "#171A21" }}>&nbsp;JUNIOR EDWIN</span>
               </h1>
             </motion.div>
 
