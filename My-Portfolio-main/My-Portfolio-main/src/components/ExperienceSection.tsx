@@ -4,56 +4,51 @@ import { experiences } from "../data";
 const inView = (delay = 0) => ({
   initial: { opacity: 0, y: 18 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-15%" },
-  transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1], delay },
+  viewport: { once: true, margin: "-10%" },
+  transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1], delay },
 });
 
 export default function ExperienceSection() {
   return (
-    <section id="experience" className="section" style={{ background: "#0a0f1e", position: "relative", zIndex: 1 }}>
-      <div className="section-sep" style={{ position: "absolute", top: 0, left: 0, right: 0 }} />
+    <section id="experience" className="section section-alt" style={{ position: "relative", zIndex: 1 }}>
       <div className="container">
-
         <motion.div {...inView()} style={{ marginBottom: "3rem" }}>
-          <p className="label" style={{ marginBottom: "0.5rem" }}>Experience</p>
-          <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.5rem)", fontWeight: 800, color: "#f1f5f9", letterSpacing: "-0.02em" }}>
-            Practical work &amp; activities
-          </h2>
-          <p style={{ fontSize: "0.9rem", color: "#64748b", marginTop: "0.5rem" }}>
-            University labs, self-directed study, and technical activities — all authentic, no fabricated roles.
-          </p>
+          <p className="label" style={{ marginBottom: "0.6rem" }}>Experience</p>
+          <h2 className="section-title" style={{ marginBottom: "1rem" }}>Practical Work & Activities</h2>
+          <p className="section-subtitle">Authentic — no fabricated roles or inflated claims.</p>
         </motion.div>
 
         <div style={{ position: "relative", paddingLeft: "1.75rem" }}>
           <div className="timeline-line" />
-
           {experiences.map((exp, i) => (
             <motion.div key={exp.id} {...inView(i * 0.08)}
-              style={{ position: "relative", marginBottom: i < experiences.length - 1 ? "2.25rem" : 0 }}
+              style={{ position: "relative", marginBottom: i < experiences.length - 1 ? "2rem" : 0 }}
             >
               <div className="timeline-dot" />
-
-              <div className="card card-accent" style={{ padding: "1.35rem" }}>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: "0.5rem", marginBottom: "0.75rem" }}>
+              <div style={{
+                padding: "1.35rem 1.5rem",
+                background: "#FFFFFF", border: "1px solid #E5E7EB",
+                borderRadius: "0.75rem",
+              }}>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: "0.5rem", marginBottom: "0.85rem" }}>
                   <div>
-                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#f1f5f9", marginBottom: "0.2rem" }}>{exp.role}</h3>
-                    <p style={{ fontSize: "0.82rem", color: "#06b6d4", fontFamily: "var(--font-mono)" }}>{exp.org}</p>
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#171A21", marginBottom: "0.2rem" }}>{exp.role}</h3>
+                    <p style={{ fontSize: "0.85rem", color: "#315EFB", fontWeight: 500 }}>{exp.org}</p>
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.3rem" }}>
-                    <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono)", color: "#475569", padding: "0.18rem 0.6rem", background: "#0f172a", border: "1px solid #1e293b", borderRadius: "0.3rem" }}>
+                  <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                    <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "0.18rem 0.65rem", background: "#F3F4F6", border: "1px solid #E5E7EB", borderRadius: "0.35rem", color: "#374151", fontFamily: "var(--font-mono)" }}>
                       {exp.period}
                     </span>
-                    <span style={{ fontSize: "0.65rem", color: "#06b6d4", fontFamily: "var(--font-mono)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "0.65rem", color: "#315EFB", fontFamily: "var(--font-mono)", letterSpacing: "0.06em", textTransform: "uppercase", padding: "0.18rem 0.65rem", background: "#EEF2FF", borderRadius: "0.35rem" }}>
                       {exp.type}
                     </span>
                   </div>
                 </div>
-
-                <ul style={{ display: "flex", flexDirection: "column", gap: "0.45rem", paddingLeft: "0.1rem" }}>
+                <ul style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
                   {exp.bullets.map((b, bi) => (
-                    <li key={bi} style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem" }}>
-                      <span style={{ width: "0.35rem", height: "0.35rem", borderRadius: "50%", background: "#06b6d4", flexShrink: 0, marginTop: "0.55rem" }} />
-                      <span style={{ fontSize: "0.875rem", lineHeight: 1.65, color: "#94a3b8" }}>{b}</span>
+                    <li key={bi} style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem" }}>
+                      <span style={{ width: "0.35rem", height: "0.35rem", borderRadius: "50%", background: "#315EFB", flexShrink: 0, marginTop: "0.55rem" }} />
+                      <span style={{ fontSize: "0.875rem", lineHeight: 1.68, color: "#374151" }}>{b}</span>
                     </li>
                   ))}
                 </ul>
