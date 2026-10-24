@@ -1,7 +1,8 @@
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, Mail, Github, Linkedin, MapPin } from "lucide-react";
 import { profile } from "../data";
 import headshotPhoto from "../assets/images/edwin_headshot.jpg";
+import { useState, useEffect } from "react";
 
 interface HeroProps {
   onOpenTerminal: () => void;
@@ -21,6 +22,70 @@ const fadeIn = (delay = 0) => ({
   animate: { opacity: 1 },
   transition: { duration: 0.5, ease: "easeOut", delay },
 });
+
+const ROLES = [
+  "Information Technology Student",
+  "Aspiring Cybersecurity Professional",
+  "Full-Stack Developer",
+  "Network Engineering Learner",
+  "Python Programmer",
+];
+
+function RotatingRole() {
+  const [index, setIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [typing, setTyping] = useState(true);
+  const [cursor, setCursor] = useState(true);
+
+  // Blinking cursor
+  useEffect(() => {
+    const t = setInterval(() => setCursor(c => !c), 530);
+    return () => clearInterval(t);
+  }, []);
+
+  // Typewriter effect
+  useEffect(() => {
+    const current = ROLES[index];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (typing) {
+      if (displayed.length < current.length) {
+        timeout = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 55);
+      } else {
+        // Fully typed — pause then start erasing
+        timeout = setTimeout(() => setTyping(false), 2200);
+      }
+    } else {
+      if (displayed.length > 0) {
+        timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 30);
+      } else {
+        // Fully erased — move to next role
+        setIndex(i => (i + 1) % ROLES.length);
+        setTyping(true);
+      }
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, typing, index]);
+
+  return (
+    <div style={{
+      display: "inline-flex", alignItems: "center", gap: "0.6rem",
+      padding: "0.6rem 1.4rem",
+      background: "rgba(34,211,238,0.06)",
+      border: "1px solid rgba(34,211,238,0.25)",
+      borderRadius: "0.65rem",
+      minWidth: "min(26rem, 100%)",
+    }}>
+      <span style={{ fontSize: "0.9rem", fontWeight: 700, fontFamily: "var(--font-mono)", color: "#22d3ee" }}>
+        &gt;_
+      </span>
+      <span style={{ fontSize: "0.9rem", fontWeight: 500, fontFamily: "var(--font-mono)", color: "#22d3ee", letterSpacing: "0.02em" }}>
+        {displayed}
+        <span style={{ opacity: cursor ? 1 : 0, marginLeft: "1px" }}>▋</span>
+      </span>
+    </div>
+  );
+}
 
 export default function Hero({ onOpenResume }: HeroProps) {
   const scroll = (id: string) => document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
@@ -81,33 +146,13 @@ export default function Hero({ onOpenResume }: HeroProps) {
                   Junior Edwin
                 </h1>
 
-                {/* Terminal pill */}
+                {/* Animated rotating role terminal pill */}
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: "0.6rem",
-                    padding: "0.6rem 1.4rem",
-                    background: "rgba(34,211,238,0.06)",
-                    border: "1px solid rgba(34,211,238,0.25)",
-                    borderRadius: "0.65rem",
-                  }}
                 >
-                  <span style={{
-                    fontSize: "0.9rem", fontWeight: 700,
-                    fontFamily: "var(--font-mono)",
-                    color: "#22d3ee", letterSpacing: "0.01em",
-                  }}>
-                    &gt;_
-                  </span>
-                  <span style={{
-                    fontSize: "0.9rem", fontWeight: 500,
-                    fontFamily: "var(--font-mono)",
-                    color: "#22d3ee", letterSpacing: "0.03em",
-                  }}>
-                    Information Technology Student
-                  </span>
+                  <RotatingRole />
                 </motion.div>
               </div>
             </motion.div>
