@@ -56,15 +56,16 @@ export default function Hero({ onOpenResume }: HeroProps) {
                 background: "#0f172a",
                 borderRadius: "1.25rem",
                 padding: "2rem 2.2rem 1.75rem",
-                display: "inline-block",
+                width: "100%",
                 maxWidth: "100%",
+                overflow: "hidden",
               }}>
                 {/* Line 1: Hi, I'm Boadu Kofi */}
                 <h1 style={{
-                  fontSize: "clamp(2.4rem, 5.5vw, 4.2rem)",
-                  fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
-                  whiteSpace: "nowrap",
+                  fontSize: "clamp(2rem, 4.5vw, 3.6rem)",
+                  fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.15,
                   marginBottom: "0.1rem",
+                  whiteSpace: "normal",
                 }}>
                   <span style={{ color: "#FFFFFF" }}>Hi, I'm&nbsp;</span>
                   <span style={{ color: "#22d3ee" }}>Boadu Kofi</span>
@@ -72,8 +73,8 @@ export default function Hero({ onOpenResume }: HeroProps) {
 
                 {/* Line 2: Junior Edwin */}
                 <h1 style={{
-                  fontSize: "clamp(2.4rem, 5.5vw, 4.2rem)",
-                  fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
+                  fontSize: "clamp(2rem, 4.5vw, 3.6rem)",
+                  fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.15,
                   color: "#FFFFFF",
                   marginBottom: "1.5rem",
                 }}>
