@@ -49,44 +49,67 @@ export default function Hero({ onOpenResume }: HeroProps) {
           {/* ── Left: Text ── */}
           <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
 
-            {/* Eyebrow */}
-            <motion.p {...fadeIn(0.05)} style={{
-              fontSize: "1rem", color: "#315EFB",
-              display: "flex", alignItems: "center", gap: "0.6rem",
-            }}>
-              <span style={{ width: "1.5rem", height: "2px", background: "#315EFB", display: "inline-block", borderRadius: "999px", flexShrink: 0 }} />
-              <em style={{ fontWeight: 700, fontStyle: "italic", letterSpacing: "0.01em" }}>Hello, I'm</em>
-            </motion.p>
-
-            {/* Name */}
-            <motion.div {...fadeUp(0.1)}>
-              <h1 style={{
-                fontSize: "clamp(2.2rem, 5.5vw, 4rem)",
-                fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
-                wordBreak: "keep-all", overflowWrap: "break-word",
+            {/* ── Hero heading card — dark style from screenshot ── */}
+            <motion.div {...fadeUp(0.08)}>
+              {/* Dark card wrapping the heading */}
+              <div style={{
+                background: "#0f172a",
+                borderRadius: "1.25rem",
+                padding: "2rem 2.2rem 1.75rem",
+                display: "inline-block",
+                maxWidth: "100%",
               }}>
-                {/* BOADU KOFI — blue gradient */}
-                <span style={{
-                  background: "linear-gradient(135deg, #315EFB 0%, #2563EB 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
+                {/* Line 1: Hi, I'm Boadu Kofi */}
+                <h1 style={{
+                  fontSize: "clamp(2.4rem, 5.5vw, 4.2rem)",
+                  fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
+                  whiteSpace: "nowrap",
+                  marginBottom: "0.1rem",
                 }}>
-                  BOADU KOFI
-                </span>
-                {/* JUNIOR EDWIN — dark charcoal */}
-                <span style={{ color: "#171A21" }}>&nbsp;JUNIOR EDWIN</span>
-              </h1>
-            </motion.div>
+                  <span style={{ color: "#FFFFFF" }}>Hi, I'm&nbsp;</span>
+                  <span style={{ color: "#22d3ee" }}>Boadu Kofi</span>
+                </h1>
 
-            {/* Title */}
-            <motion.p {...fadeUp(0.18)} style={{
-              fontSize: "clamp(1.1rem, 2vw, 1.35rem)",
-              fontWeight: 500, color: "#315EFB",
-              letterSpacing: "-0.01em",
-            }}>
-              Information Technology Student
-            </motion.p>
+                {/* Line 2: Junior Edwin */}
+                <h1 style={{
+                  fontSize: "clamp(2.4rem, 5.5vw, 4.2rem)",
+                  fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
+                  color: "#FFFFFF",
+                  marginBottom: "1.5rem",
+                }}>
+                  Junior Edwin
+                </h1>
+
+                {/* Terminal pill */}
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.6rem",
+                    padding: "0.6rem 1.4rem",
+                    background: "rgba(34,211,238,0.06)",
+                    border: "1px solid rgba(34,211,238,0.25)",
+                    borderRadius: "0.65rem",
+                  }}
+                >
+                  <span style={{
+                    fontSize: "0.9rem", fontWeight: 700,
+                    fontFamily: "var(--font-mono)",
+                    color: "#22d3ee", letterSpacing: "0.01em",
+                  }}>
+                    &gt;_
+                  </span>
+                  <span style={{
+                    fontSize: "0.9rem", fontWeight: 500,
+                    fontFamily: "var(--font-mono)",
+                    color: "#22d3ee", letterSpacing: "0.03em",
+                  }}>
+                    Information Technology Student
+                  </span>
+                </motion.div>
+              </div>
+            </motion.div>
 
             {/* Bio */}
             <motion.p {...fadeUp(0.25)} style={{
