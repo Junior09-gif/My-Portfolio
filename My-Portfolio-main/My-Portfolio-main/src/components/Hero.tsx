@@ -266,7 +266,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
             style={{ display: "flex", justifyContent: "center" }}
           >
-            <div style={{ position: "relative", width: "clamp(260px, 40vw, 360px)" }}>
+            <div style={{ position: "relative", width: "clamp(200px, 28vw, 300px)" }}>
               {/* Decorative square behind */}
               <div style={{
                 position: "absolute", top: "1.5rem", right: "-1.5rem",
