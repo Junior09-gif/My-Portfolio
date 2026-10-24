@@ -125,26 +125,63 @@ export default function Hero({ onOpenResume }: HeroProps) {
                 maxWidth: "100%",
                 overflow: "hidden",
               }}>
-                {/* Line 1: Hi, I'm Boadu Kofi */}
-                <h1 style={{
-                  fontSize: "clamp(2rem, 4.5vw, 3.6rem)",
-                  fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.15,
-                  marginBottom: "0.1rem",
-                  whiteSpace: "normal",
-                }}>
-                  <span style={{ color: "#FFFFFF" }}>Hi, I'm&nbsp;</span>
-                  <span style={{ color: "#22d3ee" }}>Boadu Kofi</span>
-                </h1>
+                {/* Line 1: Hi, I'm — static */}
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+                  style={{
+                    fontSize: "clamp(1rem, 2vw, 1.3rem)",
+                    fontWeight: 600, color: "#94a3b8",
+                    marginBottom: "0.4rem",
+                    fontFamily: "var(--font-sans)",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  Hi, I'm
+                </motion.p>
 
-                {/* Line 2: Junior Edwin */}
-                <h1 style={{
-                  fontSize: "clamp(2rem, 4.5vw, 3.6rem)",
-                  fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.15,
-                  color: "#FFFFFF",
-                  marginBottom: "1.5rem",
-                }}>
-                  Junior Edwin
-                </h1>
+                {/* Name: BOADU KOFI — animated word by word */}
+                <div style={{ overflow: "hidden", marginBottom: "0.1rem" }}>
+                  <h1 style={{
+                    fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
+                    fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
+                    display: "flex", flexWrap: "wrap", gap: "0 0.55rem",
+                  }}>
+                    {["Boadu", "Kofi"].map((word, i) => (
+                      <motion.span
+                        key={word}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.18 + i * 0.12 }}
+                        style={{ color: "#22d3ee", display: "inline-block" }}
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
+                  </h1>
+                </div>
+
+                {/* Name: JUNIOR EDWIN — animated word by word */}
+                <div style={{ overflow: "hidden", marginBottom: "1.5rem" }}>
+                  <h1 style={{
+                    fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
+                    fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
+                    display: "flex", flexWrap: "wrap", gap: "0 0.55rem",
+                  }}>
+                    {["Junior", "Edwin"].map((word, i) => (
+                      <motion.span
+                        key={word}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.42 + i * 0.12 }}
+                        style={{ color: "#f1f5f9", display: "inline-block" }}
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
+                  </h1>
+                </div>
 
                 {/* Animated rotating role terminal pill */}
                 <motion.div
