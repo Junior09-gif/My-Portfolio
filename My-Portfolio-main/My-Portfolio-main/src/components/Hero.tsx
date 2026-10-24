@@ -274,6 +274,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
                 border: "2px solid #315EFB",
                 borderRadius: "1rem",
                 opacity: 0.2,
+                zIndex: 0,
               }} />
               {/* Decorative dot grid top-left */}
               <div style={{
@@ -282,16 +283,19 @@ export default function Hero({ onOpenResume }: HeroProps) {
                 backgroundImage: "radial-gradient(circle, #315EFB 1.5px, transparent 1.5px)",
                 backgroundSize: "12px 12px",
                 opacity: 0.25,
+                zIndex: 0,
               }} />
 
-              {/* Photo */}
+              {/* Photo — fully contained */}
               <div style={{
                 position: "relative",
+                zIndex: 1,
                 borderRadius: "1rem",
                 overflow: "hidden",
                 boxShadow: "0 20px 60px rgba(23,26,33,0.12), 0 4px 16px rgba(23,26,33,0.08)",
                 background: "#E5E7EB",
-                aspectRatio: "4/5",
+                width: "100%",
+                aspectRatio: "3/4",
               }}>
                 <img
                   src={headshotPhoto}
@@ -300,7 +304,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    objectPosition: "center 15%",
+                    objectPosition: "center 10%",
                     display: "block",
                   }}
                 />
