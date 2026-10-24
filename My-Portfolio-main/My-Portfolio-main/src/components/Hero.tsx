@@ -291,11 +291,18 @@ export default function Hero({ onOpenResume }: HeroProps) {
                 overflow: "hidden",
                 boxShadow: "0 20px 60px rgba(23,26,33,0.12), 0 4px 16px rgba(23,26,33,0.08)",
                 background: "#E5E7EB",
+                aspectRatio: "4/5",
               }}>
                 <img
                   src={headshotPhoto}
                   alt="Edwin Boadu"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "center 15%",
+                    display: "block",
+                  }}
                 />
               </div>
             </div>
