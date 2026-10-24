@@ -191,19 +191,6 @@ export default function Hero({ onOpenResume }: HeroProps) {
                   alt="Edwin Boadu"
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                 />
-                {/* Name tag overlay */}
-                <div style={{
-                  position: "absolute", bottom: "1rem", left: "50%", transform: "translateX(-50%)",
-                  background: "rgba(255,255,255,0.92)",
-                  backdropFilter: "blur(8px)",
-                  borderRadius: "0.5rem",
-                  padding: "0.5rem 1rem",
-                  whiteSpace: "nowrap",
-                  boxShadow: "0 2px 12px rgba(23,26,33,0.1)",
-                }}>
-                  <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "#171A21" }}>Edwin Boadu</p>
-                  <p style={{ fontSize: "0.68rem", color: "#315EFB", fontFamily: "var(--font-mono)", marginTop: "0.1rem" }}>IT Student · KNUST</p>
-                </div>
               </div>
             </div>
           </motion.div>
