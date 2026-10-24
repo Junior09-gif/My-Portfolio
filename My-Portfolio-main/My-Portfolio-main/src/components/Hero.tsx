@@ -264,35 +264,45 @@ export default function Hero({ onOpenResume }: HeroProps) {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            style={{ display: "flex", justifyContent: "center" }}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
           >
-            <div style={{ position: "relative", width: "clamp(200px, 28vw, 300px)" }}>
-              {/* Decorative square behind */}
+            {/* Outer wrapper — gives space for offset decorative frame */}
+            <div style={{
+              position: "relative",
+              width: "clamp(200px, 28vw, 300px)",
+              paddingRight: "1.25rem",
+              paddingBottom: "1.25rem",
+            }}>
+              {/* Decorative square — same size as photo, offset bottom-right */}
               <div style={{
-                position: "absolute", top: "1.5rem", right: "-1.5rem",
-                width: "100%", height: "100%",
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                width: "calc(100% - 1.25rem)",
+                height: "calc(100% - 1.25rem)",
                 border: "2px solid #315EFB",
                 borderRadius: "1rem",
-                opacity: 0.2,
-                zIndex: 0,
-              }} />
-              {/* Decorative dot grid top-left */}
-              <div style={{
-                position: "absolute", top: "-1rem", left: "-1rem",
-                width: "5rem", height: "5rem",
-                backgroundImage: "radial-gradient(circle, #315EFB 1.5px, transparent 1.5px)",
-                backgroundSize: "12px 12px",
-                opacity: 0.25,
+                opacity: 0.3,
                 zIndex: 0,
               }} />
 
-              {/* Photo — fully contained */}
+              {/* Dot grid — top-left accent */}
+              <div style={{
+                position: "absolute", top: "-0.75rem", left: "-0.75rem",
+                width: "4.5rem", height: "4.5rem",
+                backgroundImage: "radial-gradient(circle, #315EFB 1.5px, transparent 1.5px)",
+                backgroundSize: "11px 11px",
+                opacity: 0.22,
+                zIndex: 0,
+              }} />
+
+              {/* Photo — sits on top of decorative square */}
               <div style={{
                 position: "relative",
                 zIndex: 1,
                 borderRadius: "1rem",
                 overflow: "hidden",
-                boxShadow: "0 20px 60px rgba(23,26,33,0.12), 0 4px 16px rgba(23,26,33,0.08)",
+                boxShadow: "0 16px 48px rgba(23,26,33,0.13), 0 4px 14px rgba(23,26,33,0.07)",
                 background: "#E5E7EB",
                 width: "100%",
                 aspectRatio: "3/4",
