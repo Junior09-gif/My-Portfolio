@@ -141,47 +141,73 @@ export default function Hero({ onOpenResume }: HeroProps) {
                   Hi, I'm
                 </motion.p>
 
-                {/* Name: BOADU KOFI — animated word by word */}
-                <div style={{ overflow: "hidden", marginBottom: "0.1rem" }}>
-                  <h1 style={{
+                {/* Name: letter-by-letter reveal animation
+                    Line 1 = "Boadu Kofi" in cyan
+                    Line 2 = "Junior Edwin" in white
+                    Each letter: 0.35s fade+slide-up, 110ms stagger, plays once */}
+                <h1
+                  aria-label="Boadu Kofi Junior Edwin"
+                  style={{
                     fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
-                    fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
-                    display: "flex", flexWrap: "wrap", gap: "0 0.55rem",
-                  }}>
-                    {["Boadu", "Kofi"].map((word, i) => (
-                      <motion.span
-                        key={word}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.18 + i * 0.12 }}
-                        style={{ color: "#22d3ee", display: "inline-block" }}
-                      >
-                        {word}
-                      </motion.span>
-                    ))}
-                  </h1>
-                </div>
+                    fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.15,
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  {/* Reduced-motion: show instantly via @media in style tag */}
+                  <style>{`
+                    @keyframes letterReveal {
+                      from { opacity: 0; transform: translateY(12px); }
+                      to   { opacity: 1; transform: translateY(0); }
+                    }
+                    @media (prefers-reduced-motion: reduce) {
+                      .hero-letter { animation: none !important; opacity: 1 !important; transform: none !important; }
+                    }
+                  `}</style>
 
-                {/* Name: JUNIOR EDWIN — animated word by word */}
-                <div style={{ overflow: "hidden", marginBottom: "1.5rem" }}>
-                  <h1 style={{
-                    fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
-                    fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.1,
-                    display: "flex", flexWrap: "wrap", gap: "0 0.55rem",
-                  }}>
-                    {["Junior", "Edwin"].map((word, i) => (
-                      <motion.span
-                        key={word}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.42 + i * 0.12 }}
-                        style={{ color: "#f1f5f9", display: "inline-block" }}
+                  {/* Line 1: Boadu Kofi — cyan */}
+                  <span style={{ display: "block" }}>
+                    {"Boadu Kofi".split("").map((char, i) => (
+                      <span
+                        key={`l1-${i}`}
+                        className="hero-letter"
+                        style={{
+                          display: "inline-block",
+                          color: "#22d3ee",
+                          whiteSpace: char === " " ? "pre" : "normal",
+                          opacity: 0,
+                          animation: "letterReveal 0.35s ease-out forwards",
+                          animationDelay: `${i * 110}ms`,
+                        }}
                       >
-                        {word}
-                      </motion.span>
+                        {char === " " ? "\u00A0" : char}
+                      </span>
                     ))}
-                  </h1>
-                </div>
+                  </span>
+
+                  {/* Line 2: Junior Edwin — white, stagger continues from line 1 */}
+                  <span style={{ display: "block" }}>
+                    {"Junior Edwin".split("").map((char, i) => {
+                      // line 1 has 10 chars ("Boadu Kofi"), so offset by 10
+                      const delay = (10 + i) * 110;
+                      return (
+                        <span
+                          key={`l2-${i}`}
+                          className="hero-letter"
+                          style={{
+                            display: "inline-block",
+                            color: "#f1f5f9",
+                            whiteSpace: char === " " ? "pre" : "normal",
+                            opacity: 0,
+                            animation: "letterReveal 0.35s ease-out forwards",
+                            animationDelay: `${delay}ms`,
+                          }}
+                        >
+                          {char === " " ? "\u00A0" : char}
+                        </span>
+                      );
+                    })}
+                  </span>
+                </h1>
 
                 {/* Animated rotating role terminal pill */}
                 <motion.div
