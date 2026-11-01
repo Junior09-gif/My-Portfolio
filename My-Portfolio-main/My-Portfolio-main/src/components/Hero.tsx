@@ -87,6 +87,130 @@ function RotatingRole() {
   );
 }
 
+// ── NameReveal ────────────────────────────────────────────────────────────────
+// Letter-by-letter reveal for "Boadu Kofi Junior Edwin"
+// - 110ms stagger, 0.35s per letter, 12px slide-up
+// - Auto-refreshes every 3 minutes (timer starts AFTER animation finishes)
+// - Pauses while tab is hidden (visibilitychange)
+// - prefers-reduced-motion: shows full name instantly, no refresh
+
+const LINE1 = "Boadu Kofi";
+const LINE2 = "Junior Edwin";
+const TOTAL = LINE1.length + LINE2.length;  // 22 chars
+const STAGGER_MS = 110;
+const DURATION_MS = 350;
+const REFRESH_MS = 180_000; // 3 minutes
+
+function NameReveal() {
+  // visibleCount: how many letters are currently revealed (0 = hidden, TOTAL = all shown)
+  const [visibleCount, setVisibleCount] = useState(0);
+  const [key, setKey] = useState(0); // increment to force re-mount & restart
+
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  useEffect(() => {
+    if (prefersReduced) { setVisibleCount(TOTAL); return; }
+
+    // --- Animate letters one by one ---
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    for (let i = 0; i < TOTAL; i++) {
+      timers.push(setTimeout(() => setVisibleCount(i + 1), i * STAGGER_MS));
+    }
+
+    // --- Schedule refresh 3 min AFTER last letter finishes ---
+    const animationFinishes = (TOTAL - 1) * STAGGER_MS + DURATION_MS;
+    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+    let pausedAt: number | null = null;
+    let remaining = REFRESH_MS;
+
+    const scheduleRefresh = (delay: number) => {
+      refreshTimer = setTimeout(() => {
+        setVisibleCount(0);     // hide all letters
+        setKey(k => k + 1);    // will trigger re-mount of children via key
+      }, delay);
+    };
+
+    const startRefreshTimer = () => {
+      const afterAnim = setTimeout(() => {
+        scheduleRefresh(remaining);
+      }, animationFinishes);
+      timers.push(afterAnim);
+    };
+
+    // Visibility pause/resume
+    const onVisChange = () => {
+      if (document.hidden) {
+        // Tab hidden — record how much time is left
+        if (refreshTimer) {
+          clearTimeout(refreshTimer);
+          pausedAt = Date.now();
+        }
+      } else {
+        // Tab visible again — resume with remaining time
+        if (pausedAt !== null) {
+          remaining = Math.max(0, remaining - (Date.now() - pausedAt));
+          pausedAt = null;
+          scheduleRefresh(remaining);
+        }
+      }
+    };
+
+    startRefreshTimer();
+    document.addEventListener("visibilitychange", onVisChange);
+
+    return () => {
+      timers.forEach(clearTimeout);
+      if (refreshTimer) clearTimeout(refreshTimer);
+      document.removeEventListener("visibilitychange", onVisChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+
+  // Render
+  const renderLine = (text: string, offset: number, color: string) => (
+    <span style={{ display: "block" }}>
+      {text.split("").map((char, i) => {
+        const globalIdx = offset + i;
+        const revealed = prefersReduced || visibleCount > globalIdx;
+        return (
+          <span
+            key={i}
+            style={{
+              display: "inline-block",
+              color,
+              whiteSpace: "pre",
+              opacity: revealed ? 1 : 0,
+              transform: revealed ? "translateY(0)" : "translateY(12px)",
+              transition: revealed
+                ? `opacity ${DURATION_MS}ms ease-out, transform ${DURATION_MS}ms ease-out`
+                : "none",
+            }}
+          >
+            {char === " " ? "\u00A0" : char}
+          </span>
+        );
+      })}
+    </span>
+  );
+
+  return (
+    <h1
+      aria-label="Boadu Kofi Junior Edwin"
+      style={{
+        fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
+        fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.15,
+        marginBottom: "1.5rem",
+      }}
+    >
+      {renderLine(LINE1, 0, "#22d3ee")}
+      {renderLine(LINE2, LINE1.length, "#f1f5f9")}
+    </h1>
+  );
+}
+
 export default function Hero({ onOpenResume }: HeroProps) {
   const scroll = (id: string) => document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
 
@@ -141,73 +265,8 @@ export default function Hero({ onOpenResume }: HeroProps) {
                   Hi, I'm
                 </motion.p>
 
-                {/* Name: letter-by-letter reveal animation
-                    Line 1 = "Boadu Kofi" in cyan
-                    Line 2 = "Junior Edwin" in white
-                    Each letter: 0.35s fade+slide-up, 110ms stagger, plays once */}
-                <h1
-                  aria-label="Boadu Kofi Junior Edwin"
-                  style={{
-                    fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
-                    fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.15,
-                    marginBottom: "1.5rem",
-                  }}
-                >
-                  {/* Reduced-motion: show instantly via @media in style tag */}
-                  <style>{`
-                    @keyframes letterReveal {
-                      from { opacity: 0; transform: translateY(12px); }
-                      to   { opacity: 1; transform: translateY(0); }
-                    }
-                    @media (prefers-reduced-motion: reduce) {
-                      .hero-letter { animation: none !important; opacity: 1 !important; transform: none !important; }
-                    }
-                  `}</style>
-
-                  {/* Line 1: Boadu Kofi — cyan */}
-                  <span style={{ display: "block" }}>
-                    {"Boadu Kofi".split("").map((char, i) => (
-                      <span
-                        key={`l1-${i}`}
-                        className="hero-letter"
-                        style={{
-                          display: "inline-block",
-                          color: "#22d3ee",
-                          whiteSpace: char === " " ? "pre" : "normal",
-                          opacity: 0,
-                          animation: "letterReveal 0.35s ease-out forwards",
-                          animationDelay: `${i * 110}ms`,
-                        }}
-                      >
-                        {char === " " ? "\u00A0" : char}
-                      </span>
-                    ))}
-                  </span>
-
-                  {/* Line 2: Junior Edwin — white, stagger continues from line 1 */}
-                  <span style={{ display: "block" }}>
-                    {"Junior Edwin".split("").map((char, i) => {
-                      // line 1 has 10 chars ("Boadu Kofi"), so offset by 10
-                      const delay = (10 + i) * 110;
-                      return (
-                        <span
-                          key={`l2-${i}`}
-                          className="hero-letter"
-                          style={{
-                            display: "inline-block",
-                            color: "#f1f5f9",
-                            whiteSpace: char === " " ? "pre" : "normal",
-                            opacity: 0,
-                            animation: "letterReveal 0.35s ease-out forwards",
-                            animationDelay: `${delay}ms`,
-                          }}
-                        >
-                          {char === " " ? "\u00A0" : char}
-                        </span>
-                      );
-                    })}
-                  </span>
-                </h1>
+                {/* Name: letter-by-letter reveal with 3-min auto-refresh */}
+                <NameReveal />
 
                 {/* Animated rotating role terminal pill */}
                 <motion.div
