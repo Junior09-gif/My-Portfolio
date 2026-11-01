@@ -266,43 +266,44 @@ export default function Hero({ onOpenResume }: HeroProps) {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
             style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
           >
-            {/* Outer wrapper — gives space for offset decorative frame */}
+            {/* Outer wrapper — padding creates room for the offset blue box */}
             <div style={{
               position: "relative",
-              width: "clamp(200px, 28vw, 300px)",
-              paddingRight: "1.25rem",
-              paddingBottom: "1.25rem",
+              width: "clamp(220px, 30vw, 320px)",
+              paddingRight: "1.5rem",
+              paddingBottom: "1.5rem",
             }}>
-              {/* Decorative square — same size as photo, offset bottom-right */}
+
+              {/* Blue outlined box — offset bottom-right, same border-radius as photo */}
               <div style={{
                 position: "absolute",
                 bottom: 0,
                 right: 0,
-                width: "calc(100% - 1.25rem)",
-                height: "calc(100% - 1.25rem)",
-                border: "2px solid #315EFB",
-                borderRadius: "1rem",
-                opacity: 0.3,
+                width: "calc(100% - 1.5rem)",
+                height: "calc(100% - 1.5rem)",
+                border: "2px solid #93C5FD",
+                borderRadius: "1.25rem",
+                opacity: 0.6,
                 zIndex: 0,
               }} />
 
               {/* Dot grid — top-left accent */}
               <div style={{
                 position: "absolute", top: "-0.75rem", left: "-0.75rem",
-                width: "4.5rem", height: "4.5rem",
+                width: "5rem", height: "5rem",
                 backgroundImage: "radial-gradient(circle, #315EFB 1.5px, transparent 1.5px)",
                 backgroundSize: "11px 11px",
-                opacity: 0.22,
+                opacity: 0.2,
                 zIndex: 0,
               }} />
 
-              {/* Photo — sits on top of decorative square */}
+              {/* Photo container — same border-radius as the blue box */}
               <div style={{
                 position: "relative",
                 zIndex: 1,
-                borderRadius: "1rem",
+                borderRadius: "1.25rem",
                 overflow: "hidden",
-                boxShadow: "0 16px 48px rgba(23,26,33,0.13), 0 4px 14px rgba(23,26,33,0.07)",
+                boxShadow: "0 16px 48px rgba(23,26,33,0.1), 0 4px 14px rgba(23,26,33,0.06)",
                 background: "#E5E7EB",
                 width: "100%",
                 aspectRatio: "3/4",
@@ -314,7 +315,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
-                    objectPosition: "center 10%",
+                    objectPosition: "center top",
                     display: "block",
                   }}
                 />
