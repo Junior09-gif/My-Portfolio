@@ -21,7 +21,7 @@ export default function App() {
   const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F8F9FB", color: "#171A21" }}>
+    <div style={{ minHeight: "100vh", background: "#F6F7FB", color: "#0F172A" }}>
       <Navbar
         onOpenTerminal={() => setIsTerminalOpen(true)}
         onOpenSubnet={() => setIsSubnetOpen(true)}

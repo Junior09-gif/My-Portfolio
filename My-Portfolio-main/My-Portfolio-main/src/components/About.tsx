@@ -44,12 +44,12 @@ export default function About() {
           {/* Left — Bio + info */}
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <motion.div {...inView(0.08)} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <p style={{ fontSize: "0.975rem", lineHeight: 1.82, color: "#374151" }}>
+              <p style={{ fontSize: "0.975rem", lineHeight: 1.82, color: "#0F172A" }}>
                 I'm Boadu Kofi Junior Edwin, an Information Technology student at the Kwame Nkrumah University of Science
                 and Technology (KNUST) in Kumasi, Ghana. My interest in technology started with a childhood curiosity about
                 computers — how they work, how software is built, and how networks connect people.
               </p>
-              <p style={{ fontSize: "0.975rem", lineHeight: 1.82, color: "#374151" }}>
+              <p style={{ fontSize: "0.975rem", lineHeight: 1.82, color: "#0F172A" }}>
                 I'm currently building my foundation in software development, networking, and cybersecurity through
                 coursework, personal projects, and self-directed study. My goal is to become a well-rounded IT professional
                 who can build secure, practical solutions to real problems.
@@ -65,14 +65,14 @@ export default function About() {
                 { icon: Code2, label: "Focus", value: "Learning & Building" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} style={{
-                  padding: "0.9rem 1rem", background: "#F8F9FB",
+                  padding: "0.9rem 1rem", background: "#F6F7FB",
                   border: "1px solid #E5E7EB", borderRadius: "0.65rem",
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.3rem" }}>
                     <Icon style={{ width: "0.85rem", height: "0.85rem", color: "#315EFB" }} />
-                    <span style={{ fontSize: "0.65rem", fontFamily: "var(--font-mono)", color: "#9BA3AE", textTransform: "uppercase", letterSpacing: "0.1em" }}>{label}</span>
+                    <span style={{ fontSize: "0.65rem", fontFamily: "var(--font-mono)", color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.1em" }}>{label}</span>
                   </div>
-                  <p style={{ fontSize: "0.85rem", fontWeight: 600, color: "#171A21" }}>{value}</p>
+                  <p style={{ fontSize: "0.85rem", fontWeight: 600, color: "#0F172A" }}>{value}</p>
                 </div>
               ))}
             </motion.div>
@@ -116,8 +116,8 @@ export default function About() {
                   <f.icon style={{ width: "1.1rem", height: "1.1rem", color: "#315EFB" }} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#171A21", marginBottom: "0.3rem" }}>{f.title}</h3>
-                  <p style={{ fontSize: "0.82rem", lineHeight: 1.65, color: "#667085" }}>{f.desc}</p>
+                  <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.3rem" }}>{f.title}</h3>
+                  <p style={{ fontSize: "0.82rem", lineHeight: 1.65, color: "#475569" }}>{f.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -127,3 +127,5 @@ export default function About() {
     </section>
   );
 }
+
+

@@ -32,11 +32,11 @@ export default function ExperienceSection() {
               }}>
                 <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: "0.5rem", marginBottom: "0.85rem" }}>
                   <div>
-                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#171A21", marginBottom: "0.2rem" }}>{exp.role}</h3>
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.2rem" }}>{exp.role}</h3>
                     <p style={{ fontSize: "0.85rem", color: "#315EFB", fontWeight: 500 }}>{exp.org}</p>
                   </div>
                   <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                    <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "0.18rem 0.65rem", background: "#F3F4F6", border: "1px solid #E5E7EB", borderRadius: "0.35rem", color: "#374151", fontFamily: "var(--font-mono)" }}>
+                    <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "0.18rem 0.65rem", background: "#F3F4F6", border: "1px solid #E5E7EB", borderRadius: "0.35rem", color: "#0F172A", fontFamily: "var(--font-mono)" }}>
                       {exp.period}
                     </span>
                     <span style={{ fontSize: "0.65rem", color: "#315EFB", fontFamily: "var(--font-mono)", letterSpacing: "0.06em", textTransform: "uppercase", padding: "0.18rem 0.65rem", background: "#EEF2FF", borderRadius: "0.35rem" }}>
@@ -48,7 +48,7 @@ export default function ExperienceSection() {
                   {exp.bullets.map((b, bi) => (
                     <li key={bi} style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem" }}>
                       <span style={{ width: "0.35rem", height: "0.35rem", borderRadius: "50%", background: "#315EFB", flexShrink: 0, marginTop: "0.55rem" }} />
-                      <span style={{ fontSize: "0.875rem", lineHeight: 1.68, color: "#374151" }}>{b}</span>
+                      <span style={{ fontSize: "0.875rem", lineHeight: 1.68, color: "#0F172A" }}>{b}</span>
                     </li>
                   ))}
                 </ul>
@@ -60,3 +60,5 @@ export default function ExperienceSection() {
     </section>
   );
 }
+
+

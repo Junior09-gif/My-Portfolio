@@ -93,14 +93,14 @@ export default function Hero({ onOpenResume }: HeroProps) {
   return (
     <section id="home" style={{
       minHeight: "100vh", display: "flex", alignItems: "center",
-      background: "#F8F9FB", paddingTop: "5rem", paddingBottom: "3rem",
+      background: "#F6F7FB", paddingTop: "5rem", paddingBottom: "3rem",
       position: "relative", overflow: "hidden",
     }}>
       {/* Subtle background circle */}
       <div style={{
         position: "absolute", top: "-10%", right: "-5%",
         width: "45vw", height: "45vw", borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(49,94,251,0.06) 0%, transparent 70%)",
+        background: "radial-gradient(circle, rgba(49,94,251,0.07) 0%, transparent 70%)",
         pointerEvents: "none",
       }} />
 
@@ -197,7 +197,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
             {/* Bio */}
             <motion.p {...fadeUp(0.25)} style={{
               fontSize: "1.05rem", lineHeight: 1.75,
-              color: "#667085", maxWidth: "32rem",
+              color: "#475569", maxWidth: "32rem",
             }}>
               Building my skills in software development and cybersecurity to create
               secure, useful technology solutions for a better tomorrow.
@@ -227,7 +227,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
             {/* Location */}
             <motion.div {...fadeIn(0.4)} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
               <MapPin style={{ width: "0.9rem", height: "0.9rem", color: "#315EFB" }} />
-              <span style={{ fontSize: "0.875rem", color: "#667085" }}>
+              <span style={{ fontSize: "0.875rem", color: "#475569" }}>
                 Kumasi, Ghana &nbsp;·&nbsp; KNUST
               </span>
             </motion.div>
@@ -247,11 +247,11 @@ export default function Hero({ onOpenResume }: HeroProps) {
                     display: "flex", alignItems: "center", justifyContent: "center",
                     width: "2.25rem", height: "2.25rem",
                     background: "#FFFFFF", border: "1px solid #E5E7EB",
-                    borderRadius: "0.45rem", color: "#667085",
+                    borderRadius: "0.45rem", color: "#475569",
                     transition: "all 0.18s", textDecoration: "none",
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#315EFB"; (e.currentTarget as HTMLElement).style.borderColor = "#315EFB"; (e.currentTarget as HTMLElement).style.background = "#EEF2FF"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#667085"; (e.currentTarget as HTMLElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLElement).style.background = "#FFFFFF"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLElement).style.background = "#FFFFFF"; }}
                 >
                   <Icon style={{ width: "0.95rem", height: "0.95rem" }} />
                 </a>
@@ -267,14 +267,14 @@ export default function Hero({ onOpenResume }: HeroProps) {
             style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
           >
             <div style={{ position: "relative", width: "clamp(220px, 30vw, 320px)" }}>
-              {/* Photo */}
+              {/* Photo — white card, soft blue shadow */}
               <div style={{
                 borderRadius: "1.25rem",
                 overflow: "hidden",
-                boxShadow: "0 16px 48px rgba(23,26,33,0.1), 0 4px 14px rgba(23,26,33,0.06)",
-                background: "#E5E7EB",
+                background: "#FFFFFF",
                 width: "100%",
                 aspectRatio: "3/4",
+                boxShadow: "0 10px 40px rgba(49,94,251,0.12), 0 2px 10px rgba(49,94,251,0.06)",
               }}>
                 <img
                   src={headshotPhoto}
@@ -295,3 +295,4 @@ export default function Hero({ onOpenResume }: HeroProps) {
     </section>
   );
 }
+

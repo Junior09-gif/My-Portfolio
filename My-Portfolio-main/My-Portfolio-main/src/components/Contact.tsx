@@ -64,7 +64,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="section" style={{ background: "#F8F9FB", position: "relative", zIndex: 1 }}>
+    <section id="contact" className="section" style={{ background: "#F6F7FB", position: "relative", zIndex: 1 }}>
       <div className="container">
 
         <motion.div {...inView()} style={{ marginBottom: "3.5rem", maxWidth: "40rem" }}>
@@ -94,12 +94,12 @@ export default function Contact() {
                   <Icon style={{ width: "1rem", height: "1rem", color: "#315EFB" }} />
                 </div>
                 <div style={{ minWidth: 0 }}>
-                  <p style={{ fontSize: "0.65rem", fontFamily: "var(--font-mono)", color: "#9BA3AE", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.15rem" }}>{label}</p>
+                  <p style={{ fontSize: "0.65rem", fontFamily: "var(--font-mono)", color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.15rem" }}>{label}</p>
                   {href
                     ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer"
                       style={{ fontSize: "0.875rem", fontWeight: 500, color: "#315EFB", textDecoration: "none", wordBreak: "break-all" }}
                     >{value}</a>
-                    : <p style={{ fontSize: "0.875rem", fontWeight: 500, color: "#171A21" }}>{value}</p>
+                    : <p style={{ fontSize: "0.875rem", fontWeight: 500, color: "#0F172A" }}>{value}</p>
                   }
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function Contact() {
 
             <div style={{ padding: "1.25rem", background: "#EEF2FF", border: "1px solid #C7D7FD", borderRadius: "0.75rem" }}>
               <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#315EFB", marginBottom: "0.4rem" }}>Send a message</p>
-              <p style={{ fontSize: "0.82rem", color: "#667085", lineHeight: 1.6 }}>
+              <p style={{ fontSize: "0.82rem", color: "#475569", lineHeight: 1.6 }}>
                 Use the form or email me directly at{" "}
                 <a href={`mailto:${profile.email}`} style={{ color: "#315EFB", textDecoration: "none", fontWeight: 600 }}>
                   {profile.email}
@@ -118,7 +118,7 @@ export default function Contact() {
 
           {/* Form */}
           <motion.div {...inView(0.12)}>
-            <div style={{ background: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: "0.875rem", padding: "2rem", boxShadow: "0 2px 12px rgba(23,26,33,0.05)" }}>
+            <div style={{ background: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: "0.875rem", padding: "2rem", boxShadow: "0 10px 30px rgba(49,94,251,0.08)" }}>
               <AnimatePresence mode="wait">
                 {formState === "success" ? (
                   <motion.div key="success"
@@ -128,8 +128,8 @@ export default function Contact() {
                     <div style={{ width: "3rem", height: "3rem", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <CheckCircle style={{ width: "1.5rem", height: "1.5rem", color: "#16a34a" }} />
                     </div>
-                    <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#171A21" }}>Message sent!</h3>
-                    <p style={{ fontSize: "0.875rem", color: "#667085" }}>Thanks for reaching out. I'll get back to you as soon as possible.</p>
+                    <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "#0F172A" }}>Message sent!</h3>
+                    <p style={{ fontSize: "0.875rem", color: "#475569" }}>Thanks for reaching out. I'll get back to you as soon as possible.</p>
                     <button className="btn-secondary" onClick={() => setFormState("idle")}>Send another</button>
                   </motion.div>
                 ) : (
@@ -142,7 +142,7 @@ export default function Contact() {
                         { name: "email", label: "Email *", type: "email", placeholder: "your@email.com" },
                       ].map(({ name, label, type, placeholder }) => (
                         <motion.div key={name} variants={shakeVariants} animate={errors[name] ? "shake" : "idle"}>
-                          <label style={{ display: "block", fontSize: "0.78rem", fontWeight: 600, color: "#374151", marginBottom: "0.4rem" }}>{label}</label>
+                          <label style={{ display: "block", fontSize: "0.78rem", fontWeight: 600, color: "#0F172A", marginBottom: "0.4rem" }}>{label}</label>
                           <input name={name} type={type} value={form[name as keyof typeof form]}
                             onChange={handleChange} placeholder={placeholder} className="input-field"
                             aria-invalid={!!errors[name]}
@@ -153,12 +153,12 @@ export default function Contact() {
                       ))}
                     </div>
                     <div>
-                      <label style={{ display: "block", fontSize: "0.78rem", fontWeight: 600, color: "#374151", marginBottom: "0.4rem" }}>Subject</label>
+                      <label style={{ display: "block", fontSize: "0.78rem", fontWeight: 600, color: "#0F172A", marginBottom: "0.4rem" }}>Subject</label>
                       <input name="subject" type="text" value={form.subject} onChange={handleChange}
                         placeholder="e.g. Internship enquiry" className="input-field" />
                     </div>
                     <motion.div variants={shakeVariants} animate={errors.message ? "shake" : "idle"}>
-                      <label style={{ display: "block", fontSize: "0.78rem", fontWeight: 600, color: "#374151", marginBottom: "0.4rem" }}>Message *</label>
+                      <label style={{ display: "block", fontSize: "0.78rem", fontWeight: 600, color: "#0F172A", marginBottom: "0.4rem" }}>Message *</label>
                       <textarea name="message" value={form.message} onChange={handleChange}
                         placeholder="Tell me about your project or opportunity..." rows={5}
                         className="input-field" style={{ resize: "none", borderColor: errors.message ? "#ef4444" : undefined }}
@@ -188,3 +188,5 @@ export default function Contact() {
     </section>
   );
 }
+
+

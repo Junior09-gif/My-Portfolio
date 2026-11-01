@@ -54,7 +54,7 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-      background: scrolled ? "rgba(248,249,251,0.95)" : "rgba(248,249,251,0.8)",
+      background: scrolled ? "rgba(246,247,251,0.97)" : "rgba(246,247,251,0.85)",
       backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
       borderBottom: `1px solid ${scrolled ? "#E5E7EB" : "transparent"}`,
       transition: "all 0.3s ease",
@@ -63,7 +63,7 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
 
         {/* Logo */}
         <button onClick={() => go("#home")} style={{ background: "none", border: "none", cursor: "pointer" }}>
-          <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#171A21", letterSpacing: "-0.02em" }}>
+          <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#0F172A", letterSpacing: "-0.02em" }}>
             Edwin <span style={{ color: "#315EFB" }}>Boadu</span>
           </span>
         </button>
@@ -77,12 +77,12 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
                 <button key={label} onClick={() => go(href)} style={{
                   padding: "0.4rem 0.9rem", borderRadius: "0.45rem",
                   fontSize: "0.875rem", fontWeight: isActive ? 600 : 400,
-                  color: isActive ? "#315EFB" : "#667085",
+                  color: isActive ? "#315EFB" : "#475569",
                   background: isActive ? "#EEF2FF" : "transparent",
                   border: "none", cursor: "pointer", transition: "all 0.15s",
                 }}
-                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = "#171A21"; }}
-                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = "#667085"; }}
+                  onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = "#0F172A"; }}
+                  onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = "#475569"; }}
                 >{label}</button>
               );
             })}
@@ -107,7 +107,7 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
             <button onClick={() => setOpen(!open)} style={{
               padding: "0.4rem", background: "transparent",
               border: "1px solid #E5E7EB", borderRadius: "0.4rem",
-              cursor: "pointer", color: "#374151",
+              cursor: "pointer", color: "#0F172A",
               display: "flex", alignItems: "center",
             }}>
               {open ? <X style={{ width: "1.1rem", height: "1.1rem" }} /> : <Menu style={{ width: "1.1rem", height: "1.1rem" }} />}
@@ -129,7 +129,7 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
                 <button key={label} onClick={() => go(href)} style={{
                   textAlign: "left", padding: "0.65rem 0.85rem", borderRadius: "0.45rem",
                   fontSize: "0.9rem", fontWeight: active === href ? 600 : 400,
-                  color: active === href ? "#315EFB" : "#374151",
+                  color: active === href ? "#315EFB" : "#0F172A",
                   background: active === href ? "#EEF2FF" : "transparent",
                   border: "none", cursor: "pointer",
                 }}>{label}</button>
@@ -145,3 +145,4 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
     </nav>
   );
 }
+
