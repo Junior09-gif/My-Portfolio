@@ -99,7 +99,7 @@ const LINE2 = "Junior Edwin";
 const TOTAL = LINE1.length + LINE2.length;  // 22 chars
 const STAGGER_MS = 110;
 const DURATION_MS = 350;
-const REFRESH_MS = 85_000; // 1 minute 25 seconds
+const REFRESH_MS = 10_000; // 10 seconds
 
 function NameReveal() {
   // visibleCount: how many letters are currently revealed (0 = hidden, TOTAL = all shown)
