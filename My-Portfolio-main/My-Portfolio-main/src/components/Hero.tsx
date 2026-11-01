@@ -267,21 +267,8 @@ export default function Hero({ onOpenResume }: HeroProps) {
             style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
           >
             <div style={{ position: "relative", width: "clamp(220px, 30vw, 320px)" }}>
-
-              {/* Dot grid — top-left accent */}
-              <div style={{
-                position: "absolute", top: "-0.75rem", left: "-0.75rem",
-                width: "5rem", height: "5rem",
-                backgroundImage: "radial-gradient(circle, #315EFB 1.5px, transparent 1.5px)",
-                backgroundSize: "11px 11px",
-                opacity: 0.2,
-                zIndex: 0,
-              }} />
-
               {/* Photo */}
               <div style={{
-                position: "relative",
-                zIndex: 1,
                 borderRadius: "1.25rem",
                 overflow: "hidden",
                 boxShadow: "0 16px 48px rgba(23,26,33,0.1), 0 4px 14px rgba(23,26,33,0.06)",
