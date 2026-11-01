@@ -266,26 +266,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
             style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
           >
-            {/* Outer wrapper — padding creates room for the offset blue box */}
-            <div style={{
-              position: "relative",
-              width: "clamp(220px, 30vw, 320px)",
-              paddingRight: "1.5rem",
-              paddingBottom: "1.5rem",
-            }}>
-
-              {/* Blue outlined box — offset bottom-right, same border-radius as photo */}
-              <div style={{
-                position: "absolute",
-                bottom: 0,
-                right: 0,
-                width: "calc(100% - 1.5rem)",
-                height: "calc(100% - 1.5rem)",
-                border: "2px solid #93C5FD",
-                borderRadius: "1.25rem",
-                opacity: 0.6,
-                zIndex: 0,
-              }} />
+            <div style={{ position: "relative", width: "clamp(220px, 30vw, 320px)" }}>
 
               {/* Dot grid — top-left accent */}
               <div style={{
@@ -297,7 +278,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
                 zIndex: 0,
               }} />
 
-              {/* Photo container — same border-radius as the blue box */}
+              {/* Photo */}
               <div style={{
                 position: "relative",
                 zIndex: 1,
