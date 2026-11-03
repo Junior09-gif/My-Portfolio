@@ -54,9 +54,9 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-      background: scrolled ? "rgba(246,247,251,0.97)" : "rgba(246,247,251,0.85)",
+      background: scrolled ? "rgba(199,227,225,0.92)" : "rgba(199,227,225,0.80)",
       backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
-      borderBottom: `1px solid ${scrolled ? "#E5E7EB" : "transparent"}`,
+      borderBottom: `1px solid ${scrolled ? "rgba(255,255,255,0.6)" : "transparent"}`,
       transition: "all 0.3s ease",
     }}>
       <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "3.75rem" }}>
@@ -106,7 +106,7 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
           {isMobile && (
             <button onClick={() => setOpen(!open)} style={{
               padding: "0.4rem", background: "transparent",
-              border: "1px solid #E5E7EB", borderRadius: "0.4rem",
+              border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.4rem",
               cursor: "pointer", color: "#0F172A",
               display: "flex", alignItems: "center",
             }}>
@@ -122,7 +122,7 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
           <motion.div key="drawer"
             initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            style={{ background: "#FFFFFF", borderTop: "1px solid #E5E7EB", boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
+            style={{ background: "rgba(255,255,255,0.75)", borderTop: "1px solid rgba(255,255,255,0.5)", boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
           >
             <div style={{ padding: "0.75rem 1.5rem 1rem", display: "flex", flexDirection: "column", gap: "0.15rem" }}>
               {NAV.map(({ label, href }) => (
@@ -134,7 +134,7 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
                   border: "none", cursor: "pointer",
                 }}>{label}</button>
               ))}
-              <div style={{ height: "1px", background: "#E5E7EB", margin: "0.5rem 0" }} />
+              <div style={{ height: "1px", background: "rgba(255,255,255,0.6)", margin: "0.5rem 0" }} />
               <button onClick={onOpenResume} className="btn-primary" style={{ justifyContent: "center" }}>
                 View CV
               </button>
@@ -145,4 +145,6 @@ export default function Navbar({ onOpenResume }: NavbarProps) {
     </nav>
   );
 }
+
+
 

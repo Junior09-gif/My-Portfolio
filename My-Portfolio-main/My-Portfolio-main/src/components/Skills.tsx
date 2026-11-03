@@ -38,7 +38,7 @@ const SKILLS = [
 
 export default function Skills() {
   return (
-    <section id="skills" className="section" style={{ background: "#F6F7FB", position: "relative", zIndex: 1 }}>
+    <section id="skills" className="section" style={{ background: "transparent", position: "relative", zIndex: 1 }}>
       <div className="container">
 
         <motion.div {...inView()} style={{ marginBottom: "3.5rem", maxWidth: "40rem" }}>
@@ -56,8 +56,8 @@ export default function Skills() {
               whileHover={{ y: -4, boxShadow: "0 10px 30px rgba(49,94,251,0.1)", borderColor: "#D1D5DB", transition: { duration: 0.2 } }}
               style={{
                 padding: "1.5rem",
-                background: "#FFFFFF",
-                border: "1px solid #E5E7EB",
+                background: "rgba(255,255,255,0.75)",
+                border: "1px solid rgba(255,255,255,0.7)",
                 borderRadius: "0.85rem",
               }}
             >
@@ -79,5 +79,8 @@ export default function Skills() {
     </section>
   );
 }
+
+
+
 
 

@@ -64,7 +64,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="section" style={{ background: "#F6F7FB", position: "relative", zIndex: 1 }}>
+    <section id="contact" className="section" style={{ background: "transparent", position: "relative", zIndex: 1 }}>
       <div className="container">
 
         <motion.div {...inView()} style={{ marginBottom: "3.5rem", maxWidth: "40rem" }}>
@@ -88,7 +88,7 @@ export default function Contact() {
               <div key={label} style={{
                 display: "flex", alignItems: "center", gap: "0.9rem",
                 padding: "1rem 1.1rem",
-                background: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: "0.75rem",
+                background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.75rem",
               }}>
                 <div style={{ padding: "0.5rem", background: "#EEF2FF", borderRadius: "0.5rem", flexShrink: 0 }}>
                   <Icon style={{ width: "1rem", height: "1rem", color: "#315EFB" }} />
@@ -118,7 +118,7 @@ export default function Contact() {
 
           {/* Form */}
           <motion.div {...inView(0.12)}>
-            <div style={{ background: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: "0.875rem", padding: "2rem", boxShadow: "0 10px 30px rgba(49,94,251,0.08)" }}>
+            <div style={{ background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.875rem", padding: "2rem", boxShadow: "0 10px 30px rgba(49,94,251,0.08)" }}>
               <AnimatePresence mode="wait">
                 {formState === "success" ? (
                   <motion.div key="success"
@@ -188,5 +188,8 @@ export default function Contact() {
     </section>
   );
 }
+
+
+
 
 

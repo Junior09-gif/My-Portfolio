@@ -17,7 +17,7 @@ const CERT_STATUS: Record<string, { color: string; bg: string; label: string }> 
 
 export default function EducationSection() {
   return (
-    <section id="education" className="section" style={{ background: "#F6F7FB", position: "relative", zIndex: 1 }}>
+    <section id="education" className="section" style={{ background: "transparent", position: "relative", zIndex: 1 }}>
       <div className="container">
         <motion.div {...inView()} style={{ marginBottom: "3rem" }}>
           <p className="label" style={{ marginBottom: "0.6rem" }}>Education</p>
@@ -32,7 +32,7 @@ export default function EducationSection() {
               <GraduationCap style={{ width: "1rem", height: "1rem", color: "#315EFB" }} />
               <h3 style={{ fontSize: "0.95rem", fontWeight: 700, color: "#0F172A" }}>Academic Background</h3>
             </div>
-            <div style={{ background: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: "0.875rem", overflow: "hidden" }}>
+            <div style={{ background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.875rem", overflow: "hidden" }}>
               <div style={{ height: "4rem", background: "linear-gradient(135deg, #EEF2FF 0%, #DBEAFE 100%)", display: "flex", alignItems: "center", padding: "0 1.5rem" }}>
                 <span style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono)", color: "#315EFB", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>
                   {education.period}
@@ -42,7 +42,7 @@ export default function EducationSection() {
                 <h4 style={{ fontSize: "1rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.3rem" }}>{education.degree}</h4>
                 <p style={{ fontSize: "0.875rem", color: "#315EFB", fontWeight: 500, marginBottom: "0.15rem" }}>{education.institution}</p>
                 <p style={{ fontSize: "0.8rem", color: "#475569", marginBottom: "1.1rem" }}>{education.location}</p>
-                <div style={{ height: "1px", background: "#E3E7F0", marginBottom: "1.1rem" }} />
+                <div style={{ height: "1px", background: "rgba(255,255,255,0.6)", marginBottom: "1.1rem" }} />
                 <ul style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                   {education.highlights.map((h, i) => (
                     <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: "0.55rem" }}>
@@ -68,7 +68,7 @@ export default function EducationSection() {
                   <motion.div key={cert.id}
                     {...inView(0.14 + i * 0.06)}
                     whileHover={{ y: -2, borderColor: "#D1D5DB", transition: { duration: 0.2 } }}
-                    style={{ padding: "1rem 1.15rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", background: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: "0.75rem" }}
+                    style={{ padding: "1rem 1.15rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.75rem" }}
                   >
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.2rem" }}>
@@ -106,5 +106,8 @@ export default function EducationSection() {
     </section>
   );
 }
+
+
+
 
 

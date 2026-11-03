@@ -35,9 +35,9 @@ export default function Footer({ onOpenResume }: FooterProps) {
               ].map(({ icon: Icon, href, label }) => (
                 <a key={label} href={href} target={href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer" aria-label={label}
-                  style={{ padding: "0.4rem", background: "rgba(255,255,255,0.05)", color: "#64748B", border: "1px solid #E5E7EB", borderRadius: "0.4rem", transition: "all 0.18s", display: "flex" }}
+                  style={{ padding: "0.4rem", background: "rgba(255,255,255,0.05)", color: "#64748B", border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.4rem", transition: "all 0.18s", display: "flex" }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#315EFB"; (e.currentTarget as HTMLElement).style.borderColor = "#315EFB"; (e.currentTarget as HTMLElement).style.background = "#EEF2FF"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "#E3E7F0"; (e.currentTarget as HTMLElement).style.background = "#F6F7FB"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.6)"; (e.currentTarget as HTMLElement).style.background = "#F6F7FB"; }}
                 >
                   <Icon style={{ width: "0.875rem", height: "0.875rem" }} />
                 </a>
@@ -74,7 +74,7 @@ export default function Footer({ onOpenResume }: FooterProps) {
         </div>
 
         {/* Bottom bar */}
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", paddingTop: "1.5rem", borderTop: "1px solid #E5E7EB" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", paddingTop: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.5)" }}>
           <p style={{ fontSize: "0.8rem", color: "#64748B" }}>
             © {new Date().getFullYear()} Edwin Boadu. All rights reserved.
           </p>
@@ -86,5 +86,7 @@ export default function Footer({ onOpenResume }: FooterProps) {
     </footer>
   );
 }
+
+
 
 

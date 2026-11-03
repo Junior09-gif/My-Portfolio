@@ -65,8 +65,8 @@ export default function About() {
                 { icon: Code2, label: "Focus", value: "Learning & Building" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} style={{
-                  padding: "0.9rem 1rem", background: "#F6F7FB",
-                  border: "1px solid #E5E7EB", borderRadius: "0.65rem",
+                  padding: "0.9rem 1rem", background: "transparent",
+                  border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.65rem",
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.3rem" }}>
                     <Icon style={{ width: "0.85rem", height: "0.85rem", color: "#315EFB" }} />
@@ -91,7 +91,7 @@ export default function About() {
                 {LEARNING.map(item => (
                   <span key={item} style={{
                     padding: "0.28rem 0.75rem",
-                    background: "#FFFFFF",
+                    background: "rgba(255,255,255,0.75)",
                     border: "1px solid #C7D7FD",
                     borderRadius: "999px",
                     fontSize: "0.78rem", fontWeight: 500, color: "#315EFB",
@@ -109,7 +109,7 @@ export default function About() {
                 whileHover={{ y: -3, borderColor: "#315EFB", transition: { duration: 0.2 } }}
                 style={{
                   padding: "1.15rem 1.25rem", display: "flex", gap: "1rem", alignItems: "flex-start",
-                  background: "#FFFFFF", border: "1px solid #E5E7EB", borderRadius: "0.75rem",
+                  background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.75rem",
                 }}
               >
                 <div style={{ padding: "0.5rem", background: "#EEF2FF", borderRadius: "0.45rem", flexShrink: 0 }}>
@@ -127,5 +127,8 @@ export default function About() {
     </section>
   );
 }
+
+
+
 
 

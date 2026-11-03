@@ -27,7 +27,7 @@ export default function ExperienceSection() {
               <div className="timeline-dot" />
               <div style={{
                 padding: "1.35rem 1.5rem",
-                background: "#FFFFFF", border: "1px solid #E5E7EB",
+                background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)",
                 borderRadius: "0.75rem",
               }}>
                 <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", justifyContent: "space-between", gap: "0.5rem", marginBottom: "0.85rem" }}>
@@ -36,7 +36,7 @@ export default function ExperienceSection() {
                     <p style={{ fontSize: "0.85rem", color: "#315EFB", fontWeight: 500 }}>{exp.org}</p>
                   </div>
                   <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                    <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "0.18rem 0.65rem", background: "#F3F4F6", border: "1px solid #E5E7EB", borderRadius: "0.35rem", color: "#0F172A", fontFamily: "var(--font-mono)" }}>
+                    <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "0.18rem 0.65rem", background: "#F3F4F6", border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.35rem", color: "#0F172A", fontFamily: "var(--font-mono)" }}>
                       {exp.period}
                     </span>
                     <span style={{ fontSize: "0.65rem", color: "#315EFB", fontFamily: "var(--font-mono)", letterSpacing: "0.06em", textTransform: "uppercase", padding: "0.18rem 0.65rem", background: "#EEF2FF", borderRadius: "0.35rem" }}>
@@ -60,5 +60,8 @@ export default function ExperienceSection() {
     </section>
   );
 }
+
+
+
 
 

@@ -217,7 +217,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
   return (
     <section id="home" style={{
       minHeight: "100vh", display: "flex", alignItems: "center",
-      background: "#F6F7FB", paddingTop: "5rem", paddingBottom: "3rem",
+      background: "transparent", paddingTop: "5rem", paddingBottom: "3rem",
       position: "relative", overflow: "hidden",
     }}>
       {/* Subtle background circle */}
@@ -331,12 +331,12 @@ export default function Hero({ onOpenResume }: HeroProps) {
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "center",
                     width: "2.25rem", height: "2.25rem",
-                    background: "#FFFFFF", border: "1px solid #E5E7EB",
+                    background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)",
                     borderRadius: "0.45rem", color: "#475569",
                     transition: "all 0.18s", textDecoration: "none",
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#315EFB"; (e.currentTarget as HTMLElement).style.borderColor = "#315EFB"; (e.currentTarget as HTMLElement).style.background = "#EEF2FF"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "#E5E7EB"; (e.currentTarget as HTMLElement).style.background = "#FFFFFF"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.6)"; (e.currentTarget as HTMLElement).style.background = "#FFFFFF"; }}
                 >
                   <Icon style={{ width: "0.95rem", height: "0.95rem" }} />
                 </a>
@@ -356,7 +356,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
               <div style={{
                 borderRadius: "1.25rem",
                 overflow: "hidden",
-                background: "#FFFFFF",
+                background: "rgba(255,255,255,0.75)",
                 width: "100%",
                 aspectRatio: "3/4",
                 boxShadow: "0 10px 40px rgba(49,94,251,0.12), 0 2px 10px rgba(49,94,251,0.06)",
@@ -380,4 +380,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
     </section>
   );
 }
+
+
+
 
