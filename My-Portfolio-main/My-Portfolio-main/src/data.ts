@@ -4,9 +4,9 @@ export const profile = {
   alias: "eii.jnr",
   title: "Information Technology Student | Aspiring Cybersecurity Professional | Developer",
   location: "KNUST Campus, Kumasi, Ghana",
-  email: "boaduedwin5543@gmail.com",
+  email: "kingslayer5543@gmail.com",
   github: "https://github.com/Junior09-gif",
-  linkedin: "https://linkedin.com/in/boadu-kofi-junior-edwin",
+  linkedin: "https://www.linkedin.com/in/edwin-kofi-junior-boadu-4849b634b",
   cvUrl: "#", // TODO: Replace with your Google Drive PDF link e.g. "https://drive.google.com/uc?export=download&id=YOUR_FILE_ID"
   bio: [
     "I'm Boadu Kofi Junior Edwin — known online as eii.jnr — an Information Technology student at the Kwame Nkrumah University of Science and Technology (KNUST) in Kumasi, Ghana. My fascination with technology started in childhood, tinkering with computers and exploring how software makes hardware come to life.",

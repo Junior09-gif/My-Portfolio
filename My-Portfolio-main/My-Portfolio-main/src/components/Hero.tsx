@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { ArrowRight, Mail, Github, Linkedin, MapPin } from "lucide-react";
 import { profile } from "../data";
 import headshotPhoto from "../assets/images/edwin_headshot.jpg";
@@ -23,6 +23,7 @@ const fadeIn = (delay = 0) => ({
   transition: { duration: 0.5, ease: "easeOut", delay },
 });
 
+// ── Rotating role typewriter ───────────────────────────────────────────────────
 const ROLES = [
   "Information Technology Student",
   "Aspiring Cybersecurity Professional",
@@ -37,29 +38,24 @@ function RotatingRole() {
   const [typing, setTyping] = useState(true);
   const [cursor, setCursor] = useState(true);
 
-  // Blinking cursor
   useEffect(() => {
     const t = setInterval(() => setCursor(c => !c), 530);
     return () => clearInterval(t);
   }, []);
 
-  // Typewriter effect
   useEffect(() => {
     const current = ROLES[index];
     let timeout: ReturnType<typeof setTimeout>;
-
     if (typing) {
       if (displayed.length < current.length) {
         timeout = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 55);
       } else {
-        // Fully typed — pause then start erasing
         timeout = setTimeout(() => setTyping(false), 2200);
       }
     } else {
       if (displayed.length > 0) {
         timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 30);
       } else {
-        // Fully erased — move to next role
         setIndex(i => (i + 1) % ROLES.length);
         setTyping(true);
       }
@@ -87,113 +83,76 @@ function RotatingRole() {
   );
 }
 
-// ── NameReveal ────────────────────────────────────────────────────────────────
-// Letter-by-letter reveal for "Boadu Kofi Junior Edwin"
-// - 110ms stagger, 0.35s per letter, 12px slide-up
-// - Auto-refreshes every 3 minutes (timer starts AFTER animation finishes)
-// - Pauses while tab is hidden (visibilitychange)
-// - prefers-reduced-motion: shows full name instantly, no refresh
-
+// ── NameReveal — typewriter with blinking cursor ───────────────────────────────
+// Types "Boadu Kofi" (cyan) then "Junior Edwin" (white) one character at a time
+// Cursor moves with the typing position
+// Pauses 5 seconds after fully typed, then erases and retypes
 const LINE1 = "Boadu Kofi";
 const LINE2 = "Junior Edwin";
-const TOTAL = LINE1.length + LINE2.length;  // 22 chars
-const STAGGER_MS = 110;
-const DURATION_MS = 350;
-const REFRESH_MS = 5_000; // 5 seconds
+const FULL = LINE1 + "\n" + LINE2; // \n = line break marker
+const TYPE_MS = 90;   // ms per character typed
+const ERASE_MS = 35;   // ms per character erased
+const PAUSE_MS = 5000; // pause after fully typed
 
 function NameReveal() {
-  // visibleCount: how many letters are currently revealed (0 = hidden, TOTAL = all shown)
-  const [visibleCount, setVisibleCount] = useState(0);
-  const [key, setKey] = useState(0); // increment to force re-mount & restart
+  const [count, setCount] = useState(0); // how many chars of FULL are typed
+  const [erasing, setErasing] = useState(false);
+  const [cursor, setCursor] = useState(true);
 
   const prefersReduced =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Blinking cursor
   useEffect(() => {
-    if (prefersReduced) { setVisibleCount(TOTAL); return; }
+    if (prefersReduced) return;
+    const t = setInterval(() => setCursor(c => !c), 530);
+    return () => clearInterval(t);
+  }, [prefersReduced]);
 
-    // --- Animate letters one by one ---
-    const timers: ReturnType<typeof setTimeout>[] = [];
+  // Type / erase loop
+  useEffect(() => {
+    if (prefersReduced) { setCount(FULL.length); return; }
+    let t: ReturnType<typeof setTimeout>;
 
-    for (let i = 0; i < TOTAL; i++) {
-      timers.push(setTimeout(() => setVisibleCount(i + 1), i * STAGGER_MS));
-    }
-
-    // --- Schedule refresh 3 min AFTER last letter finishes ---
-    const animationFinishes = (TOTAL - 1) * STAGGER_MS + DURATION_MS;
-    let refreshTimer: ReturnType<typeof setTimeout> | null = null;
-    let pausedAt: number | null = null;
-    let remaining = REFRESH_MS;
-
-    const scheduleRefresh = (delay: number) => {
-      refreshTimer = setTimeout(() => {
-        setVisibleCount(0);     // hide all letters
-        setKey(k => k + 1);    // will trigger re-mount of children via key
-      }, delay);
-    };
-
-    const startRefreshTimer = () => {
-      const afterAnim = setTimeout(() => {
-        scheduleRefresh(remaining);
-      }, animationFinishes);
-      timers.push(afterAnim);
-    };
-
-    // Visibility pause/resume
-    const onVisChange = () => {
-      if (document.hidden) {
-        // Tab hidden — record how much time is left
-        if (refreshTimer) {
-          clearTimeout(refreshTimer);
-          pausedAt = Date.now();
-        }
+    if (!erasing) {
+      if (count < FULL.length) {
+        t = setTimeout(() => setCount(c => c + 1), TYPE_MS);
       } else {
-        // Tab visible again — resume with remaining time
-        if (pausedAt !== null) {
-          remaining = Math.max(0, remaining - (Date.now() - pausedAt));
-          pausedAt = null;
-          scheduleRefresh(remaining);
-        }
+        // Fully typed — wait then erase
+        t = setTimeout(() => setErasing(true), PAUSE_MS);
       }
-    };
+    } else {
+      if (count > 0) {
+        t = setTimeout(() => setCount(c => c - 1), ERASE_MS);
+      } else {
+        // Fully erased — start typing again
+        setErasing(false);
+      }
+    }
+    return () => clearTimeout(t);
+  }, [count, erasing, prefersReduced]);
 
-    startRefreshTimer();
-    document.addEventListener("visibilitychange", onVisChange);
+  // Build visible text from count
+  const visible = FULL.slice(0, count);
+  const parts = visible.split("\n");
+  const line1v = parts[0] ?? "";
+  const line2v = parts[1] ?? "";
 
-    return () => {
-      timers.forEach(clearTimeout);
-      if (refreshTimer) clearTimeout(refreshTimer);
-      document.removeEventListener("visibilitychange", onVisChange);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
+  // Where is the cursor? Line 1 if we haven't passed the \n yet
+  const onLine1 = count <= LINE1.length;
 
-  // Render
-  const renderLine = (text: string, offset: number, color: string) => (
-    <span style={{ display: "block" }}>
-      {text.split("").map((char, i) => {
-        const globalIdx = offset + i;
-        const revealed = prefersReduced || visibleCount > globalIdx;
-        return (
-          <span
-            key={i}
-            style={{
-              display: "inline-block",
-              color,
-              whiteSpace: "pre",
-              opacity: revealed ? 1 : 0,
-              transform: revealed ? "translateY(0)" : "translateY(12px)",
-              transition: revealed
-                ? `opacity ${DURATION_MS}ms ease-out, transform ${DURATION_MS}ms ease-out`
-                : "none",
-            }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </span>
-        );
-      })}
-    </span>
+  const Cursor = ({ color }: { color: string }) => (
+    <span style={{
+      display: "inline-block",
+      width: "2.5px", height: "0.9em",
+      background: color,
+      marginLeft: "1px",
+      verticalAlign: "text-bottom",
+      borderRadius: "1px",
+      opacity: cursor ? 1 : 0,
+      transition: "opacity 0.1s",
+    }} />
   );
 
   return (
@@ -203,10 +162,20 @@ function NameReveal() {
         fontSize: "clamp(2.4rem, 5.5vw, 4rem)",
         fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1.15,
         marginBottom: "1.5rem",
+        fontFamily: "var(--font-sans)",
       }}
     >
-      {renderLine(LINE1, 0, "#22d3ee")}
-      {renderLine(LINE2, LINE1.length, "#f1f5f9")}
+      {/* Line 1 — cyan */}
+      <span style={{ display: "block", color: "#22d3ee", minHeight: "1.15em" }}>
+        {line1v || "\u00A0"}
+        {onLine1 && <Cursor color="#22d3ee" />}
+      </span>
+
+      {/* Line 2 — white */}
+      <span style={{ display: "block", color: "#f1f5f9", minHeight: "1.15em" }}>
+        {line2v || (onLine1 ? "" : "\u00A0")}
+        {!onLine1 && <Cursor color="#f1f5f9" />}
+      </span>
     </h1>
   );
 }
@@ -238,18 +207,14 @@ export default function Hero({ onOpenResume }: HeroProps) {
           {/* ── Left: Text ── */}
           <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
 
-            {/* ── Hero heading card — dark style from screenshot ── */}
             <motion.div {...fadeUp(0.08)}>
-              {/* Dark card wrapping the heading */}
               <div style={{
                 background: "#0f172a",
                 borderRadius: "1.25rem",
                 padding: "2rem 2.2rem 1.75rem",
-                width: "100%",
-                maxWidth: "100%",
-                overflow: "hidden",
+                width: "100%", maxWidth: "100%", overflow: "hidden",
               }}>
-                {/* Line 1: Hi, I'm — static */}
+                {/* Hi, I'm */}
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -265,10 +230,10 @@ export default function Hero({ onOpenResume }: HeroProps) {
                   Hi, I'm
                 </motion.p>
 
-                {/* Name: letter-by-letter reveal with 3-min auto-refresh */}
+                {/* Typewriter name */}
                 <NameReveal />
 
-                {/* Animated rotating role terminal pill */}
+                {/* Rotating role pill */}
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -292,11 +257,11 @@ export default function Hero({ onOpenResume }: HeroProps) {
             <motion.div {...fadeUp(0.32)} style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
               <motion.button
                 className="btn-primary"
-                onClick={() => scroll("#projects")}
+                onClick={() => scroll("#about")}
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.15 }}
               >
-                View My Projects
+                View My Work
                 <ArrowRight style={{ width: "0.9rem", height: "0.9rem" }} />
               </motion.button>
               <motion.button
@@ -336,7 +301,7 @@ export default function Hero({ onOpenResume }: HeroProps) {
                     transition: "all 0.18s", textDecoration: "none",
                   }}
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#315EFB"; (e.currentTarget as HTMLElement).style.borderColor = "#315EFB"; (e.currentTarget as HTMLElement).style.background = "#EEF2FF"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.6)"; (e.currentTarget as HTMLElement).style.background = "#FFFFFF"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.6)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.75)"; }}
                 >
                   <Icon style={{ width: "0.95rem", height: "0.95rem" }} />
                 </a>
@@ -352,26 +317,15 @@ export default function Hero({ onOpenResume }: HeroProps) {
             style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
           >
             <div style={{ position: "relative", width: "clamp(220px, 30vw, 320px)" }}>
-              {/* Photo — white card, soft blue shadow */}
               <div style={{
-                borderRadius: "1.25rem",
-                overflow: "hidden",
-                background: "rgba(255,255,255,0.75)",
-                width: "100%",
-                aspectRatio: "3/4",
+                borderRadius: "1.25rem", overflow: "hidden",
+                background: "rgba(255,255,255,0.75)", width: "100%", aspectRatio: "3/4",
                 boxShadow: "0 10px 40px rgba(49,94,251,0.12), 0 2px 10px rgba(49,94,251,0.06)",
               }}>
-                <img
-                  src={headshotPhoto}
-                  alt="Edwin Boadu"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    objectPosition: "center top",
-                    display: "block",
-                  }}
-                />
+                <img src={headshotPhoto} alt="Edwin Boadu" style={{
+                  width: "100%", height: "100%",
+                  objectFit: "cover", objectPosition: "center top", display: "block",
+                }} />
               </div>
             </div>
           </motion.div>
@@ -380,7 +334,3 @@ export default function Hero({ onOpenResume }: HeroProps) {
     </section>
   );
 }
-
-
-
-

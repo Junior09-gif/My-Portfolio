@@ -17,11 +17,12 @@ const shakeVariants = {
   shake: { x: [0, -6, 6, -4, 4, -2, 2, 0], transition: { duration: 0.4 } },
 };
 
-const FORMSPREE_URL = "https://formspree.io/f/xzzbnwvj";
+const FORMSPREE_URL = "https://formspree.io/f/mwlowebl";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errorMessage, setErrorMessage] = useState("");
   const [formState, setFormState] = useState<FormState>("idle");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -40,6 +41,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs); setFormState("error");
@@ -50,16 +52,28 @@ export default function Contact() {
       const res = await fetch(FORMSPREE_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ name: form.name, email: form.email, subject: form.subject || "Portfolio Contact", message: form.message }),
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          subject: form.subject || `Portfolio Message from ${form.name}`,
+          message: form.message,
+        }),
       });
       if (res.ok) {
         setFormState("success");
         setForm({ name: "", email: "", subject: "", message: "" });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       } else {
-        setFormState("error"); setTimeout(() => setFormState("idle"), 3000);
+        setFormState("error");
+        setErrorMessage("Failed to send message. Please try again or email directly.");
+        setTimeout(() => setFormState("idle"), 4000);
       }
     } catch {
-      setFormState("error"); setTimeout(() => setFormState("idle"), 3000);
+      setFormState("error");
+      setErrorMessage("Network error. Please try again or email directly.");
+      setTimeout(() => setFormState("idle"), 4000);
     }
   };
 
@@ -83,7 +97,7 @@ export default function Contact() {
               { icon: Mail, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
               { icon: MapPin, label: "Location", value: "KNUST Campus, Kumasi, Ghana", href: null },
               { icon: Github, label: "GitHub", value: "github.com/Junior09-gif", href: profile.github },
-              { icon: Linkedin, label: "LinkedIn", value: "boadu-kofi-junior-edwin", href: profile.linkedin },
+              { icon: Linkedin, label: "LinkedIn", value: "edwin-kofi-junior-boadu-4849b634b", href: profile.linkedin },
             ].map(({ icon: Icon, label, value, href }) => (
               <div key={label} style={{
                 display: "flex", alignItems: "center", gap: "0.9rem",
@@ -136,6 +150,11 @@ export default function Contact() {
                   <motion.form key="form" onSubmit={handleSubmit} noValidate
                     style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}
                   >
+                    {errorMessage && (
+                      <div style={{ padding: "0.6rem 0.8rem", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "0.5rem", color: "#b91c1c", fontSize: "0.8rem", textAlign: "center" }}>
+                        {errorMessage}
+                      </div>
+                    )}
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.85rem" }}>
                       {[
                         { name: "name", label: "Name *", type: "text", placeholder: "Your name" },
