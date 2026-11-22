@@ -9,9 +9,9 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/edwin-kofi-junior-boadu-4849b634b",
   cvUrl: "#", // TODO: Replace with your Google Drive PDF link e.g. "https://drive.google.com/uc?export=download&id=YOUR_FILE_ID"
   bio: [
-    "I'm Boadu Kofi Junior Edwin — known online as eii.jnr — an Information Technology student at the Kwame Nkrumah University of Science and Technology (KNUST) in Kumasi, Ghana. My fascination with technology started in childhood, tinkering with computers and exploring how software makes hardware come to life.",
-    "Today that curiosity drives me to pursue a career at the intersection of software development, network engineering, and cybersecurity. I believe that building secure, resilient, and well-engineered systems is one of the most meaningful contributions a technologist can make — especially in Africa's rapidly transforming digital economy.",
-    "I am currently sharpening my technical foundation through hands-on lab coursework, personal coding projects, and self-directed study in networking protocols, ethical hacking, Linux systems, and modern full-stack development.",
+    "I'm Boadu Kofi Junior Edwin, an Information Technology student at the Kwame Nkrumah University of Science and Technology (KNUST) in Kumasi, Ghana. My interest in technology began with a childhood curiosity about computers, how they work, how software is developed, and how networks connect people.",
+    "I'm currently building a strong foundation in software development, networking, and cybersecurity through coursework, personal projects, and independent learning. My goal is to become a well rounded IT professional capable of building secure and practical solutions to real world problems.",
+    "Alongside my academic and technical pursuits, I currently serve as the Assistant Web and App Head of the PENSA KNUST Media Department for the 2026/2027 Spiritual and Academic Year. In this role, I contribute to the department's digital presence and support its web and application platforms.",
   ],
   stats: [
     { value: "5+", label: "Built Projects" },

@@ -1,6 +1,5 @@
 import { motion } from "motion/react";
-import { GraduationCap, MapPin, BookOpen, Code2, Shield, Network, Cpu } from "lucide-react";
-import { profile } from "../data";
+import { GraduationCap, MapPin, BookOpen, Code2, Shield, Network, Cpu, Users } from "lucide-react";
 
 const inView = (delay = 0) => ({
   initial: { opacity: 0, y: 18 },
@@ -31,7 +30,7 @@ export default function About() {
       <div className="container">
 
         {/* Header */}
-        <motion.div {...inView()} style={{ marginBottom: "3.5rem", maxWidth: "40rem" }}>
+        <motion.div {...inView()} style={{ marginBottom: "3.5rem", maxWidth: "42rem" }}>
           <p className="label" style={{ marginBottom: "0.6rem" }}>About Me</p>
           <h2 className="section-title" style={{ marginBottom: "1rem" }}>Who I Am</h2>
           <p className="section-subtitle">
@@ -41,32 +40,65 @@ export default function About() {
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "3.5rem", alignItems: "start" }}>
 
-          {/* Left — Bio + info */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-            <motion.div {...inView(0.08)} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {/* Left — Bio + Leadership + Info */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
+            
+            {/* Bio paragraphs */}
+            <motion.div {...inView(0.08)} style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
               <p style={{ fontSize: "0.975rem", lineHeight: 1.82, color: "#0F172A" }}>
-                I'm Boadu Kofi Junior Edwin, an Information Technology student at the Kwame Nkrumah University of Science
-                and Technology (KNUST) in Kumasi, Ghana. My interest in technology started with a childhood curiosity about
-                computers — how they work, how software is built, and how networks connect people.
+                I'm <strong style={{ color: "#315EFB", fontWeight: 700 }}>Boadu Kofi Junior Edwin</strong>, an Information Technology student at the <strong style={{ color: "#0F172A", fontWeight: 700 }}>Kwame Nkrumah University of Science and Technology (KNUST)</strong> in Kumasi, Ghana. My interest in technology began with a childhood curiosity about computers, how they work, how software is developed, and how networks connect people.
               </p>
               <p style={{ fontSize: "0.975rem", lineHeight: 1.82, color: "#0F172A" }}>
-                I'm currently building my foundation in software development, networking, and cybersecurity through
-                coursework, personal projects, and self-directed study. My goal is to become a well-rounded IT professional
-                who can build secure, practical solutions to real problems.
+                I'm currently building a strong foundation in <strong style={{ color: "#315EFB", fontWeight: 700 }}>software development, networking, and cybersecurity</strong> through coursework, personal projects, and independent learning. My goal is to become a well rounded IT professional capable of building secure and practical solutions to real world problems.
+              </p>
+            </motion.div>
+
+            {/* PENSA Leadership Distinct Highlight Card */}
+            <motion.div
+              {...inView(0.12)}
+              style={{
+                padding: "1.25rem 1.4rem",
+                background: "rgba(255, 255, 255, 0.82)",
+                border: "1px solid #C7D7FD",
+                borderLeft: "3.5px solid #315EFB",
+                borderRadius: "0.75rem",
+                boxShadow: "0 4px 16px rgba(49, 94, 251, 0.05)",
+                backdropFilter: "blur(8px)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.6rem",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <div style={{ padding: "0.35rem", background: "#EEF2FF", borderRadius: "0.4rem", display: "flex" }}>
+                    <Users style={{ width: "0.95rem", height: "0.95rem", color: "#315EFB" }} />
+                  </div>
+                  <span style={{ fontSize: "0.7rem", fontFamily: "var(--font-mono)", color: "#315EFB", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700 }}>
+                    Leadership &amp; Service
+                  </span>
+                </div>
+                <span style={{ fontSize: "0.68rem", fontFamily: "var(--font-mono)", color: "#64748B", background: "rgba(238, 242, 255, 0.8)", padding: "0.15rem 0.55rem", borderRadius: "999px", border: "1px solid #C7D7FD" }}>
+                  2026 / 2027
+                </span>
+              </div>
+              <p style={{ fontSize: "0.9rem", lineHeight: 1.75, color: "#334155" }}>
+                Alongside my academic and technical pursuits, I currently serve as the <strong style={{ color: "#315EFB", fontWeight: 700 }}>Assistant Web and App Head</strong> of the <strong style={{ color: "#0F172A", fontWeight: 600 }}>PENSA KNUST Media Department</strong> for the <strong style={{ color: "#315EFB", fontWeight: 600 }}>2026/2027 Spiritual and Academic Year</strong>. In this role, I contribute to the department's digital presence and support its web and application platforms.
               </p>
             </motion.div>
 
             {/* Info grid */}
-            <motion.div {...inView(0.12)} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+            <motion.div {...inView(0.14)} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
               {[
                 { icon: GraduationCap, label: "University", value: "KNUST" },
                 { icon: BookOpen, label: "Programme", value: "BSc. Information Technology" },
                 { icon: MapPin, label: "Location", value: "Kumasi, Ghana" },
-                { icon: Code2, label: "Focus", value: "Learning & Building" },
+                { icon: Users, label: "Leadership", value: "PENSA Web & App" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} style={{
-                  padding: "0.9rem 1rem", background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.7)", borderRadius: "0.65rem",
+                  padding: "0.9rem 1rem", background: "rgba(255,255,255,0.7)",
+                  border: "1px solid rgba(255,255,255,0.85)", borderRadius: "0.65rem",
+                  boxShadow: "0 2px 8px rgba(49,94,251,0.03)",
                 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.3rem" }}>
                     <Icon style={{ width: "0.85rem", height: "0.85rem", color: "#315EFB" }} />
@@ -84,7 +116,7 @@ export default function About() {
               border: "1px solid #C7D7FD",
               borderRadius: "0.75rem",
             }}>
-              <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#315EFB", marginBottom: "0.85rem', display: 'flex", alignItems: "center", gap: "0.4rem" }}>
+              <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#315EFB", marginBottom: "0.85rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
                 📚 Currently Learning
               </h3>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
