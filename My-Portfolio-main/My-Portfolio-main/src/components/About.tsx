@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { Code2, Calendar, Check, X, Sparkles, ArrowRight } from "lucide-react";
 import headshotPhoto from "../assets/images/edwin_headshot.jpg";
 
@@ -15,16 +15,6 @@ function ParallaxPhotoCard() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [tilt, setTilt] = useState({ rX: 0, rY: 0 });
-
-  // Scroll parallax matching AmassTech's scroll interpolation
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Wide horizontal sweep [80, -80] & vertical glide [40, -40] as user scrolls
-  const scrollX = useTransform(scrollYProgress, [0, 1], [80, -80]);
-  const scrollY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -49,8 +39,8 @@ function ParallaxPhotoCard() {
         margin: "0 auto",
       }}
     >
-      {/* Scroll parallax motion wrapper */}
-      <motion.div style={{ x: scrollX, y: scrollY }} className="relative z-10">
+      {/* No scroll parallax — it causes blank space on mobile */}
+      <div style={{ position: "relative" }}>
 
         {/* Continuous organic levitation */}
         <motion.div
@@ -136,7 +126,7 @@ function ParallaxPhotoCard() {
             filter: "blur(28px)", pointerEvents: "none", zIndex: -1,
           }} />
         </motion.div>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -369,14 +359,14 @@ export default function About() {
               whileHover={{ y: -5, scale: 1.015, transition: { duration: 0.2 } }}
               style={{
                 marginTop: "0.5rem",
-                padding: "1.35rem 1.5rem",
+                padding: "1rem 1.1rem",
                 background: "rgba(15, 23, 42, 0.94)",
                 border: "1px solid rgba(49, 94, 251, 0.4)",
                 borderRadius: "0.85rem",
                 boxShadow: "0 10px 25px -5px rgba(15, 23, 42, 0.3), 0 0 18px rgba(49, 94, 251, 0.15)",
                 display: "flex",
                 flexDirection: "column",
-                gap: "0.75rem",
+                gap: "0.55rem",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
@@ -415,7 +405,7 @@ export default function About() {
                 </motion.span>
               </div>
 
-              <p style={{ fontSize: "0.88rem", lineHeight: 1.68, color: "#cbd5e1" }}>
+              <p style={{ fontSize: "0.82rem", lineHeight: 1.65, color: "#cbd5e1" }}>
                 Alongside my academic and technical pursuits, I currently serve as the{" "}
                 <strong style={{ color: "#60a5fa" }}>Assistant Web and App Head</strong> of the{" "}
                 <strong style={{ color: "#ffffff" }}>PENSA KNUST Media Department</strong> for the{" "}
