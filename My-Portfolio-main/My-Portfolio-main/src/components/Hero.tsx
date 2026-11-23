@@ -1,7 +1,6 @@
 import { motion } from "motion/react";
 import { ArrowRight, Mail, Github, Linkedin, MapPin } from "lucide-react";
 import { profile } from "../data";
-import headshotPhoto from "../assets/images/edwin_headshot.jpg";
 import { useState, useEffect } from "react";
 
 interface HeroProps {
@@ -198,136 +197,107 @@ export default function Hero({ onOpenResume }: HeroProps) {
       }} />
 
       <div className="container">
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "4rem", alignItems: "center",
-        }}>
+        <div style={{ maxWidth: "46rem", display: "flex", flexDirection: "column", gap: "1.75rem" }}>
 
-          {/* ── Left: Text ── */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-
-            <motion.div {...fadeUp(0.08)}>
-              <div style={{
-                background: "#0f172a",
-                borderRadius: "1.25rem",
-                padding: "2rem 2.2rem 1.75rem",
-                width: "100%", maxWidth: "100%", overflow: "hidden",
-              }}>
-                {/* Hi, I'm */}
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
-                  style={{
-                    fontSize: "clamp(1rem, 2vw, 1.3rem)",
-                    fontWeight: 600, color: "#94a3b8",
-                    marginBottom: "0.4rem",
-                    fontFamily: "var(--font-sans)",
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  Hi, I'm
-                </motion.p>
-
-                {/* Typewriter name */}
-                <NameReveal />
-
-                {/* Rotating role pill */}
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
-                >
-                  <RotatingRole />
-                </motion.div>
-              </div>
-            </motion.div>
-
-            {/* Bio */}
-            <motion.p {...fadeUp(0.25)} style={{
-              fontSize: "1.05rem", lineHeight: 1.75,
-              color: "#475569", maxWidth: "32rem",
+          <motion.div {...fadeUp(0.08)}>
+            <div style={{
+              background: "#0f172a",
+              borderRadius: "1.25rem",
+              padding: "2rem 2.2rem 1.75rem",
+              width: "100%", maxWidth: "100%", overflow: "hidden",
             }}>
-              Building my skills in software development and cybersecurity to create
-              secure, useful technology solutions for a better tomorrow.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div {...fadeUp(0.32)} style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-              <motion.button
-                className="btn-primary"
-                onClick={() => scroll("#about")}
-                whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.15 }}
+              {/* Hi, I'm */}
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+                style={{
+                  fontSize: "clamp(1rem, 2vw, 1.3rem)",
+                  fontWeight: 600, color: "#94a3b8",
+                  marginBottom: "0.4rem",
+                  fontFamily: "var(--font-sans)",
+                  letterSpacing: "0.02em",
+                }}
               >
-                View My Work
-                <ArrowRight style={{ width: "0.9rem", height: "0.9rem" }} />
-              </motion.button>
-              <motion.button
-                className="btn-secondary"
-                onClick={() => scroll("#contact")}
-                whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.15 }}
+                Hi, I'm
+              </motion.p>
+
+              {/* Typewriter name */}
+              <NameReveal />
+
+              {/* Rotating role pill */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
               >
-                Get In Touch
-              </motion.button>
-            </motion.div>
-
-            {/* Location */}
-            <motion.div {...fadeIn(0.4)} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-              <MapPin style={{ width: "0.9rem", height: "0.9rem", color: "#315EFB" }} />
-              <span style={{ fontSize: "0.875rem", color: "#475569" }}>
-                Kumasi, Ghana &nbsp;·&nbsp; KNUST
-              </span>
-            </motion.div>
-
-            {/* Social links */}
-            <motion.div {...fadeIn(0.45)} style={{ display: "flex", gap: "0.5rem" }}>
-              {[
-                { icon: Github, href: profile.github, label: "GitHub" },
-                { icon: Linkedin, href: profile.linkedin, label: "LinkedIn" },
-                { icon: Mail, href: `mailto:${profile.email}`, label: "Email" },
-              ].map(({ icon: Icon, href, label }) => (
-                <a key={label} href={href}
-                  target={href.startsWith("http") ? "_blank" : undefined}
-                  rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  aria-label={label}
-                  style={{
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    width: "2.25rem", height: "2.25rem",
-                    background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)",
-                    borderRadius: "0.45rem", color: "#475569",
-                    transition: "all 0.18s", textDecoration: "none",
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#315EFB"; (e.currentTarget as HTMLElement).style.borderColor = "#315EFB"; (e.currentTarget as HTMLElement).style.background = "#EEF2FF"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.6)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.75)"; }}
-                >
-                  <Icon style={{ width: "0.95rem", height: "0.95rem" }} />
-                </a>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* ── Right: Photo ── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-          >
-            <div style={{ position: "relative", width: "clamp(220px, 30vw, 320px)" }}>
-              <div style={{
-                borderRadius: "1.25rem", overflow: "hidden",
-                background: "rgba(255,255,255,0.75)", width: "100%", aspectRatio: "3/4",
-                boxShadow: "0 10px 40px rgba(49,94,251,0.12), 0 2px 10px rgba(49,94,251,0.06)",
-              }}>
-                <img src={headshotPhoto} alt="Edwin Boadu" style={{
-                  width: "100%", height: "100%",
-                  objectFit: "cover", objectPosition: "center top", display: "block",
-                }} />
-              </div>
+                <RotatingRole />
+              </motion.div>
             </div>
+          </motion.div>
+
+          {/* Bio */}
+          <motion.p {...fadeUp(0.25)} style={{
+            fontSize: "1.05rem", lineHeight: 1.75,
+            color: "#475569", maxWidth: "34rem",
+          }}>
+            Building my skills in software development and cybersecurity to create
+            secure, useful technology solutions for a better tomorrow.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div {...fadeUp(0.32)} style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+            <motion.button
+              className="btn-primary"
+              onClick={() => scroll("#about")}
+              whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.15 }}
+            >
+              View My Work
+              <ArrowRight style={{ width: "0.9rem", height: "0.9rem" }} />
+            </motion.button>
+            <motion.button
+              className="btn-secondary"
+              onClick={() => scroll("#contact")}
+              whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.15 }}
+            >
+              Get In Touch
+            </motion.button>
+          </motion.div>
+
+          {/* Location */}
+          <motion.div {...fadeIn(0.4)} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+            <MapPin style={{ width: "0.9rem", height: "0.9rem", color: "#315EFB" }} />
+            <span style={{ fontSize: "0.875rem", color: "#475569" }}>
+              Kumasi, Ghana &nbsp;·&nbsp; KNUST
+            </span>
+          </motion.div>
+
+          {/* Social links */}
+          <motion.div {...fadeIn(0.45)} style={{ display: "flex", gap: "0.5rem" }}>
+            {[
+              { icon: Github, href: profile.github, label: "GitHub" },
+              { icon: Linkedin, href: profile.linkedin, label: "LinkedIn" },
+              { icon: Mail, href: `mailto:${profile.email}`, label: "Email" },
+            ].map(({ icon: Icon, href, label }) => (
+              <a key={label} href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                aria-label={label}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  width: "2.25rem", height: "2.25rem",
+                  background: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.7)",
+                  borderRadius: "0.45rem", color: "#475569",
+                  transition: "all 0.18s", textDecoration: "none",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#315EFB"; (e.currentTarget as HTMLElement).style.borderColor = "#315EFB"; (e.currentTarget as HTMLElement).style.background = "#EEF2FF"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#475569"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.6)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.75)"; }}
+              >
+                <Icon style={{ width: "0.95rem", height: "0.95rem" }} />
+              </a>
+            ))}
           </motion.div>
         </div>
       </div>

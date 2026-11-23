@@ -121,7 +121,7 @@ export default function Contact() {
 
             <div style={{ padding: "1.25rem", background: "#EEF2FF", border: "1px solid #C7D7FD", borderRadius: "0.75rem" }}>
               <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#315EFB", marginBottom: "0.4rem" }}>Send a message</p>
-              <p style={{ fontSize: "0.82rem", color: "#475569", lineHeight: 1.6 }}>
+              <p style={{ fontSize: "0.82rem", color: "#5b6c85ff", lineHeight: 1.6 }}>
                 Use the form or email me directly at{" "}
                 <a href={`mailto:${profile.email}`} style={{ color: "#315EFB", textDecoration: "none", fontWeight: 600 }}>
                   {profile.email}

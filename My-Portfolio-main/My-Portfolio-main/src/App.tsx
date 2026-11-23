@@ -12,6 +12,7 @@ import CyberTerminalModal from "./components/CyberTerminalModal";
 import CyberToolkitModal from "./components/CyberToolkitModal";
 import NetworkTopologyModal from "./components/NetworkTopologyModal";
 import ResumeModal from "./components/ResumeModal";
+import CustomCursor from "./components/CustomCursor";
 
 export default function App() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
@@ -22,6 +23,7 @@ export default function App() {
 
   return (
     <div style={{ minHeight: "100vh", background: "transparent", color: "#0F172A" }}>
+      <CustomCursor />
       <Navbar
         onOpenTerminal={() => setIsTerminalOpen(true)}
         onOpenSubnet={() => setIsSubnetOpen(true)}

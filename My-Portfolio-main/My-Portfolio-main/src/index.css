@@ -28,6 +28,18 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Hide default OS mouse pointer on desktops so only custom glowing pointer is shown */
+@media (min-width: 769px) {
+  html, body, *, *::before, *::after, a, button, input, textarea, select {
+    cursor: none !important;
+  }
+}
+@media (max-width: 768px) {
+  html, body, *, *::before, *::after, a, button, input, textarea, select {
+    cursor: auto !important;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
