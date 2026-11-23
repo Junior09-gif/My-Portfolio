@@ -24,25 +24,22 @@ function ParallaxPhotoCard() {
 
   return (
     <div
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => { setIsHovered(false); setTilt({ rX: 0, rY: 0 }); }}
       style={{ position: "relative", width: "100%", maxWidth: "480px", margin: "0 auto" }}
     >
-      {/* Floating bob animation */}
+      {/* Outer floating layer — always bobs, independent of hover */}
       <motion.div
-        animate={{
-          y: isHovered ? 0 : [0, -14, 0],
-          rotateZ: isHovered ? 0 : [-0.75, 0.75, -0.75],
-        }}
-        transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ y: [0, -14, 0], rotateZ: [-0.75, 0.75, -0.75] }}
+        transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
         style={{ position: "relative" }}
       >
-        {/* 3D tilt card */}
+        {/* Inner hover layer — 3D tilt only on mouse hover */}
         <motion.div
+          onMouseMove={handleMouseMove}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => { setIsHovered(false); setTilt({ rX: 0, rY: 0 }); }}
           animate={{
-            rotateX: isHovered ? tilt.rX : 0,
-            rotateY: isHovered ? tilt.rY : 0,
+            rotateX: tilt.rX,
+            rotateY: tilt.rY,
             scale: isHovered ? 1.03 : 1,
           }}
           transition={{ type: "spring", stiffness: 280, damping: 20 }}
@@ -75,19 +72,18 @@ function ParallaxPhotoCard() {
             pointerEvents: "none",
           }} />
           {/* Glare on hover */}
-          <div style={{
-            position: "absolute", inset: 0, pointerEvents: "none",
-            background: isHovered
-              ? `radial-gradient(circle at ${(tilt.rY / 18 + 0.5) * 100}% ${(-tilt.rX / 18 + 0.5) * 100}%, rgba(255,255,255,0.28) 0%, transparent 60%)`
-              : "none",
-            transition: "opacity 0.2s ease",
-          }} />
+          {isHovered && (
+            <div style={{
+              position: "absolute", inset: 0, pointerEvents: "none",
+              background: `radial-gradient(circle at ${(tilt.rY / 18 + 0.5) * 100}% ${(-tilt.rX / 18 + 0.5) * 100}%, rgba(255,255,255,0.28) 0%, transparent 60%)`,
+            }} />
+          )}
         </motion.div>
 
         {/* Glowing orb bottom-right */}
         <motion.div
           animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.4, 0.25] }}
-          transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
           style={{
             position: "absolute", bottom: "-1.75rem", right: "-1.75rem",
             width: "13rem", height: "13rem",
@@ -154,10 +150,10 @@ export default function About() {
             >
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.65rem" }}>
                 {[
-                  { icon: "💻", title: "Software Developer",    desc: "Building practical web apps with modern frameworks.",     color: "#315EFB" },
-                  { icon: "🛡️", title: "Cybersecurity Learner", desc: "Exploring ethical hacking and secure system design.",      color: "#22d3ee" },
-                  { icon: "🌐", title: "Network Enthusiast",    desc: "TCP/IP, subnetting, and digital infrastructure.",          color: "#a78bfa" },
-                  { icon: "🚀", title: "IT Problem Solver",     desc: "Designing secure, useful, and lasting solutions.",         color: "#34d399" },
+                  { icon: "💻", title: "Software Developer", desc: "Building practical web apps with modern frameworks.", color: "#315EFB" },
+                  { icon: "🛡️", title: "Cybersecurity Learner", desc: "Exploring ethical hacking and secure system design.", color: "#22d3ee" },
+                  { icon: "🌐", title: "Network Enthusiast", desc: "TCP/IP, subnetting, and digital infrastructure.", color: "#a78bfa" },
+                  { icon: "🚀", title: "IT Problem Solver", desc: "Designing secure, useful, and lasting solutions.", color: "#34d399" },
                 ].map((card, i) => (
                   <motion.div
                     key={card.title}
