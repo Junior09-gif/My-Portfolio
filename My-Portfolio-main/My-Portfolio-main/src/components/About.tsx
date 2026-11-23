@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
-import { Code2, Calendar, Check, X, Shield, Terminal, Sparkles, ArrowRight } from "lucide-react";
+import { Code2, Calendar, Check, X, Sparkles, ArrowRight } from "lucide-react";
 import headshotPhoto from "../assets/images/edwin_headshot.jpg";
 
 const PENSA_ACHIEVEMENTS = [
@@ -181,12 +181,12 @@ export default function About() {
           />
         </div>
 
-        {/* 2-Column Responsive Layout */}
+        {/* 2-Column Responsive Layout — image aligns to top of text */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
           gap: "4rem",
-          alignItems: "center",
+          alignItems: "start",
         }}>
 
           {/* Left: Animated Huge Parallax Photo Card */}
@@ -340,67 +340,6 @@ export default function About() {
                   Learn more <ArrowRight style={{ width: "0.9rem", height: "0.9rem" }} />
                 </motion.button>
               </div>
-            </motion.div>
-
-            {/* Quick Competency Badges with Hover Motion */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.45 }}
-              style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginTop: "0.5rem" }}
-            >
-              <motion.div
-                whileHover={{ y: -5, scale: 1.025, boxShadow: "0 12px 25px rgba(49,94,251,0.15)", transition: { duration: 0.2 } }}
-                style={{
-                  padding: "1rem",
-                  borderRadius: "0.75rem",
-                  background: "rgba(255, 255, 255, 0.85)",
-                  border: "1px solid rgba(255, 255, 255, 0.95)",
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "0.75rem",
-                  boxShadow: "0 4px 15px rgba(0,0,0,0.03)",
-                }}
-              >
-                <div style={{ color: "#315EFB", marginTop: "0.15rem" }}>
-                  <Terminal style={{ width: "1.25rem", height: "1.25rem" }} />
-                </div>
-                <div>
-                  <h4 style={{ fontSize: "0.875rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.2rem" }}>
-                    Software &amp; Web
-                  </h4>
-                  <p style={{ fontSize: "0.78rem", color: "#64748B", lineHeight: 1.45 }}>
-                    Modern React apps, Python scripting, and responsive interfaces.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ y: -5, scale: 1.025, boxShadow: "0 12px 25px rgba(249,115,22,0.15)", transition: { duration: 0.2 } }}
-                style={{
-                  padding: "1rem",
-                  borderRadius: "0.75rem",
-                  background: "rgba(255, 255, 255, 0.85)",
-                  border: "1px solid rgba(255, 255, 255, 0.95)",
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "0.75rem",
-                  boxShadow: "0 4px 15px rgba(0,0,0,0.03)",
-                }}
-              >
-                <div style={{ color: "#f97316", marginTop: "0.15rem" }}>
-                  <Shield style={{ width: "1.25rem", height: "1.25rem" }} />
-                </div>
-                <div>
-                  <h4 style={{ fontSize: "0.875rem", fontWeight: 700, color: "#0F172A", marginBottom: "0.2rem" }}>
-                    Networks &amp; Security
-                  </h4>
-                  <p style={{ fontSize: "0.78rem", color: "#64748B", lineHeight: 1.45 }}>
-                    TCP/IP subnetting, Cisco packet routing, and defensive security.
-                  </p>
-                </div>
-              </motion.div>
             </motion.div>
 
           </div>
