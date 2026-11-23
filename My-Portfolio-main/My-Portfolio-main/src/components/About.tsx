@@ -10,50 +10,90 @@ const PENSA_ACHIEVEMENTS = [
   "Stewarding digital platforms that connect thousands of university students and alumni",
 ];
 
-// ── Animated Photo Card — floating + 3D tilt on hover ──────────────────────
+// ── Photo Card — AmassTech style ──────────────────────────────────────────────
+// Large portrait, rotating gradient ring, floating bob, 3D tilt on hover,
+// breathing glow blobs behind, glare shine tracking cursor
 function ParallaxPhotoCard() {
   const [isHovered, setIsHovered] = useState(false);
   const [tilt, setTilt] = useState({ rX: 0, rY: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const xPos = (e.clientX - rect.left) / rect.width - 0.5;
-    const yPos = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ rX: -yPos * 18, rY: xPos * 18 });
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ rX: -y * 16, rY: x * 16 });
   };
 
   return (
-    <div
-      style={{ position: "relative", width: "100%", maxWidth: "480px", margin: "0 auto" }}
-    >
-      {/* Outer floating layer — always bobs, independent of hover */}
+    <div style={{ position: "relative", width: "100%", maxWidth: "460px", margin: "0 auto" }}>
+
+      {/* ── Breathing glow blob — blue, top-left ── */}
       <motion.div
-        animate={{ y: [0, -14, 0], rotateZ: [-0.75, 0.75, -0.75] }}
-        transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
-        style={{ position: "relative" }}
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
+        style={{
+          position: "absolute", top: "-3rem", left: "-3rem",
+          width: "16rem", height: "16rem",
+          background: "radial-gradient(circle, rgba(49,94,251,0.45) 0%, transparent 70%)",
+          borderRadius: "50%", filter: "blur(40px)", zIndex: 0, pointerEvents: "none",
+        }}
+      />
+
+      {/* ── Breathing glow blob — cyan, bottom-right ── */}
+      <motion.div
+        animate={{ scale: [1.1, 1, 1.1], opacity: [0.25, 0.42, 0.25] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1, repeatType: "loop" }}
+        style={{
+          position: "absolute", bottom: "-3rem", right: "-3rem",
+          width: "14rem", height: "14rem",
+          background: "radial-gradient(circle, rgba(6,182,212,0.45) 0%, transparent 70%)",
+          borderRadius: "50%", filter: "blur(36px)", zIndex: 0, pointerEvents: "none",
+        }}
+      />
+
+      {/* ── Rotating gradient ring ── */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 8, repeat: Infinity, ease: "linear", repeatType: "loop" }}
+        style={{
+          position: "absolute", inset: "-6px", borderRadius: "1.65rem",
+          background: "conic-gradient(from 0deg, #315EFB, #22d3ee, #a78bfa, #315EFB)",
+          zIndex: 1, padding: "3px",
+        }}
       >
-        {/* Inner hover layer — 3D tilt only on mouse hover */}
+        {/* Inner mask to show only the border */}
+        <div style={{
+          width: "100%", height: "100%",
+          borderRadius: "1.5rem",
+          background: "#C7E3E1",
+        }} />
+      </motion.div>
+
+      {/* ── Floating bob — always running ── */}
+      <motion.div
+        animate={{ y: [0, -18, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
+        style={{ position: "relative", zIndex: 2 }}
+      >
+        {/* ── 3D tilt + scale on hover ── */}
         <motion.div
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => { setIsHovered(false); setTilt({ rX: 0, rY: 0 }); }}
-          animate={{
-            rotateX: tilt.rX,
-            rotateY: tilt.rY,
-            scale: isHovered ? 1.03 : 1,
-          }}
-          transition={{ type: "spring", stiffness: 280, damping: 20 }}
+          animate={{ rotateX: tilt.rX, rotateY: tilt.rY, scale: isHovered ? 1.04 : 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 22 }}
           style={{
             transformStyle: "preserve-3d",
             aspectRatio: "4 / 5",
             borderRadius: "1.5rem",
             overflow: "hidden",
-            border: "2px solid rgba(255,255,255,0.75)",
+            border: "3px solid rgba(255,255,255,0.9)",
             boxShadow: isHovered
-              ? "0 40px 80px -15px rgba(49,94,251,0.45), 0 0 50px rgba(49,94,251,0.25)"
-              : "0 30px 60px -15px rgba(15,23,42,0.3), 0 0 30px rgba(49,94,251,0.1)",
+              ? "0 45px 90px -15px rgba(49,94,251,0.5), 0 0 60px rgba(6,182,212,0.3)"
+              : "0 30px 60px -10px rgba(15,23,42,0.4), 0 0 30px rgba(49,94,251,0.15)",
             position: "relative",
             background: "#C7E3E1",
+            cursor: "pointer",
           }}
         >
           <img
@@ -62,43 +102,41 @@ function ParallaxPhotoCard() {
             style={{
               width: "100%", height: "100%",
               objectFit: "cover", objectPosition: "center 8%",
-              display: "block", transform: "translateZ(25px)",
+              display: "block",
+              transform: "translateZ(30px)",
+              transition: "transform 0.3s ease",
             }}
           />
+
           {/* Bottom teal blend */}
           <div style={{
-            position: "absolute", bottom: 0, left: 0, right: 0, height: "45%",
-            background: "linear-gradient(to bottom, transparent 0%, rgba(199,227,225,0.55) 60%, rgba(199,227,225,0.92) 100%)",
+            position: "absolute", bottom: 0, left: 0, right: 0, height: "40%",
+            background: "linear-gradient(to bottom, transparent 0%, rgba(199,227,225,0.6) 65%, rgba(199,227,225,0.95) 100%)",
             pointerEvents: "none",
           }} />
+
           {/* Glare on hover */}
           {isHovered && (
-            <div style={{
-              position: "absolute", inset: 0, pointerEvents: "none",
-              background: `radial-gradient(circle at ${(tilt.rY / 18 + 0.5) * 100}% ${(-tilt.rX / 18 + 0.5) * 100}%, rgba(255,255,255,0.28) 0%, transparent 60%)`,
-            }} />
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                position: "absolute", inset: 0, pointerEvents: "none",
+                background: `radial-gradient(circle at ${(tilt.rY / 16 + 0.5) * 100}% ${(-tilt.rX / 16 + 0.5) * 100}%, rgba(255,255,255,0.3) 0%, transparent 55%)`,
+              }}
+            />
           )}
-        </motion.div>
 
-        {/* Glowing orb bottom-right */}
-        <motion.div
-          animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.4, 0.25] }}
-          transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
-          style={{
-            position: "absolute", bottom: "-1.75rem", right: "-1.75rem",
-            width: "13rem", height: "13rem",
-            background: "linear-gradient(135deg, #315EFB, #06b6d4)",
-            borderRadius: "50%", filter: "blur(40px)",
-            pointerEvents: "none", zIndex: -1, opacity: 0.3,
-          }}
-        />
-        {/* Top-left aura */}
-        <div style={{
-          position: "absolute", top: "-1.5rem", left: "-1.5rem",
-          width: "9rem", height: "9rem",
-          background: "radial-gradient(circle, rgba(49,94,251,0.25) 0%, transparent 70%)",
-          filter: "blur(28px)", pointerEvents: "none", zIndex: -1,
-        }} />
+          {/* Subtle breathing vignette */}
+          <motion.div
+            animate={{ opacity: [0.1, 0.22, 0.1] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
+            style={{
+              position: "absolute", inset: 0, pointerEvents: "none",
+              background: "radial-gradient(ellipse at center, transparent 50%, rgba(15,23,42,0.35) 100%)",
+            }}
+          />
+        </motion.div>
       </motion.div>
     </div>
   );
