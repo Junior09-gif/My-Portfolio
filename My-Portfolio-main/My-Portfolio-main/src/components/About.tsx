@@ -255,6 +255,111 @@ export default function About() {
               My goal is to become a well rounded IT professional capable of building secure and practical solutions to real world problems.
             </motion.p>
 
+            {/* ── 2×2 Role Cards + CTAs ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.32 }}
+              style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "0.25rem" }}
+            >
+              {/* 2×2 grid */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                {[
+                  {
+                    icon: "💻",
+                    title: "Software Developer",
+                    desc: "Building practical web applications and tools with modern frameworks and clean code.",
+                    color: "#315EFB",
+                  },
+                  {
+                    icon: "🛡️",
+                    title: "Cybersecurity Learner",
+                    desc: "Exploring ethical hacking, network defence, and secure system design.",
+                    color: "#22d3ee",
+                  },
+                  {
+                    icon: "🌐",
+                    title: "Network Enthusiast",
+                    desc: "Understanding TCP/IP, subnetting, and how data moves across digital infrastructure.",
+                    color: "#a78bfa",
+                  },
+                  {
+                    icon: "🚀",
+                    title: "IT Problem Solver",
+                    desc: "Using technology to design solutions that are secure, useful, and built to last.",
+                    color: "#34d399",
+                  },
+                ].map((card, i) => (
+                  <motion.div
+                    key={card.title}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.35 + i * 0.08 }}
+                    whileHover={{ y: -4, scale: 1.02, transition: { duration: 0.18 } }}
+                    style={{
+                      padding: "1rem 1.1rem",
+                      background: "rgba(15,23,42,0.88)",
+                      border: `1px solid rgba(255,255,255,0.08)`,
+                      borderRadius: "0.75rem",
+                      display: "flex", flexDirection: "column", gap: "0.4rem",
+                      cursor: "default",
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <span style={{ fontSize: "1.1rem", lineHeight: 1 }}>{card.icon}</span>
+                      <h4 style={{ fontSize: "0.875rem", fontWeight: 700, color: card.color, lineHeight: 1.2 }}>
+                        {card.title}
+                      </h4>
+                    </div>
+                    <p style={{ fontSize: "0.78rem", lineHeight: 1.6, color: "#94a3b8" }}>
+                      {card.desc}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* CTA buttons */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginTop: "0.1rem" }}>
+                <motion.a
+                  href="#projects"
+                  onClick={e => { e.preventDefault(); document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" }); }}
+                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                  transition={{ duration: 0.15 }}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    padding: "0.75rem 1rem",
+                    background: "linear-gradient(135deg, #315EFB, #6E8BFF)",
+                    color: "#fff", borderRadius: "0.65rem",
+                    fontSize: "0.85rem", fontWeight: 700,
+                    textDecoration: "none", cursor: "pointer",
+                    boxShadow: "0 4px 14px rgba(49,94,251,0.35)",
+                  }}
+                >
+                  View My Projects
+                </motion.a>
+                <motion.a
+                  href="#contact"
+                  onClick={e => { e.preventDefault(); document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" }); }}
+                  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
+                  transition={{ duration: 0.15 }}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    padding: "0.75rem 1rem",
+                    background: "linear-gradient(135deg, #0891b2, #22d3ee)",
+                    color: "#fff", borderRadius: "0.65rem",
+                    fontSize: "0.85rem", fontWeight: 700,
+                    textDecoration: "none", cursor: "pointer",
+                    boxShadow: "0 4px 14px rgba(6,182,212,0.35)",
+                  }}
+                >
+                  Get In Touch
+                </motion.a>
+              </div>
+            </motion.div>
+
             {/* Distinct PENSA Leadership Card with Interactive Modal Trigger */}
             <motion.div
               initial={{ opacity: 0, x: 25 }}
