@@ -317,6 +317,67 @@ export default function About() {
                 <strong style={{ color: "#ffffff" }}>2026/2027 Spiritual and Academic Year</strong>. In this role, I contribute to the department's digital presence and support its web and application platforms.
               </p>
 
+              {/* Mentorship subsection — visually separated */}
+              <div style={{
+                marginTop: "0.25rem",
+                paddingTop: "0.9rem",
+                borderTop: "1px solid rgba(255,255,255,0.08)",
+              }}>
+                {/* Mentor label */}
+                <div style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                  marginBottom: "0.65rem",
+                  padding: "0.18rem 0.7rem",
+                  background: "rgba(6,182,212,0.1)",
+                  border: "1px solid rgba(6,182,212,0.25)",
+                  borderRadius: "999px",
+                }}>
+                  <span style={{ fontSize: "0.62rem", color: "#22d3ee", fontFamily: "var(--font-mono)", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 600 }}>
+                    Mentorship &amp; Training
+                  </span>
+                </div>
+
+                <p style={{ fontSize: "0.875rem", lineHeight: 1.72, color: "#94a3b8" }}>
+                  My journey in web and application development has also been shaped by hands-on training and mentorship under{" "}
+                  <strong style={{ color: "#ffffff" }}>Theophilus Amankwah</strong>, popularly known as{" "}
+                  <strong style={{ color: "#22d3ee" }}>Amass</strong>, founder of{" "}
+                  <a href="https://www.amasstechhub.com/" target="_blank" rel="noopener noreferrer"
+                    style={{ color: "#22d3ee", fontWeight: 600, textDecoration: "none", borderBottom: "1px solid rgba(34,211,238,0.35)", transition: "border-color 0.18s" }}
+                    onMouseEnter={e => (e.currentTarget.style.borderColor = "#22d3ee")}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(34,211,238,0.35)")}
+                  >
+                    AmassTechHub
+                  </a>{" "}and{" "}
+                  <strong style={{ color: "#ffffff" }}>Amass Multimedia</strong>.
+                </p>
+
+                <p style={{ fontSize: "0.875rem", lineHeight: 1.72, color: "#94a3b8", marginTop: "0.5rem" }}>
+                  Through his guidance, training and experience, I have gained valuable exposure to the world of technology, digital development and creative problem-solving. His work and professional journey continue to inspire my growth and passion for technology.
+                </p>
+
+                {/* Mentor link */}
+                <a
+                  href="https://amasstech.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                    marginTop: "0.75rem",
+                    fontSize: "0.8rem", fontWeight: 600, color: "#22d3ee",
+                    textDecoration: "none",
+                    padding: "0.3rem 0.85rem",
+                    background: "rgba(6,182,212,0.08)",
+                    border: "1px solid rgba(6,182,212,0.22)",
+                    borderRadius: "0.4rem",
+                    transition: "background 0.18s, border-color 0.18s",
+                  }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(6,182,212,0.16)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(6,182,212,0.5)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(6,182,212,0.08)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(6,182,212,0.22)"; }}
+                >
+                  ↗ Visit Amass's portfolio
+                </a>
+              </div>
+
               <div>
                 <motion.button
                   onClick={() => setIsModalOpen(true)}
