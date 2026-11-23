@@ -45,27 +45,23 @@ function ParallaxPhotoCard() {
       style={{
         position: "relative",
         width: "100%",
-        maxWidth: "480px", // Huge prominent portrait framing matching AmassTech
+        maxWidth: "540px", // bigger — matching AmassTech prominence
         margin: "0 auto",
       }}
     >
-      {/* Scroll parallax motion wrapper (sweeps across x and y as user scrolls) */}
+      {/* Scroll parallax motion wrapper */}
       <motion.div style={{ x: scrollX, y: scrollY }} className="relative z-10">
 
-        {/* Continuous organic levitation (breathing floating motion) */}
+        {/* Continuous organic levitation */}
         <motion.div
           animate={{
             y: isHovered ? 0 : [0, -14, 0],
             rotateZ: isHovered ? 0 : [-0.75, 0.75, -0.75],
           }}
-          transition={{
-            duration: 4.8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
           style={{ position: "relative" }}
         >
-          {/* Huge Card frame with 3D tilt */}
+          {/* Card frame with 3D tilt */}
           <motion.div
             animate={{
               rotateX: isHovered ? tilt.rX : 0,
@@ -75,15 +71,15 @@ function ParallaxPhotoCard() {
             transition={{ type: "spring", stiffness: 280, damping: 20 }}
             style={{
               transformStyle: "preserve-3d",
-              aspectRatio: "1 / 1",
+              aspectRatio: "4 / 5",   // taller portrait, more of the person visible
               borderRadius: "1.5rem",
               overflow: "hidden",
-              border: "2px solid rgba(255, 255, 255, 0.85)",
+              border: "2px solid rgba(255,255,255,0.75)",
               boxShadow: isHovered
-                ? "0 35px 70px -15px rgba(49, 94, 251, 0.45), 0 0 45px rgba(49, 94, 251, 0.3)"
-                : "0 25px 50px -15px rgba(15, 23, 42, 0.35), 0 0 25px rgba(49, 94, 251, 0.12)",
-              background: "linear-gradient(135deg, rgba(49,94,251,0.25) 0%, rgba(15,23,42,0.96) 50%, rgba(249,115,22,0.2) 100%)",
+                ? "0 40px 80px -15px rgba(49,94,251,0.45), 0 0 50px rgba(49,94,251,0.25)"
+                : "0 30px 60px -15px rgba(15,23,42,0.3), 0 0 30px rgba(49,94,251,0.1)",
               position: "relative",
+              background: "#C7E3E1",
             }}
           >
             <img
@@ -93,65 +89,52 @@ function ParallaxPhotoCard() {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                objectPosition: "center 12%",
+                objectPosition: "center 8%",
                 display: "block",
                 transform: "translateZ(25px)",
               }}
             />
 
-            {/* Dynamic glare shine tracking mouse cursor */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                pointerEvents: "none",
-                background: isHovered
-                  ? `radial-gradient(circle at ${(tilt.rY / 18 + 0.5) * 100}% ${(-tilt.rX / 18 + 0.5) * 100}%, rgba(255,255,255,0.32) 0%, transparent 60%)`
-                  : "none",
-                transition: "opacity 0.2s ease",
-              }}
-            />
+            {/* Bottom gradient — blends image into the teal background */}
+            <div style={{
+              position: "absolute",
+              bottom: 0, left: 0, right: 0,
+              height: "45%",
+              background: "linear-gradient(to bottom, transparent 0%, rgba(199,227,225,0.55) 60%, rgba(199,227,225,0.92) 100%)",
+              pointerEvents: "none",
+            }} />
+
+            {/* Dynamic glare shine on hover */}
+            <div style={{
+              position: "absolute", inset: 0, pointerEvents: "none",
+              background: isHovered
+                ? `radial-gradient(circle at ${(tilt.rY / 18 + 0.5) * 100}% ${(-tilt.rX / 18 + 0.5) * 100}%, rgba(255,255,255,0.28) 0%, transparent 60%)`
+                : "none",
+              transition: "opacity 0.2s ease",
+            }} />
           </motion.div>
 
-          {/* Large glowing blur gradient orb matching AmassTech */}
+          {/* Glowing orb bottom-right */}
           <motion.div
-            animate={{
-              scale: [1, 1.15, 1],
-              opacity: [0.25, 0.38, 0.25],
-            }}
-            transition={{
-              duration: 3.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.4, 0.25] }}
+            transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
             style={{
-              position: "absolute",
-              bottom: "-1.75rem",
-              right: "-1.75rem",
-              width: "11rem",
-              height: "11rem",
-              background: "linear-gradient(135deg, #315EFB, #f97316)",
-              borderRadius: "50%",
-              filter: "blur(32px)",
-              pointerEvents: "none",
-              zIndex: -1,
+              position: "absolute", bottom: "-1.75rem", right: "-1.75rem",
+              width: "13rem", height: "13rem",
+              background: "linear-gradient(135deg, #315EFB, #06b6d4)",
+              borderRadius: "50%", filter: "blur(40px)",
+              pointerEvents: "none", zIndex: -1,
+              opacity: 0.3,
             }}
           />
 
-          {/* Ambient top-left soft aura */}
-          <div
-            style={{
-              position: "absolute",
-              top: "-1.5rem",
-              left: "-1.5rem",
-              width: "8rem",
-              height: "8rem",
-              background: "radial-gradient(circle, rgba(49,94,251,0.3) 0%, transparent 70%)",
-              filter: "blur(24px)",
-              pointerEvents: "none",
-              zIndex: -1,
-            }}
-          />
+          {/* Ambient top-left aura */}
+          <div style={{
+            position: "absolute", top: "-1.5rem", left: "-1.5rem",
+            width: "9rem", height: "9rem",
+            background: "radial-gradient(circle, rgba(49,94,251,0.25) 0%, transparent 70%)",
+            filter: "blur(28px)", pointerEvents: "none", zIndex: -1,
+          }} />
         </motion.div>
       </motion.div>
     </div>
