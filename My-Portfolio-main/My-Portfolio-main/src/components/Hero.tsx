@@ -94,51 +94,51 @@ const ERASE_MS = 35;   // ms per character erased
 const PAUSE_MS = 5000; // pause after fully typed
 
 function NameReveal() {
-  const [count, setCount] = useState(0); // how many chars of FULL are typed
+  const [count, setCount] = useState(0);
   const [erasing, setErasing] = useState(false);
   const [cursor, setCursor] = useState(true);
+  // Check prefers-reduced-motion AFTER mount so mobile doesn't false-positive
+  const [reducedMotion, setReducedMotion] = useState(false);
 
-  const prefersReduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Blinking cursor
   useEffect(() => {
-    if (prefersReduced) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    // If reduced motion — show full name instantly
+    if (mq.matches) setCount(FULL.length);
+  }, []);
+
+  // Blinking cursor — always runs (even mobile)
+  useEffect(() => {
     const t = setInterval(() => setCursor(c => !c), 530);
     return () => clearInterval(t);
-  }, [prefersReduced]);
+  }, []);
 
   // Type / erase loop
   useEffect(() => {
-    if (prefersReduced) { setCount(FULL.length); return; }
+    if (reducedMotion) return;
     let t: ReturnType<typeof setTimeout>;
 
     if (!erasing) {
       if (count < FULL.length) {
         t = setTimeout(() => setCount(c => c + 1), TYPE_MS);
       } else {
-        // Fully typed — wait then erase
         t = setTimeout(() => setErasing(true), PAUSE_MS);
       }
     } else {
       if (count > 0) {
         t = setTimeout(() => setCount(c => c - 1), ERASE_MS);
       } else {
-        // Fully erased — start typing again
         setErasing(false);
       }
     }
     return () => clearTimeout(t);
-  }, [count, erasing, prefersReduced]);
+  }, [count, erasing, reducedMotion]);
 
   // Build visible text from count
   const visible = FULL.slice(0, count);
   const parts = visible.split("\n");
   const line1v = parts[0] ?? "";
   const line2v = parts[1] ?? "";
-
-  // Where is the cursor? Line 1 if we haven't passed the \n yet
   const onLine1 = count <= LINE1.length;
 
   const Cursor = ({ color }: { color: string }) => (
