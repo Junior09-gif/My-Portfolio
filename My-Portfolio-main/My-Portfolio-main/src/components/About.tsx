@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "motion/react";
 import { Code2, Calendar, ArrowRight } from "lucide-react";
 import headshotPhoto from "../assets/images/edwin_headshot.jpg";
 
@@ -10,133 +10,78 @@ const PENSA_ACHIEVEMENTS = [
   "Stewarding digital platforms that connect thousands of university students and alumni",
 ];
 
-// ── Photo Card — AmassTech style ──────────────────────────────────────────────
-// Large portrait, rotating gradient ring, floating bob, 3D tilt on hover,
-// breathing glow blobs behind, glare shine tracking cursor
+// ── Photo Card — scroll-driven parallax (image moves at different speed to page) ──
 function ParallaxPhotoCard() {
+  const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [tilt, setTilt] = useState({ rX: 0, rY: 0 });
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const smooth = useSpring(scrollYProgress, { stiffness: 60, damping: 20 });
+  const imageY = useTransform(smooth, [0, 1], ["5%", "-12%"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ rX: -y * 16, rY: x * 16 });
+    setTilt({ rX: -y * 14, rY: x * 14 });
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", maxWidth: "460px", margin: "0 auto" }}>
-
-      {/* ── Breathing glow blob — blue, top-left ── */}
+    <div ref={ref} style={{ position: "relative", width: "100%", maxWidth: "460px", margin: "0 auto" }}>
+      {/* Blue glow — top-left */}
       <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        animate={{ scale: [1, 1.18, 1], opacity: [0.28, 0.44, 0.28] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
-        style={{
-          position: "absolute", top: "-3rem", left: "-3rem",
-          width: "16rem", height: "16rem",
-          background: "radial-gradient(circle, rgba(49,94,251,0.45) 0%, transparent 70%)",
-          borderRadius: "50%", filter: "blur(40px)", zIndex: 0, pointerEvents: "none",
-        }}
+        style={{ position: "absolute", top: "-2.5rem", left: "-2.5rem", width: "14rem", height: "14rem", background: "radial-gradient(circle, rgba(49,94,251,0.4) 0%, transparent 70%)", borderRadius: "50%", filter: "blur(36px)", zIndex: 0, pointerEvents: "none" }}
       />
-
-      {/* ── Breathing glow blob — cyan, bottom-right ── */}
+      {/* Cyan glow — bottom-right */}
       <motion.div
-        animate={{ scale: [1.1, 1, 1.1], opacity: [0.25, 0.42, 0.25] }}
-        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1, repeatType: "loop" }}
-        style={{
-          position: "absolute", bottom: "-3rem", right: "-3rem",
-          width: "14rem", height: "14rem",
-          background: "radial-gradient(circle, rgba(6,182,212,0.45) 0%, transparent 70%)",
-          borderRadius: "50%", filter: "blur(36px)", zIndex: 0, pointerEvents: "none",
-        }}
+        animate={{ scale: [1.1, 1, 1.1], opacity: [0.22, 0.38, 0.22] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.2, repeatType: "loop" }}
+        style={{ position: "absolute", bottom: "-2.5rem", right: "-2.5rem", width: "12rem", height: "12rem", background: "radial-gradient(circle, rgba(6,182,212,0.4) 0%, transparent 70%)", borderRadius: "50%", filter: "blur(32px)", zIndex: 0, pointerEvents: "none" }}
       />
-
-      {/* ── Rotating gradient ring ── */}
+      {/* Card shell — 3D tilt on hover */}
       <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear", repeatType: "loop" }}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => { setIsHovered(false); setTilt({ rX: 0, rY: 0 }); }}
+        animate={{ rotateX: tilt.rX, rotateY: tilt.rY, scale: isHovered ? 1.03 : 1 }}
+        transition={{ type: "spring", stiffness: 260, damping: 22 }}
         style={{
-          position: "absolute", inset: "-6px", borderRadius: "1.65rem",
-          background: "conic-gradient(from 0deg, #315EFB, #22d3ee, #a78bfa, #315EFB)",
-          zIndex: 1, padding: "3px",
-        }}
-      >
-        {/* Inner mask to show only the border */}
-        <div style={{
-          width: "100%", height: "100%",
+          position: "relative", zIndex: 2,
+          transformStyle: "preserve-3d",
           borderRadius: "1.5rem",
+          overflow: "hidden",
+          border: "2px solid rgba(255,255,255,0.8)",
+          boxShadow: isHovered
+            ? "0 40px 80px -10px rgba(49,94,251,0.4), 0 0 50px rgba(6,182,212,0.25)"
+            : "0 25px 55px -10px rgba(15,23,42,0.35), 0 0 25px rgba(49,94,251,0.12)",
+          aspectRatio: "4 / 5",
           background: "#C7E3E1",
-        }} />
-      </motion.div>
-
-      {/* ── Floating bob — always running ── */}
-      <motion.div
-        animate={{ y: [0, -18, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
-        style={{ position: "relative", zIndex: 2 }}
+          cursor: "default",
+        }}
       >
-        {/* ── 3D tilt + scale on hover ── */}
+        {/* Scroll-parallax image */}
         <motion.div
-          onMouseMove={handleMouseMove}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => { setIsHovered(false); setTilt({ rX: 0, rY: 0 }); }}
-          animate={{ rotateX: tilt.rX, rotateY: tilt.rY, scale: isHovered ? 1.04 : 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 22 }}
-          style={{
-            transformStyle: "preserve-3d",
-            aspectRatio: "4 / 5",
-            borderRadius: "1.5rem",
-            overflow: "hidden",
-            border: "3px solid rgba(255,255,255,0.9)",
-            boxShadow: isHovered
-              ? "0 45px 90px -15px rgba(49,94,251,0.5), 0 0 60px rgba(6,182,212,0.3)"
-              : "0 30px 60px -10px rgba(15,23,42,0.4), 0 0 30px rgba(49,94,251,0.15)",
-            position: "relative",
-            background: "#C7E3E1",
-            cursor: "pointer",
-          }}
+          style={{ y: imageY, position: "absolute", top: 0, left: 0, width: "100%", height: "120%" }}
         >
           <img
             src={headshotPhoto}
             alt="Boadu Kofi Junior Edwin"
-            style={{
-              width: "100%", height: "100%",
-              objectFit: "cover", objectPosition: "center 8%",
-              display: "block",
-              transform: "translateZ(30px)",
-              transition: "transform 0.3s ease",
-            }}
-          />
-
-          {/* Bottom teal blend */}
-          <div style={{
-            position: "absolute", bottom: 0, left: 0, right: 0, height: "40%",
-            background: "linear-gradient(to bottom, transparent 0%, rgba(199,227,225,0.6) 65%, rgba(199,227,225,0.95) 100%)",
-            pointerEvents: "none",
-          }} />
-
-          {/* Glare on hover */}
-          {isHovered && (
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              style={{
-                position: "absolute", inset: 0, pointerEvents: "none",
-                background: `radial-gradient(circle at ${(tilt.rY / 16 + 0.5) * 100}% ${(-tilt.rX / 16 + 0.5) * 100}%, rgba(255,255,255,0.3) 0%, transparent 55%)`,
-              }}
-            />
-          )}
-
-          {/* Subtle breathing vignette */}
-          <motion.div
-            animate={{ opacity: [0.1, 0.22, 0.1] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", repeatType: "loop" }}
-            style={{
-              position: "absolute", inset: 0, pointerEvents: "none",
-              background: "radial-gradient(ellipse at center, transparent 50%, rgba(15,23,42,0.35) 100%)",
-            }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 5%", display: "block" }}
           />
         </motion.div>
+        {/* Bottom teal blend */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "40%", zIndex: 1, background: "linear-gradient(to bottom, transparent 0%, rgba(199,227,225,0.6) 65%, rgba(199,227,225,0.95) 100%)", pointerEvents: "none" }} />
+        {/* Hover glare */}
+        {isHovered && (
+          <div style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none", background: `radial-gradient(circle at ${(tilt.rY / 14 + 0.5) * 100}% ${(-tilt.rX / 14 + 0.5) * 100}%, rgba(255,255,255,0.25) 0%, transparent 55%)` }} />
+        )}
       </motion.div>
     </div>
   );
@@ -413,3 +358,4 @@ export default function About() {
     </section>
   );
 }
+
