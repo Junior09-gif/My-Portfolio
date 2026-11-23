@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Briefcase, Code2, GraduationCap, ShieldCheck, Check, X } from "lucide-react";
 
@@ -79,7 +79,7 @@ export default function ExperienceSection() {
   return (
     <section id="experience" className="section" style={{ position: "relative", zIndex: 1, padding: "5rem 0" }}>
       <div className="container" style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
-        
+
         {/* Section Heading matching AmassTech */}
         <div style={{ textAlign: "center", marginBottom: "4rem" }}>
           <motion.h2
@@ -125,7 +125,7 @@ export default function ExperienceSection() {
 
         {/* Timeline Container */}
         <div style={{ position: "relative", width: "100%", padding: "2rem 0" }}>
-          
+
           {/* Vertical gradient center line */}
           <div
             className="timeline-track"

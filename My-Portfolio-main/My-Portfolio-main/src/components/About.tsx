@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { Code2, Calendar, Check, X, Shield, Terminal, Sparkles, ArrowRight } from "lucide-react";
 import headshotPhoto from "../assets/images/edwin_headshot.jpg";
@@ -51,7 +51,7 @@ function ParallaxPhotoCard() {
     >
       {/* Scroll parallax motion wrapper (sweeps across x and y as user scrolls) */}
       <motion.div style={{ x: scrollX, y: scrollY }} className="relative z-10">
-        
+
         {/* Continuous organic levitation (breathing floating motion) */}
         <motion.div
           animate={{
@@ -164,7 +164,7 @@ export default function About() {
   return (
     <section id="about" className="section" style={{ position: "relative", zIndex: 1, padding: "5.5rem 0" }}>
       <div className="container" style={{ maxWidth: "72rem", margin: "0 auto", padding: "0 1.5rem" }}>
-        
+
         {/* Section Heading matching AmassTech */}
         <div style={{ textAlign: "center", marginBottom: "4rem" }}>
           <motion.h2
@@ -205,7 +205,7 @@ export default function About() {
           gap: "4rem",
           alignItems: "center",
         }}>
-          
+
           {/* Left: Animated Huge Parallax Photo Card */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
@@ -218,7 +218,7 @@ export default function About() {
 
           {/* Right: Bio Content with Staggered Cascading Animations */}
           <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-            
+
             {/* Headline Subtitle */}
             <motion.h3
               initial={{ opacity: 0, x: 25 }}
@@ -305,7 +305,7 @@ export default function About() {
                     PENSA KNUST Media Department
                   </span>
                 </div>
-                
+
                 {/* Pulsing badge */}
                 <motion.span
                   animate={{
